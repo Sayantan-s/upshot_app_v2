@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// enums
+enum PostType {
+  BUILD_IN_PUBLIC
+  PRODUCT_SELL
+}
+
+enum InterestsType {
+  Generative_AI
+  SaaS
+  No_Code_Tools
+  Developer_Tools
+}
+
+enum CurrencyType {
+  INR
+  Dollar
+}
+
+// Types
+type BIP_MediaType {
+  productLogo   String
+  productPhotos String[]
+}
+
+type PS_MediaType {
+  productPhotos String[]
+}
+
+type ProductSellPriceDetailsType {
+  amount   Int
+  currency CurrencyType
+}
+
+type ProfileLinks {
+  instgram String?
+  linkedin String
+  github   String?
+  dribble  String
+  behance  String?
+  website  String
+}
+
+// Collections
+
+model Comments {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  postId     String?   @db.ObjectId
+  post       Post?     @relation(fields: [postId], references: [id])
+  updated_at DateTime  @default(now()) @updatedAt
+  created_at DateTime  @default(now())
+  body       String
+  replies    Replies[]
+}
+
+model Replies {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  commentId  String?   @db.ObjectId
+  body       String
+  comment    Comments? @relation(fields: [commentId], references: [id])
+  updated_at DateTime  @default(now()) @updatedAt
+  created_at DateTime  @default(now())
+}
+
+model Build_In_Public {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  productName        String
+  productMoto        String
+  productDescription String // description -> (WYSIWYG Text)
+  launchDate         DateTime
+  subScribedUserIds  String[] // [:: BIP]
+  media              BIP_MediaType
+  tags               InterestsType[]
+  notifyWhenLaunched Boolean         @default(false)
+  isLaunched         Boolean         @default(false)
+  updated_at         DateTime        @default(now()) @updatedAt
+  created_at         DateTime        @default(now())
+  post               Post[]
+  user               User?           @relation(fields: [userId], references: [id])
+  userId             String?         @db.ObjectId
+}
+
+model Product_Sell {
+  id                 String                      @id @default(auto()) @map("_id") @db.ObjectId
+  productName        String
+  productDescription String // description -> (WYSIWYG Text)
+  media              PS_MediaType
+  tags               InterestsType[]
+  price              ProductSellPriceDetailsType
+  isBought           Boolean                     @default(false) // [:: PS]
+  soldAt             Int
+  buyRequests        BuyRequest[]
+  updated_at         DateTime                    @default(now()) @updatedAt
+  created_at         DateTime                    @default(now())
+  post               Post[]
+  user               User?                       @relation(fields: [userId], references: [id])
+  userId             String?                     @db.ObjectId
+}
+
+model BuyRequest {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  actualPrice  Int
+  bidPrice     Int
+  ps_productId String?       @db.ObjectId
+  updated_at   DateTime      @default(now()) @updatedAt
+  created_at   DateTime      @default(now())
+  product_sell Product_Sell? @relation(fields: [ps_productId], references: [id])
+}
+
+model Post {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  type           PostType
+  body           String //  (WYSIWYG Text)
+  updated_at     DateTime         @default(now()) @updatedAt
+  created_at     DateTime         @default(now())
+  votes          Int              @default(0)
+  comments       Comments[]
+  link           String // Website Link!
+  product_id_bip String?          @db.ObjectId
+  product_bip    Build_In_Public? @relation(fields: [product_id_bip], references: [id])
+  product_id_ps  String?          @db.ObjectId
+  product_ps     Product_Sell?    @relation(fields: [product_id_ps], references: [id])
+}
+
+model User {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  email         String            @unique
+  newUser       Boolean           @default(true)
+  userName      String            @unique
+  pwd           String
+  updated_at    DateTime          @default(now()) @updatedAt
+  created_at    DateTime          @default(now())
+  refresh_token String            @default("")
+  firstName      String?
+  lastName      String?
+  about         String?
+  interests     InterestsType[]
+  profileLinks   ProfileLinks?
+  profilePic     String?
+  coverPic      String?
+  location      String?
+  bip_products  Build_In_Public[]
+  ps_products   Product_Sell[]
+}
