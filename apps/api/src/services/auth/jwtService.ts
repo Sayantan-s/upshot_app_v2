@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '@api/config';
 import { JWTMetaData } from '@api/controller/auth/types';
 import jwt from 'jsonwebtoken';
@@ -5,7 +6,7 @@ import { ISignAccessTokenParams, ISignRefreshTokenParams } from './types';
 export class JWTService {
   public static COOKIE_EXPIRY = 24 * 60 * 60 * 1000;
 
-  public static signAccessToken<TMetaData>({
+  public static signAccessToken<TMetaData extends {}>({
     payload,
     expiresIn,
   }: ISignAccessTokenParams<TMetaData>) {
@@ -14,7 +15,7 @@ export class JWTService {
     });
   }
 
-  public static signRefreshToken<TMetaData>({
+  public static signRefreshToken<TMetaData extends {}>({
     payload,
     expiresIn,
   }: ISignRefreshTokenParams<TMetaData>) {
