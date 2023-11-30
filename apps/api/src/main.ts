@@ -1,11 +1,6 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
+import prisma from '@api/integrations/prisma';
 import express from 'express';
 import * as path from 'path';
-import prisma from './integrations/prisma';
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 export class PwdService {
   public static async hash(password: string, salt?: number) {

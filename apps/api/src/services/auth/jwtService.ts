@@ -1,6 +1,6 @@
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '@api/config';
+import { JWTMetaData } from '@api/controller/auth/types';
 import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../../config';
-import { JWTMetaData } from '../../controller/auth/types';
 import { ISignAccessTokenParams, ISignRefreshTokenParams } from './types';
 export class JWTService {
   public static COOKIE_EXPIRY = 24 * 60 * 60 * 1000;
