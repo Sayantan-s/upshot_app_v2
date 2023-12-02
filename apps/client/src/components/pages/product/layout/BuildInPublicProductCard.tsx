@@ -29,7 +29,7 @@ export const BuildInPublicProductCard = () => {
       <div className="mt-[2rem] text-base p-6">
         <div className="flex items-center space-x-1">
           <h1 className="text-slate-900 font-[700]">
-            {product.productName || 'Your MVP'}
+            {product?.productName || 'Your MVP'}
           </h1>
           <Verify
             size={20}
@@ -39,14 +39,13 @@ export const BuildInPublicProductCard = () => {
           />
         </div>
         <p className="mt-1.5 text-emerald-400 font-[600] text-[14px]">
-          {product.productMoto || `Revolutionizing the future of work`}
+          {product?.productMoto || `Revolutionizing the future of work`}
         </p>
-        {'productDescription' in product ? (
-          <p className="mt-2">
-            {product.productDescription ||
-              'Introducing our game-changing MVP - a sleek, intuitive tool revolutionizing task and project management. Boost productivity, enhance collaboration, and stay ahead with this cutting-edge solution. Experience the future of work today!'}
-          </p>
-        ) : null}
+        <p className="mt-2">
+          {product && 'productDescription' in product
+            ? product.productDescription
+            : 'Introducing our game-changing MVP - a sleek, intuitive tool revolutionizing task and project management. Boost productivity, enhance collaboration, and stay ahead with this cutting-edge solution. Experience the future of work today!'}
+        </p>
       </div>
     </div>
   );
