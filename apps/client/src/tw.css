@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply text-slate-400 text-sm box-border font-medium;
+    font-display: optional;
+  }
+  #root {
+    @apply h-screen w-full;
+  }
+}
+
+.ProseMirror h1.is-editor-empty:first-child::before,
+p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.gradient_1 {
+  background-color: rgb(56, 189, 248);
+  background-image: radial-gradient(
+      at 40% 70%,
+      rgb(125, 211, 252) 0,
+      transparent 83%
+    ),
+    radial-gradient(at 80% 20%, rgb(45, 212, 191) 0, transparent 38%),
+    radial-gradient(at 8% 30%, rgb(153, 246, 228) 0, transparent 54%),
+    radial-gradient(at 19% 74%, rgb(45, 212, 191) 0, transparent 76%),
+    radial-gradient(at 39% 70%, rgb(45, 212, 191) 0, transparent 71%),
+    radial-gradient(at 48% 6%, rgb(14, 165, 233) 0, transparent 70%);
+}
+
+* {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+*::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}

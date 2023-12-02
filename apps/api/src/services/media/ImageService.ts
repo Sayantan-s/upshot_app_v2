@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto";
-import multer from "multer";
-import { unlink } from "node:fs/promises";
-import sharp from "sharp";
-import { ICropInput } from "./type";
+import { randomUUID } from 'crypto';
+import multer from 'multer';
+import { unlink } from 'node:fs/promises';
+import sharp from 'sharp';
+import { ICropInput } from './type';
 
 export class ImageService {
   private static storage = multer.diskStorage({
@@ -14,7 +14,7 @@ export class ImageService {
   });
 
   static get uploadSingle() {
-    return ImageService.multerStorageService.single("file");
+    return ImageService.multerStorageService.single('file');
   }
 
   static async crop({ file, config, metaData }: ICropInput) {
@@ -43,7 +43,7 @@ export class ImageService {
     const uniqueCropImageId = randomUUID();
     const croppedImagePath = `temp/images/${uniqueCropImageId}.webp`;
 
-    const result = await image.extract(cropInfo).jpeg().toBuffer();
+    await image.extract(cropInfo).jpeg().toBuffer();
 
     return {
       filePath: croppedImagePath,
