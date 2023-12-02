@@ -7,6 +7,7 @@ import ErrorHandler from '@api/middlewares/error';
 import { sessionMiddleWare } from '@api/middlewares/session';
 import authRouter from '@api/routes/auth.route';
 import genAiRouter from '@api/routes/genAi.route';
+import mediaRouter from '@api/routes/media.route';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -62,7 +63,7 @@ async function main() {
 
   app.use('/api/v1/payments', authRouter);
   app.use('/api/v1/ai', genAiRouter);
-  // app.use('/api/v1/upload', mediaRouter);
+  app.use('/api/v1/upload', mediaRouter);
 
   app.use(ErrorHandler.handle);
 
