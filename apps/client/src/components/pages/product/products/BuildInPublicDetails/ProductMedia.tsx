@@ -53,16 +53,19 @@ export const ProductMedia = () => {
     }
   };
 
-  const handleModalOpener = useCallback((name: IPhotoType) => {
-    switch (name) {
-      case 'productCover':
-        return on();
-      case 'productLogo':
-        return onLogo();
-      default:
-        return;
-    }
-  }, []);
+  const handleModalOpener = useCallback(
+    (name: IPhotoType) => {
+      switch (name) {
+        case 'productCover':
+          return on();
+        case 'productLogo':
+          return onLogo();
+        default:
+          return;
+      }
+    },
+    [on, onLogo]
+  );
 
   const handleLogoUploadComplete = (data: ISingleImageUploadResponse) => {
     setValue('productLogo', data.croppedImageUrl);
