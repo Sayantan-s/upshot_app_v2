@@ -11,6 +11,9 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
+    fontFamily: {
+      display: ['Manrope', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [],
