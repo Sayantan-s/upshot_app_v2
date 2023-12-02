@@ -10,7 +10,7 @@ export const mediaApi = api.injectEndpoints({
       FormData
     >({
       query: (credentials) => ({
-        url: MEDIA_ENDPOINT.SINGLE_AUDIO,
+        url: MEDIA_ENDPOINT.SINGLE_IMAGE,
         method: 'POST',
         body: credentials,
       }),
