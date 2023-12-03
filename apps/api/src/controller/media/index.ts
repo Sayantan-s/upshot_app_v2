@@ -13,13 +13,11 @@ export class MediaController {
 
     const cropConfig: ICropState = JSON.parse(config);
     const cropMetaDataValues: ICropArea = JSON.parse(cropMetaData);
-    console.log("gay1");
     const image = await MediaService.image.crop({
       file,
       config: cropConfig,
       metaData: cropMetaDataValues,
     });
-    console.log("gay2");
     const uploadCloudinaryImages = Promise.all([
       Cloudinary.client.uploader.upload(file.path, {
         folder: `${type}/raw`,
@@ -28,11 +26,9 @@ export class MediaController {
         folder: `${type}/cropped`,
       }),
     ]);
-    console.log("gay3");
     const [rawImage, croppedImage] = await uploadCloudinaryImages;
 
     await image.destroy();
-    console.log("gay4");
 
     H.success(res, {
       statusCode: 200,
