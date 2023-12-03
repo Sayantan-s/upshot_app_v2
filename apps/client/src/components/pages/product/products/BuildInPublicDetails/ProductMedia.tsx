@@ -1,6 +1,7 @@
 import { CropperTool } from '@client/components/shared/Tools';
-import { IImageMetaData } from '@client/components/shared/Tools/CropperTool/types';
-import { ImagePanel, TextField } from '@client/components/ui';
+import { IImageMeta } from '@client/components/shared/Tools/CropperTool/types';
+import { Button, ImagePanel, TextField } from '@client/components/ui';
+import { Modal } from '@client/components/ui/Modal';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { useToggle } from '@client/hooks';
 import { ISingleImageUploadResponse } from '@client/store/types/media';
@@ -9,7 +10,7 @@ import { Export } from 'iconsax-react';
 import { Fragment, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError } from 'zod';
-import { BuildInPublicInformation } from '.';
+import { BuildInPublicInformation, IBuildInPublicInitialState } from '.';
 
 type IPhotoType = 'productLogo' | 'productCover';
 
@@ -19,10 +20,20 @@ export const ProductMedia = () => {
 
   const [showCropperLogoPhotoTool, { on: onLogo, off: offLogo }] = useToggle();
   const [showCropperCoverPhotoTool, { on, off }] = useToggle();
+  const [
+    nextStepConfirmationModal,
+    { on: showConfirmationModal, off: hideConfirmationModal },
+  ] = useToggle();
 
-  const [image, setImage] = useState<IImageMetaData>({
-    base64URL: '',
-    file: null,
+  const [image, setImage] = useState<IImageMeta>({
+    productLogo: {
+      base64URL: '',
+      file: null,
+    },
+    productCover: {
+      base64URL: '',
+      file: null,
+    },
   });
 
   const { formState, setValue, setError, getValues } = useForm<
@@ -38,12 +49,15 @@ export const ProductMedia = () => {
   const handleSaveFile = async (eve: React.ChangeEvent<HTMLInputElement>) => {
     if (eve.target.files?.length) {
       const name = eve.target.name as IPhotoType;
-      const [file] = eve.target.files;
+      const file = eve.target.files[0];
       try {
         ValidationSchema.productMediaFile.parse(file);
         setError(name, { message: '' });
         const imageURL = URL.createObjectURL(file);
-        setImage({ file, base64URL: imageURL });
+        setImage((prevState) => ({
+          ...prevState,
+          [eve.target.name]: { file, base64URL: imageURL },
+        }));
         handleModalOpener(name);
       } catch (error) {
         if (error instanceof ZodError) {
@@ -70,12 +84,30 @@ export const ProductMedia = () => {
   const handleLogoUploadComplete = (data: ISingleImageUploadResponse) => {
     setValue('productLogo', data.croppedImageUrl);
     handleFormValues('productLogo', data.croppedImageUrl);
+    if (getValues('productCover')) showConfirmationModal();
   };
 
   const handleCoverUploadComplete = (data: ISingleImageUploadResponse) => {
     setValue('productCover', data.croppedImageUrl);
     handleFormValues('productCover', data.croppedImageUrl);
+    if (getValues('productLogo')) showConfirmationModal();
   };
+
+  const handleRemoveImage = (
+    imageType: Extract<
+      keyof IBuildInPublicInitialState,
+      'productLogo' | 'productCover'
+    >
+  ) => {
+    setValue(imageType, '');
+    handleFormValues(imageType, '');
+    setImage((prevState) => ({
+      ...prevState,
+      [imageType]: { file: null, base64URL: '' },
+    }));
+  };
+
+  console.log(image);
 
   return (
     <Fragment>
@@ -96,7 +128,8 @@ export const ProductMedia = () => {
                     variant={'secondary'}
                     src={getValues('productLogo')}
                     alt="product-cover-image"
-                    fileName={image.file?.name!}
+                    fileName={image.producLogo?.file?.name}
+                    onRemoveImage={() => handleRemoveImage('productLogo')}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />
@@ -136,7 +169,8 @@ export const ProductMedia = () => {
                     variant={'primary'}
                     src={getValues('productCover')}
                     alt="product-cover-image"
-                    fileName={image.file?.name!}
+                    fileName={image.productCover?.file?.name}
+                    onRemoveImage={() => handleRemoveImage('productCover')}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />
@@ -168,7 +202,7 @@ export const ProductMedia = () => {
         name="productCover"
         show={showCropperCoverPhotoTool}
         onHide={off}
-        imageMetaData={image}
+        imageMetaData={image.productCover}
         title="Crop and Save your Cover Photo"
         imageSuggestions="Upload a 1600 x 480px image for better results"
         onUploadComplete={handleCoverUploadComplete}
@@ -177,15 +211,20 @@ export const ProductMedia = () => {
         name="productLogo"
         show={showCropperLogoPhotoTool}
         onHide={offLogo}
-        imageMetaData={image}
+        imageMetaData={image.productLogo}
         title="Crop and Save your Logo"
         imageSuggestions="Upload a 800 x 800px image for better results"
-        aspectRatio='square'
+        aspectRatio="square"
         cropShape="round"
         showGrid={false}
         onUploadComplete={handleLogoUploadComplete}
         objectFit="cover"
       />
+      <Modal show={nextStepConfirmationModal} onHide={hideConfirmationModal}>
+        <div className="bg-white w-[390px] flex flex-col justify-between shadow-md shadow-slate-600/5 rounded-xl p-5">
+          <Button onClick={controls.next}>Next</Button>
+        </div>
+      </Modal>
     </Fragment>
   );
 };

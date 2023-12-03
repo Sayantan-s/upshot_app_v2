@@ -6,6 +6,10 @@ export interface IImageMetaData {
   file: File | null;
   base64URL: string;
 }
+export interface IImageMeta {
+  [K: string]: IImageMetaData;
+}
+
 export interface Props
   extends ModalProps,
     Partial<Pick<CropperProps, 'objectFit' | 'cropShape' | 'showGrid'>> {
@@ -18,7 +22,7 @@ export interface Props
   onUploadComplete?: (data: ISingleImageUploadResponse) => void;
 }
 
-export type IAspectRatio = 'video' | 'square' ;
+export type IAspectRatio = 'video' | 'square';
 
 export interface ReducerAction<T, P> {
   type: T;
