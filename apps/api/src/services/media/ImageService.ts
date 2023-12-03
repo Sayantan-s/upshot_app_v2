@@ -1,4 +1,7 @@
+import { randomUUID } from 'crypto';
+import Jimp from 'jimp';
 import multer from 'multer';
+import { unlink } from 'node:fs/promises';
 import { ICropInput } from './type';
 
 export class ImageService {
@@ -15,36 +18,26 @@ export class ImageService {
   }
 
   static async crop({ file, config, metaData }: ICropInput) {
+    console.log(metaData, config);
     const cropInfo = {
-      left: config.crop.x,
-      top: config.crop.y,
+      left: metaData.x,
+      top: metaData.y,
       width: metaData.width,
       height: metaData.height,
     };
+    const type = file.mimetype.split('/')[1];
 
-    // const image = sharp(file.path);
-    // let imageMetaData = await image.metadata();
+    const image = await Jimp.read(file.path);
+    image.crop(cropInfo.left, cropInfo.top, cropInfo.width, cropInfo.height);
+    image.rotate(-config.rotate);
 
-    // if (config.rotate) {
-    //   await image.rotate(config.rotate);
-    //   imageMetaData = await sharp(await image.toBuffer()).metadata();
-    // }
-
-    // cropInfo.top = Math.round((cropInfo.top / 100) * imageMetaData.height!);
-    // cropInfo.left = Math.round((cropInfo.left / 100) * imageMetaData.width!);
-    // cropInfo.width = Math.round((cropInfo.width / 100) * imageMetaData.width!);
-    // cropInfo.height = Math.round(
-    //   (cropInfo.height / 100) * imageMetaData.height!
-    // );
-
-    // const uniqueCropImageId = randomUUID();
-    // const croppedImagePath = `temp/images/${uniqueCropImageId}.webp`;
-
-    // await image.extract(cropInfo).jpeg().toBuffer();
+    const uniqueCropImageId = randomUUID();
+    const croppedImagePath = `temp/images/${uniqueCropImageId}.${type}`;
+    image.write(croppedImagePath);
 
     return {
-      // filePath: croppedImagePath,
-      // destroy: async () => await unlink(croppedImagePath),
+      filePath: croppedImagePath,
+      destroy: async () => await unlink(croppedImagePath),
     };
   }
 }
