@@ -1,5 +1,8 @@
 import multer from 'multer';
 import { ICropInput } from './type';
+import Jimp from 'jimp'
+import { randomUUID } from 'crypto';
+import { unlink } from 'node:fs/promises';
 
 export class ImageService {
   private static storage = multer.diskStorage({
@@ -21,7 +24,23 @@ export class ImageService {
       width: metaData.width,
       height: metaData.height,
     };
+    console.log("ay1   ",file);
+    const [_,type] = file.mimetype.split("/")
+    cropInfo.top = Math.round((cropInfo.top / 100) * metaData.height!);
+    cropInfo.left = Math.round((cropInfo.left / 100) * metaData.width!);
+    cropInfo.width = Math.round((cropInfo.width / 100) * metaData.width!);
+    cropInfo.height = Math.round(
+      (cropInfo.height / 100) * metaData.height!
+    );
+    const image = (await Jimp.read(file.path))
+    .crop(cropInfo.left,cropInfo.top,cropInfo.width,cropInfo.height)
+    console.log("ay2");
 
+    //image.rotate(config.rotate)
+    const uniqueCropImageId = randomUUID();
+    const croppedImagePath = `temp/images/${uniqueCropImageId}.${type}`;
+    image.write(croppedImagePath)
+    console.log("ay3");
     // const image = sharp(file.path);
     // let imageMetaData = await image.metadata();
 
@@ -43,8 +62,8 @@ export class ImageService {
     // await image.extract(cropInfo).jpeg().toBuffer();
 
     return {
-      // filePath: croppedImagePath,
-      // destroy: async () => await unlink(croppedImagePath),
+      filePath: croppedImagePath,
+      destroy: async () => await unlink(croppedImagePath),
     };
   }
 }
