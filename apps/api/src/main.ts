@@ -1,6 +1,5 @@
 import { Server } from '@api/app/server';
 import { CLIENT_ORIGIN } from '@api/config';
-import { IGenerateCV } from '@api/enums/product';
 import { GQLService } from '@api/integrations/graphql';
 import { AuthMiddleware } from '@api/middlewares/auth';
 import ErrorHandler from '@api/middlewares/error';
@@ -18,7 +17,7 @@ import morgan from 'morgan';
 
 declare module 'express-session' {
   interface SessionData {
-    api_GENERATECV_status: IGenerateCV;
+    user_id: string;
   }
 }
 
@@ -61,7 +60,7 @@ async function main() {
 
   // app.use(AuthMiddleware.withAuthorization);
 
-  app.use('/api/v1/payments', authRouter);
+  // app.use('/api/v1/payments', authRouter);
   app.use('/api/v1/ai', genAiRouter);
   app.use('/api/v1/upload', mediaRouter);
 

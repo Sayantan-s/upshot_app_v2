@@ -50,6 +50,7 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
+    req.session.user_id = id;
     H.success<IRegistrationResponse>(res, {
       statusCode: 201,
       data: { accessToken },
@@ -149,11 +150,9 @@ export class AuthController {
         refresh_token: true,
       }
     );
-    if (!user || cookies.token !== user.refresh_token) {
-      console.log(cookies.token, 'COOKIES');
-      console.log(user?.refresh_token, 'REFRESH');
+    if (!user || cookies.token !== user.refresh_token)
       throw new ErrorHandler(401, 'Not Authorized');
-    }
+
     const accessToken = AuthService.jwt.signAccessToken({
       payload: {
         id,
@@ -225,7 +224,7 @@ export class AuthController {
   };
 
   public static getUser: IGetUserRequestHandler = async (req, res) => {
-    const { userId } = req.query;
+    const { user_id: userId } = req.session;
     if (!userId) throw new ErrorHandler(400, `User doesn't exists!`);
     const user = await UserService.getUser(
       { id: userId as string },
