@@ -121,8 +121,8 @@ export const CropperTool: FC<PropsWithChildren<Props>> = ({
         </div>
         <div id="configurations" className="px-5 mt-4 space-y-4">
           <RangeSlider
-            min={0.5}
-            max={100}
+            min={1}
+            max={10}
             step={0.1}
             value={config.zoom}
             onChange={handleZoomChange}

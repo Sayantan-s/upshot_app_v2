@@ -8,10 +8,12 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/client',
   server: {
     open: true,
-    hmr: true,
     strictPort: true,
     port: 3000,
     host: 'localhost',
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       '/api': {
         target: `${process.env.VITE_SERVER_ORIGIN}/api`,

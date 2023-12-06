@@ -220,9 +220,32 @@ export const ProductMedia = () => {
         onUploadComplete={handleLogoUploadComplete}
         objectFit="cover"
       />
-      <Modal show={nextStepConfirmationModal} onHide={hideConfirmationModal}>
+      <Modal show={true} onHide={hideConfirmationModal}>
         <div className="bg-white w-[390px] flex flex-col justify-between shadow-md shadow-slate-600/5 rounded-xl p-5">
-          <Button onClick={controls.next}>Next</Button>
+          <div className="relative">
+            <h1 className="text-base leading-6 font-[700] text-slate-900 flex-[0.9]">
+              Would you like to continue or make any edits to the product media
+              before finalizing?
+            </h1>
+
+            <p className="mt-2 leading-6">
+              We have successfully generated your post. To see your generate
+              posts please click on{' '}
+              <strong className="text-slate-900">"Continue"</strong>
+            </p>
+          </div>
+          <div className="mt-6 flex justify-end space-x-2">
+            <Button variant={'danger.outline'} size={'md'}>
+              No, just proceed!
+            </Button>
+            <Button
+              variant={'neutral.solid'}
+              size={'md'}
+              onClick={controls.next}
+            >
+              Continue
+            </Button>
+          </div>
         </div>
       </Modal>
     </Fragment>
