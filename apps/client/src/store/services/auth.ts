@@ -8,7 +8,6 @@ import {
   IRefreshResponse,
   IRegisterRequest,
   IRegisterResponse,
-  IRequestUserParams,
   User,
 } from '@client/store/types/auth';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
@@ -114,11 +113,10 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
-    user: builder.query<Api.SuccessResponse<User>, IRequestUserParams>({
+    user: builder.query<Api.SuccessResponse<User>,unknown>({
       query: (param) => ({
         url: AUTH_ENDPOINT.USER,
         medthod: 'GET',
-        params: param,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
