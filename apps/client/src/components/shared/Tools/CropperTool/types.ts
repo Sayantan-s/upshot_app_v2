@@ -18,7 +18,7 @@ export interface Props
   onUploadComplete?: (data: ISingleImageUploadResponse) => void;
 }
 
-export type IAspectRatio = 'video' | 'square';
+export type IAspectRatio = 'video' | 'square' ;
 
 export interface ReducerAction<T, P> {
   type: T;
