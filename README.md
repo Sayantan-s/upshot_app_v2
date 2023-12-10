@@ -11,6 +11,6 @@
 &nbsp;&nbsp;<img src="https://cdn.svgporn.com/logos/nodejs-icon.svg" width="45">
 &nbsp;<img src="https://cdn.svgporn.com/logos/prisma.svg" width="42">
 &nbsp;<img src="https://cdn.svgporn.com/logos/mongodb-icon.svg" width="24">
-&nbsp;<img src="https://cdn.svgporn.com/logos/socket.io.svg" width="48">
+&nbsp;<img src="https://cdn.svgporn.com/logos/google-cloud-functions.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/nx.svg" width="48">
