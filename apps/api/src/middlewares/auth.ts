@@ -9,7 +9,8 @@ export class AuthMiddleware {
     async (req, _, next) => {
       const access_token = req.headers['authorization']?.split(' ')[1];
       if (!access_token) throw new ErrorHandler(401, 'Not Authorized');
-      await AuthService.jwt.verifyAccessToken(access_token);
+      const {id}= await AuthService.jwt.verifyAccessToken(access_token);
+      req.session.user_id=id
       next();
     }
   );
