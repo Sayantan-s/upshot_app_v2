@@ -50,7 +50,7 @@ jobs:
       - name: Log in to Fly.io
         run: |
           export PATH=$HOME/.fly/bin:$PATH
-          fly auth login --token ${{ secrets.FLYIO_API_TOKEN }}
+          fly auth login --access-token ${{ secrets.FLYIO_API_TOKEN }}
 
       - name: Deploy API to Fly.io
         run: |
