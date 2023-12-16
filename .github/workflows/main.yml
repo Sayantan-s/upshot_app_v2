@@ -1,0 +1,44 @@
+name: Pipeline
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'v18.16.0'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build and Test
+        run: nx run-many --target=build --all --parallel
+
+  # deploy:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '14'
+
+  #     - name: Install Dependencies
+  #       run: npm install
+
+  #     - name: Deploy to Production
+  #       run: nx run-many --target=deploy --all --prod
