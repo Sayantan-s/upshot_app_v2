@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Generate Prisma Schema
-        run: prisma:generate
+        run: yarn prisma:generate
 
       - name: Build Api
         run: yarn build
