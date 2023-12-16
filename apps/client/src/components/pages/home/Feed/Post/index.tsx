@@ -33,14 +33,14 @@ const Post = ({ details, activity, id, updated_at, user }: IPost) => {
           <img
             className={`absolute w-full h-full object-cover ${bgColor}`}
             alt={`avatar_${id}`}
-            src={user?.details?.profile_pic}
+            src={user?.profilePic}
           />
         </div>
         <div>
           <h1 className="flex space-x-2 items-center">
             <span className="text-sm font-normal text-slate-500">
               {' '}
-              {user?.details?.first_name} {user?.details?.last_name}
+              {user?.firstName} {user?.lastName}
             </span>
             <span> &middot;</span>
             <span
@@ -50,7 +50,7 @@ const Post = ({ details, activity, id, updated_at, user }: IPost) => {
             </span>
           </h1>
           <p className="text-xs max-w-sm truncate text-slate-400 mt-1">
-            {user?.details?.headline}
+            {user?.about}
           </p>
           <span className="block text-xs text-slate-300 mt-0.5">
             {' '}

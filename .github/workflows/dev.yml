@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Build and Test
-        run: nx run-many --target=build --all --parallel
+        run: yarn build
 
   # deploy:
   #   needs: build-and-test
