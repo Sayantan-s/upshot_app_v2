@@ -38,7 +38,7 @@ export const ProductMedia = () => {
   const handleSaveFile = async (eve: React.ChangeEvent<HTMLInputElement>) => {
     if (eve.target.files?.length) {
       const name = eve.target.name as IPhotoType;
-      const [file] = eve.target.files;
+      const file = eve.target.files[0];
       try {
         ValidationSchema.productMediaFile.parse(file);
         setError(name, { message: '' });

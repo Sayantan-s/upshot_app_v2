@@ -18,8 +18,9 @@ export const useAuth = () => {
   const decodedToken = accessToken ? parseJWTToken(accessToken) : null;
 
   return {
-    isAuthenticated:
-      new Date(decodedToken?.exp).getTime() - Date.now() / 1000 > 0,
+    isAuthenticated: decodedToken?.exp
+      ? new Date(decodedToken?.exp).getTime() - Date.now() / 1000 > 0
+      : false,
     token: accessToken,
     tokenMetaData: decodedToken,
     user,

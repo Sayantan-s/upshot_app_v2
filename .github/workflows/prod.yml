@@ -1,0 +1,45 @@
+name: Production Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Generate Prisma Schema
+        run: yarn prisma:generate
+
+      - name: Build Both Projects
+        run: yarn build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Install Fly CLI
+        run: |
+          curl -L https://fly.io/install.sh | sh

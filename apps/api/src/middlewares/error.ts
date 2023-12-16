@@ -15,22 +15,6 @@ export default class ErrorHandler extends Error {
     this.message = message || "Something wen't wrong";
   }
 
-  public static withErrorHandler(target) {
-    const originalMethods = Object.getOwnPropertyNames(target.prototype);
-
-    originalMethods.forEach((methodName) => {
-      if (
-        methodName !== 'constructor' &&
-        typeof target.prototype[methodName] === 'function'
-      ) {
-        const originalMethod = target.prototype[methodName];
-        target.prototype[methodName] = function (...args: unknown[]) {
-          return ErrorHandler.tryCatch(originalMethod.apply(this, args));
-        };
-      }
-    });
-  }
-
   static tryCatch(controller: RequestHandler) {
     const catcher: RequestHandler = async (req, res, next) => {
       try {

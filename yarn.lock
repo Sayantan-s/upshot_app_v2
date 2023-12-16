@@ -4000,13 +4000,6 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/jsonwebtoken@^9.0.2", "@types/jsonwebtoken@^9.0.5":
-  version "9.0.5"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.5.tgz#0bd9b841c9e6c5a937c17656e2368f65da025588"
-  integrity sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==
-  dependencies:
-    "@types/node" "*"
-
 "@types/keyv@^3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
@@ -4014,12 +4007,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/linkify-it@*":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-3.0.5.tgz#1e78a3ac2428e6d7e6c05c1665c242023a4601d8"
-  integrity sha512-yg6E+u0/+Zjva+buc3EIb+29XEg4wltq7cSmd4Uc2EE/1nUVmxyzpX6gUXD0V8jIrG0r7YeOGVIbYRkxeooCtw==
-
-"@types/lodash@^4.14.104", "@types/lodash@^4.14.168":
+"@types/lodash@^4.14.168":
   version "4.14.202"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.202.tgz#f09dbd2fb082d507178b2f2a5c7e74bd72ff98f8"
   integrity sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==
@@ -7273,44 +7261,6 @@ find-versions@^5.0.0:
   dependencies:
     semver-regex "^4.0.5"
 
-firebase-admin@^11.4.1:
-  version "11.11.1"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.11.1.tgz#6712923de70d218c9f514d73005d976d03339605"
-  integrity sha512-UyEbq+3u6jWzCYbUntv/HuJiTixwh36G1R9j0v71mSvGAx/YZEWEW7uSGLYxBYE6ckVRQoKMr40PYUEzrm/4dg==
-  dependencies:
-    "@fastify/busboy" "^1.2.1"
-    "@firebase/database-compat" "^0.3.4"
-    "@firebase/database-types" "^0.10.4"
-    "@types/node" ">=12.12.47"
-    jsonwebtoken "^9.0.0"
-    jwks-rsa "^3.0.1"
-    node-forge "^1.3.1"
-    uuid "^9.0.0"
-  optionalDependencies:
-    "@google-cloud/firestore" "^6.8.0"
-    "@google-cloud/storage" "^6.9.5"
-
-firebase-functions-test@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/firebase-functions-test/-/firebase-functions-test-3.1.0.tgz#5f0946237d004d86db5ff8cfab2ab0a566ffdb75"
-  integrity sha512-yfm9ToguShxmRXb7TINN88zE2bM9gsBbs7vMWVKJAxGcl/n1f/U0sT5k2yho676QIcSqXVSjCONU8W4cUEL+Sw==
-  dependencies:
-    "@types/lodash" "^4.14.104"
-    lodash "^4.17.5"
-    ts-deepmerge "^2.0.1"
-
-firebase-functions@^4.1.1:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-4.5.0.tgz#4ce56225842d3c2b007b99a95ff0faa26098f26c"
-  integrity sha512-y6HsasHtGLfXCp3Pfrz+JA19lO9hSzYiNxFDIDMffrfcsG7UbXzv0zfi2ASadMVRoDCaox5ppZBa1QJxZbctPQ==
-  dependencies:
-    "@types/cors" "^2.8.5"
-    "@types/express" "4.17.3"
-    cors "^2.8.5"
-    express "^4.17.1"
-    node-fetch "^2.6.7"
-    protobufjs "^7.2.2"
-
 flat-cache@^3.0.4:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-3.2.0.tgz#2c0c2d5040c99b1632771a9d105725c0115363ee"
@@ -9359,7 +9309,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==
 
-lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21, lodash@^4.17.5:
+lodash@^4.17.14, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
