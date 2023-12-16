@@ -42,7 +42,7 @@ const Component: FC = () => {
   const handleSubmit = () => {};
   return (
     <MultiStep
-      defaultStep={BUILD_IN_PUBLIC_MULTISTEP.STEP_3}
+      defaultStep={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}
       state={buildInPublicInitialState}
       onSubmit={handleSubmit}
     >
