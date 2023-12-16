@@ -1,4 +1,4 @@
-name: Pipeline
+name: Development Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - development
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'v18.16.0'
+          node-version: '18'
 
       - name: Install Dependencies
         run: yarn install
