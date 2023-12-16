@@ -43,3 +43,10 @@ jobs:
       - name: Install Fly CLI
         run: |
           curl -L https://fly.io/install.sh | sh
+
+      - name: Log in to Fly.io
+        run: fly auth login --token ${{ secrets.FLYIO_API_TOKEN }}
+
+      - name: Deploy API to Fly.io
+        run: |
+          fly deploy --build-dir=./dist/apps/api
