@@ -1,9 +1,9 @@
-name: Development Pipeline
+name: Production Pipeline
 
 on:
   push:
     branches:
-      - development
+      - master
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.16.0'
 
       - name: Install Dependencies
         run: yarn install
@@ -26,3 +26,20 @@ jobs:
 
       - name: Build Both Projects
         run: yarn build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Install Fly CLI
+        run: |
+          curl -L https://fly.io/install.sh | sh
