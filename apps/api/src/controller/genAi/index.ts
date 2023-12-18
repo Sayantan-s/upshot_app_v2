@@ -14,9 +14,9 @@ export class GenAiController {
       generateProductDescription,
     } = req.body;
 
-    const responsePayload: IResponsePayload = {
+    const responsePayload: Partial<IResponsePayload> = {
       startedSettingUpAutomatedPosts: false,
-    } as IResponsePayload;
+    } ;
 
     if (generateProductDescription) {
       const description = await OpenApi.client.completions.create({
