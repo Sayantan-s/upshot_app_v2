@@ -41,7 +41,9 @@ const [MultiStep, useMultiStep] = createMultiStep<
 const Component: FC = () => {
   const handleSubmit = () => {};
 
-  const handleCacheCurrentChanges = () => {};
+  const handleCacheCurrentChanges = (state: IBuildInPublicInitialState) => {
+    console.log(state);
+  };
 
   return (
     <MultiStep
