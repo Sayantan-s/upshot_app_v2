@@ -180,7 +180,7 @@ export const ProductMedia = () => {
         imageMetaData={image}
         title="Crop and Save your Logo"
         imageSuggestions="Upload a 800 x 800px image for better results"
-        aspectRatio="square"
+        aspectRatio='square'
         cropShape="round"
         showGrid={false}
         onUploadComplete={handleLogoUploadComplete}
