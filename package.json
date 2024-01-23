@@ -20,6 +20,7 @@
     "@radix-ui/react-toolbar": "^1.0.4",
     "@reduxjs/toolkit": "^1.9.7",
     "@swc/helpers": "~0.5.2",
+    "@upstash/redis": "^1.28.2",
     "axios": "^1.0.0",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",

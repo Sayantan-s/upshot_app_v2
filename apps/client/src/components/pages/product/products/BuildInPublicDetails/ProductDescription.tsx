@@ -58,7 +58,7 @@ export const ProductDescription = () => {
               renderTag={(tag, handleDelete) => (
                 <div
                   key={tag.value}
-                  role="tag"
+                  aria-roledescription="tag"
                   className="bg-slate-50 hover:bg-slate-100 space-x-0.5 h-full p-3 flex items-center justify-center rounded-full min-w-[7rem]"
                 >
                   <Add

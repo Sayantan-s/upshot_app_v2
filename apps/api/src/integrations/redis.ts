@@ -2,11 +2,8 @@ import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from '@api/config';
 import chalk from 'chalk';
 import Redis from 'ioredis';
 
-const r = new Redis({
-  host: REDIS_HOST!,
-  port: +REDIS_PORT!,
-  password: REDIS_PASSWORD!,
-});
+const URL = `rediss://default:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
+const r = new Redis(URL);
 
 type G = typeof globalThis;
 interface CustomNodeJsGlobal extends G {

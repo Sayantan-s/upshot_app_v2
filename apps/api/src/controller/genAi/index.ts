@@ -18,6 +18,8 @@ export class GenAiController {
       startedSettingUpAutomatedPosts: false,
     } ;
 
+    // Create a product in DB and set it's status in 'PENDING' | 'CREATED'
+
     if (generateProductDescription) {
       const description = await OpenApi.client.completions.create({
         model: 'text-davinci-003',

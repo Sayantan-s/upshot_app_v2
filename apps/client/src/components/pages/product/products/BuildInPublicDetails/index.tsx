@@ -40,11 +40,15 @@ const [MultiStep, useMultiStep] = createMultiStep<
 
 const Component: FC = () => {
   const handleSubmit = () => {};
+
+  const handleCacheCurrentChanges = () => {};
+
   return (
     <MultiStep
       defaultStep={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}
       state={buildInPublicInitialState}
       onSubmit={handleSubmit}
+      onStepChange={handleCacheCurrentChanges}
     >
       <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}>
         <ProductIdenity />
