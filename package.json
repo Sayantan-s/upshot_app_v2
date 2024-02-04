@@ -5,6 +5,7 @@
   "scripts": {
     "prisma:generate": "prisma generate --schema=./apps/api/prisma/schema.prisma",
     "dev": "nx run-many --target=serve --projects=client,api",
+    "dev:server": "nx run api:serve",
     "build": "nx run-many --target=build --all --parallel"
   },
   "private": true,
