@@ -1,6 +1,5 @@
 import { ORIGIN, PORT } from '@api/config';
 import redis from '@api/integrations/redis';
-import swaggerDocs from '@api/utils/swagger';
 import chalk from 'chalk';
 import express from 'express';
 import http from 'http';
@@ -14,7 +13,6 @@ export class Server {
     this.server = http.createServer(this.app);
     this.server.listen(PORT, () => {
       console.log(chalk.bgGray.bold.redBright(`SERVER RUNNING ON ${ORIGIN}`));
-      swaggerDocs(this.app,+PORT);
     });
     process.on('SIGINT', () => {
       redis.flushall();
