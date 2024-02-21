@@ -14,5 +14,6 @@
 &nbsp;<img src="https://cdn.svgporn.com/logos/google-cloud-functions.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/nx.svg" width="48">
+&nbsp;<img src="https://cdn.svgporn.com/logos/upstash-icon.svg" width="48">
 
 <b>☁️ Cloud Functions: </b>https://github.com/Sayantan-s/serverless-fns-upshot_v2
