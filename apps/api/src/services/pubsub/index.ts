@@ -1,45 +1,60 @@
-import redis from '@api/integrations/redis';
-import { IRedisPubSubKeyNames } from '@api/main';
-import { Request } from 'express';
-import { IConsume } from './type';
+import { pubsubRedis } from '@api/integrations/redis';
+import { IConsume, PUBSUB_CHANNELNAMES } from './type';
 
 export default class PubSub<TData> {
   channel: string;
-  keyName?: keyof IRedisPubSubKeyNames;
-  request: Request;
+  static pubsubClient?: Record<
+    (typeof PUBSUB_CHANNELNAMES)[number],
+    Pick<PubSub<unknown>, 'consume' | 'produce'>
+  >;
 
-  constructor(channel: string, keyName?: keyof IRedisPubSubKeyNames) {
+  constructor(channel: string) {
     this.channel = channel;
-    this.keyName = keyName;
   }
 
   async subscribe() {
-    redis.subscribe(this.channel);
+    pubsubRedis.subscribe(this.channel);
   }
 
-  async produce(message: TData, request?: Request) {
-    await redis.publish(this.channel, JSON.stringify(message));
-    if (request) {
-      this.request = request;
-      this.request.session[this.keyName] = true;
-    }
+  async produce(message: TData) {
+    await pubsubRedis.publish(this.channel, JSON.stringify(message));
   }
 
   async consume(callback: IConsume<TData>) {
-    await redis.on('message', (channel: string, message: string) => {
+    await pubsubRedis.on('message', (channel: string, message: string) => {
       if (this.channel === channel) callback(JSON.parse(message));
     });
   }
 
-  static init<TData>(_pubSubs: Pick<PubSub<TData>, 'channel' | 'keyName'>[]) {
-    return _pubSubs.reduce((acc, curr) => {
-      const pubSub = new PubSub<TData>(curr.channel, curr.keyName);
+  static get client() {
+    if (!PubSub.pubsubClient)
+      throw new Error('Cannot find any pubsub instantiation');
+    return PubSub.pubsubClient;
+  }
+
+  private static setClient<TData>(
+    obj: Record<string, Pick<PubSub<TData>, 'consume' | 'produce'>>
+  ) {
+    PubSub.pubsubClient = obj;
+  }
+
+  static init<TData>(_pubSubChannels: typeof PUBSUB_CHANNELNAMES) {
+    const result = _pubSubChannels.reduce((acc, _pubSubChannel) => {
+      const pubSub = new PubSub<TData>(_pubSubChannel);
       pubSub.subscribe();
-      acc.set(curr.keyName, {
+      acc[_pubSubChannel] = {
         produce: pubSub.produce.bind(pubSub),
         consume: pubSub.consume.bind(pubSub),
-      });
+      };
       return acc;
-    }, new Map());
+    }, {} as Record<string, Pick<PubSub<TData>, 'consume' | 'produce'>>);
+
+    PubSub.setClient(result);
+
+    _pubSubChannels.forEach((_pubSubChannel) => {
+      PubSub.client[_pubSubChannel].consume((data) => {
+        console.log(data);
+      });
+    });
   }
 }

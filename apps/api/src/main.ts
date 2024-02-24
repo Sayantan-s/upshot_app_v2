@@ -2,9 +2,9 @@ import { Server } from '@api/app/server';
 import { SessionData } from 'express-session';
 import { Session } from 'inspector';
 import Controllers from './controller';
-import { MESSAGE_CALL_GENPOST_FN } from './enums/pubsub';
 import Middlewares from './middlewares';
 import PubSub from './services/pubsub';
+import { PUBSUB_CHANNELNAMES } from './services/pubsub/type';
 
 export interface IRedisPubSubKeyNames {
   redis_message_called_serveless_fn: boolean;
@@ -24,12 +24,7 @@ declare module 'node:http' {
 async function main() {
   const { app } = Server.init();
 
-  PubSub.init([
-    {
-      channel: MESSAGE_CALL_GENPOST_FN,
-      keyName: 'redis_message_called_serveless_fn',
-    },
-  ]);
+  PubSub.init(PUBSUB_CHANNELNAMES);
 
   // Middlewares [:: Common]
   Middlewares.commonMiddlewares(app);

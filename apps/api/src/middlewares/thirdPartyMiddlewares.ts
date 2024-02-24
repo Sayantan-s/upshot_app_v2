@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import { Express, Request, Response } from 'express';
 
 export const withSwagger = (app: Express) => {
-  console.log('HELLOW WORLD>..');
   //Swagger Page
   app.use(
     '/docs',

@@ -1,7 +1,6 @@
-import { MESSAGE_CALL_GENPOST_FN } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import { OpenApi } from '@api/integrations/openai';
-import redis from '@api/integrations/redis';
+import PubSub from '@api/services/pubsub';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
 
 export class GenAiController {
@@ -39,10 +38,10 @@ export class GenAiController {
 
     if (setupInitialFiveAutomatedPosts) {
       responsePayload.startedSettingUpAutomatedPosts = true;
-      redis.publish(
-        MESSAGE_CALL_GENPOST_FN,
-        JSON.stringify({ productMoto, productName })
-      );
+      PubSub.client.CALL_GENPOST_FN.produce({
+        productName,
+        productMoto,
+      });
       req.session.redis_message_called_serveless_fn = true;
     }
 

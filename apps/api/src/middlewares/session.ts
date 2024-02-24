@@ -1,6 +1,6 @@
 import { SESSION_SECRET } from '@api/config';
 import { SESSION_AGE } from '@api/enums/auth';
-import redis from '@api/integrations/redis';
+import { redis } from '@api/integrations/redis';
 import RedisStore from 'connect-redis';
 import session from 'express-session';
 import { Server } from 'socket.io';
