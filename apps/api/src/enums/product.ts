@@ -7,3 +7,8 @@ export enum IGEN_CV_STATUS {
 }
 
 export type IGenerateCV = keyof typeof IGEN_CV_STATUS;
+
+export enum IProductStatus {
+  PENDING = 'PENDING',
+  CREATED = 'CREATED',
+}
