@@ -1,6 +1,5 @@
 import H from '@api/helpers/ResponseHelper';
 import { OpenApi } from '@api/integrations/openai';
-import PubSub from '@api/services/pubsub';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
 
 export class GenAiController {
@@ -23,7 +22,7 @@ export class GenAiController {
 
     if (generateProductDescription) {
       const description = await OpenApi.client.completions.create({
-        model: 'text-davinci-003',
+        model: 'gpt-3.5-turbo-instruct',
         prompt: `
         Generate a 50 words product decription according to the below inputs:
         productName: ${productName}
@@ -38,10 +37,6 @@ export class GenAiController {
 
     if (setupInitialFiveAutomatedPosts) {
       responsePayload.startedSettingUpAutomatedPosts = true;
-      PubSub.client.CALL_GENPOST_FN.produce({
-        productName,
-        productMoto,
-      });
       req.session.redis_message_called_serveless_fn = true;
     }
 

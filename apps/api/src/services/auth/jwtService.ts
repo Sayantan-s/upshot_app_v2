@@ -25,7 +25,8 @@ export class JWTService {
   }
 
   public static async verifyAccessToken(token: string): Promise<JWTMetaData> {
-    return jwt.verify(token, ACCESS_TOKEN_SECRET!) as JWTMetaData;
+    const result = jwt.verify(token, ACCESS_TOKEN_SECRET!) as JWTMetaData;
+    return result;
   }
 
   public static async verifyRefreshToken(token: string): Promise<JWTMetaData> {

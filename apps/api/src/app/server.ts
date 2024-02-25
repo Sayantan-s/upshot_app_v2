@@ -1,5 +1,5 @@
 import { ORIGIN, PORT } from '@api/config';
-import { pubsubRedis, redis } from '@api/integrations/redis';
+import { redis } from '@api/integrations/redis';
 import chalk from 'chalk';
 import express from 'express';
 import http from 'http';
@@ -16,9 +16,7 @@ export class Server {
     });
     process.on('SIGINT', async () => {
       await redis.flushall();
-      await pubsubRedis.flushall();
       await redis.disconnect();
-      await pubsubRedis.disconnect();
       this.server.close();
     });
   }
