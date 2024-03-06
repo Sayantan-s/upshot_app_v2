@@ -113,7 +113,7 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
-    user: builder.query<Api.SuccessResponse<User>,unknown>({
+    user: builder.query<Api.SuccessResponse<User>, unknown>({
       query: (param) => ({
         url: AUTH_ENDPOINT.USER,
         medthod: 'GET',

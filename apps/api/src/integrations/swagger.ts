@@ -10,21 +10,23 @@ interface ISwaggerClient {
 export class Swagger {
   private swaggerSpec: object;
   private ui: typeof swaggerUi;
-  private static clientInstance: ISwaggerClient | null ={
+  private static clientInstance: ISwaggerClient | null = {
     spec: swaggerJsdoc,
-    ui: swaggerUi
+    ui: swaggerUi,
   };
   constructor() {
     const options: swaggerJsdoc.Options = {
       definition: {
         openapi: '3.0.0',
-        servers: [{
-          url: `${ORIGIN}`,
-        }],
+        servers: [
+          {
+            url: `${ORIGIN}`,
+          },
+        ],
         info: {
           title: 'Upshot API docs',
           version: '0.0.0',
-          description:'Upshot API Description'
+          description: 'Upshot API Description',
         },
         components: {
           securitySchemas: {
@@ -49,9 +51,9 @@ export class Swagger {
   }
   static get client() {
     const instance = new Swagger();
-      Swagger.clientInstance.spec = instance.swaggerSpec;
-      Swagger.clientInstance.ui = instance.ui;
-      //console.log(Swagger.clientInstance);
+    Swagger.clientInstance.spec = instance.swaggerSpec;
+    Swagger.clientInstance.ui = instance.ui;
+    //console.log(Swagger.clientInstance);
     return Swagger.clientInstance;
   }
 }

@@ -1,5 +1,9 @@
+import { IProductStatus } from '@api/enums/product';
 import H from '@api/helpers/ResponseHelper';
+import PubSub from '@api/integrations/kafka';
 import { OpenApi } from '@api/integrations/openai';
+import { redis } from '@api/integrations/redis';
+import { v4 as uuid } from 'uuid';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
 
 export class GenAiController {
@@ -16,13 +20,11 @@ export class GenAiController {
 
     const responsePayload: Partial<IResponsePayload> = {
       startedSettingUpAutomatedPosts: false,
-    } ;
-
-    // Create a product in DB and set it's status in 'PENDING' | 'CREATED'
+    };
 
     if (generateProductDescription) {
       const description = await OpenApi.client.completions.create({
-        model: 'text-davinci-003',
+        model: 'gpt-3.5-turbo-instruct',
         prompt: `
         Generate a 50 words product decription according to the below inputs:
         productName: ${productName}
@@ -37,12 +39,36 @@ export class GenAiController {
 
     if (setupInitialFiveAutomatedPosts) {
       responsePayload.startedSettingUpAutomatedPosts = true;
-      // Call a serverless function
+      req.session.redis_message_called_serveless_fn = true;
     }
+
+    // Create a product in your in memory cache and set it's status in 'PENDING'
+
+    const pubsub = new PubSub();
+    const messages = [
+      {
+        key: 'key1',
+        value: true,
+      },
+    ];
+
+    pubsub.publish('my-topic', messages);
+
+    const temporaryProductIdentity = uuid();
+
+    await redis.set(
+      temporaryProductIdentity,
+      JSON.stringify({
+        productMoto,
+        productName,
+        status: IProductStatus.PENDING,
+        description: responsePayload.description || '',
+      })
+    );
 
     H.success(res, {
       statusCode: 200,
-      data: responsePayload,
+      data: { ...responsePayload, temporaryProductIdentity },
     });
   };
 }

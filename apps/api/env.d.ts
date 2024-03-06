@@ -6,8 +6,6 @@ declare global {
       PWD: string;
       ORIGIN: string;
       CLIENT_ORIGIN: string;
-      STYTCH_PROJECT_ID: string;
-      STYTCH_SECRET: string;
       SESSION_SECRET: string;
       REDIS_HOST: string;
       REDIS_PORT: string;
@@ -20,6 +18,10 @@ declare global {
       CLOUDINARY_API_KEY: string;
       CLOUDINARY_SECRET_KEY: string;
       AAI_API_KEY: string;
+      REDIS_PUBSUB_HOST: string;
+      REDIS_PUBSUB_PASSWORD: string;
+      REDIS_PUBSUB_PORT: string;
+      SERVERLESS_FN: string;
     }
 
     interface Global {}
