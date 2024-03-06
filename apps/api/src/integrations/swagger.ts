@@ -1,3 +1,4 @@
+import { ORIGIN } from '@api/config';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -9,14 +10,21 @@ interface ISwaggerClient {
 export class Swagger {
   private swaggerSpec: object;
   private ui: typeof swaggerUi;
-  private static clientInstance: ISwaggerClient | null = null;
+  private static clientInstance: ISwaggerClient | null ={
+    spec: swaggerJsdoc,
+    ui: swaggerUi
+  };
   constructor() {
     const options: swaggerJsdoc.Options = {
       definition: {
-        upshotapi: '0.0.0',
+        openapi: '3.0.0',
+        servers: [{
+          url: `${ORIGIN}`,
+        }],
         info: {
           title: 'Upshot API docs',
           version: '0.0.0',
+          description:'Upshot API Description'
         },
         components: {
           securitySchemas: {
@@ -33,18 +41,17 @@ export class Swagger {
           },
         ],
       },
-      apis: ['../routes/*.ts', ''], //routes and schema paths
+      apis: ['../routes/*.ts'], //routes and schema paths
     };
 
     this.swaggerSpec = swaggerJsdoc(options);
     this.ui = swaggerUi;
   }
   static get client() {
-    if (!Swagger.clientInstance) {
-      const instance = new Swagger();
+    const instance = new Swagger();
       Swagger.clientInstance.spec = instance.swaggerSpec;
       Swagger.clientInstance.ui = instance.ui;
-    }
+      //console.log(Swagger.clientInstance);
     return Swagger.clientInstance;
   }
 }

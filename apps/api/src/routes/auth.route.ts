@@ -4,7 +4,15 @@ import ErrorHandler from '@api/middlewares/error';
 import express from 'express';
 
 const authRouter = express.Router();
-
+/**
+ * @swagger
+ * /register:
+ *  post:
+ *    summary: Register User Account
+ *    responses:
+ *    '200':
+ *      description: A successful User Account Registration
+ */
 authRouter
   .route('/register')
   .post(ErrorHandler.tryCatch(AuthController.register));
