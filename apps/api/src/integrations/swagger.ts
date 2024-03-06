@@ -10,7 +10,7 @@ interface ISwaggerClient {
 export class Swagger {
   private swaggerSpec: object;
   private ui: typeof swaggerUi;
-  private static clientInstance = {} as ISwaggerClient | null;
+  private static clientInstance = {} as ISwaggerClient;
   private static path = path.resolve(
     __dirname,
     '..',
