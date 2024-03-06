@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { AuthMiddleware } from './auth';
 import ErrorHandler from './error';
 import { sessionMiddleWare } from './session';
+import swagger from './swagger';
 
 export default class Middlewares {
   static commonMiddlewares(app: Express) {
@@ -17,7 +18,7 @@ export default class Middlewares {
 
   static restMiddlewares(app: Express) {
     app.use(express.urlencoded({ extended: false }));
-    // app.use(withSwagger);
+    app.use(swagger);
     app.use(
       cors({
         origin: CLIENT_ORIGIN,
