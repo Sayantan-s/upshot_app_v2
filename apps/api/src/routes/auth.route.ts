@@ -7,11 +7,9 @@ const authRouter = express.Router();
 /**
  * @swagger
  * /register:
- *  post:
- *    summary: Register User Account
- *    responses:
- *    '200':
- *      description: A successful User Account Registration
+ *   post:
+ *     summary: Retrieve a list of JSONPlaceholder users
+ *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
  */
 authRouter
   .route('/register')
