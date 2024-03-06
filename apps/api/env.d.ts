@@ -21,6 +21,7 @@ declare global {
       REDIS_PUBSUB_HOST: string;
       REDIS_PUBSUB_PASSWORD: string;
       REDIS_PUBSUB_PORT: string;
+      SERVERLESS_FN: string;
     }
 
     interface Global {}
