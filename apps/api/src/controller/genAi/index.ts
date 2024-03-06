@@ -1,5 +1,6 @@
 import { IProductStatus } from '@api/enums/product';
 import H from '@api/helpers/ResponseHelper';
+import PubSub from '@api/integrations/kafka';
 import { OpenApi } from '@api/integrations/openai';
 import { redis } from '@api/integrations/redis';
 import { v4 as uuid } from 'uuid';
@@ -42,6 +43,16 @@ export class GenAiController {
     }
 
     // Create a product in your in memory cache and set it's status in 'PENDING'
+
+    const pubsub = new PubSub();
+    const messages = [
+      {
+        key: 'key1',
+        value: true,
+      },
+    ];
+
+    pubsub.publish('my-topic', messages);
 
     const temporaryProductIdentity = uuid();
 
