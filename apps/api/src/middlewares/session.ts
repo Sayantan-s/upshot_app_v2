@@ -1,6 +1,6 @@
 import { SESSION_SECRET } from '@api/config';
 import { SESSION_AGE } from '@api/enums/auth';
-import { redis } from '@api/integrations/redis';
+import { Redis } from '@api/integrations/redis';
 import RedisStore from 'connect-redis';
 import session from 'express-session';
 import { Server } from 'socket.io';
@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 export type SocketMiddleware = Parameters<Server['use']>[0];
 
 const redisStore = new RedisStore({
-  client: redis,
+  client: Redis.client.cache,
   prefix: 'myapp:',
 });
 

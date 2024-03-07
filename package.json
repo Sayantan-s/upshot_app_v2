@@ -5,8 +5,11 @@
   "scripts": {
     "prisma:generate": "prisma generate --schema=./apps/api/prisma/schema.prisma",
     "dev": "nx run-many --target=serve --projects=api,client",
-    "dev:server": "nx run api:serve",
-    "build": "nx run-many --target=build --all --parallel"
+    "build": "nx run-many --target=build --all --parallel",
+    "build:api": "nx run api:build:production",
+    "build:client": "nx run client:build:production",
+    "serve:api": "nx run api:serve:production",
+    "serve:client": "nx run client:serve:production"
   },
   "private": true,
   "dependencies": {
@@ -22,8 +25,10 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@swc/helpers": "~0.5.2",
     "@upstash/redis": "^1.28.2",
+    "add": "^2.0.6",
     "axios": "^1.0.0",
     "bcrypt": "^5.1.1",
+    "bullmq": "^5.4.2",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.0",
     "connect-redis": "^7.1.0",
@@ -38,7 +43,6 @@
     "ioredis": "^5.3.2",
     "jimp": "^0.22.10",
     "jsonwebtoken": "^9.0.2",
-    "kafkajs": "^2.2.4",
     "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
     "openai": "^4.20.1",
@@ -57,6 +61,7 @@
     "tslib": "^2.3.0",
     "uuid": "^9.0.1",
     "vite-tsconfig-paths": "^4.2.1",
+    "yarn": "^1.22.21",
     "zod": "^3.22.4"
   },
   "devDependencies": {

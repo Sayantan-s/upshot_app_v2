@@ -18,9 +18,6 @@ declare global {
       CLOUDINARY_API_KEY: string;
       CLOUDINARY_SECRET_KEY: string;
       AAI_API_KEY: string;
-      REDIS_PUBSUB_HOST: string;
-      REDIS_PUBSUB_PASSWORD: string;
-      REDIS_PUBSUB_PORT: string;
       SERVERLESS_FN: string;
     }
 
