@@ -1,9 +1,7 @@
-import { IProductStatus } from '@api/enums/product';
+import { MESSAGE_CALL_GENPOST_FN } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
-import PubSub from '@api/integrations/kafka';
 import { OpenApi } from '@api/integrations/openai';
-import { redis } from '@api/integrations/redis';
-import { v4 as uuid } from 'uuid';
+import GenaiQueue from '@api/integrations/queues/genpost.queue';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
 
 export class GenAiController {
@@ -23,6 +21,7 @@ export class GenAiController {
     };
 
     if (generateProductDescription) {
+      // Task 1:: Generate a product description using ai if checked from UI
       const description = await OpenApi.client.completions.create({
         model: 'gpt-3.5-turbo-instruct',
         prompt: `
@@ -38,37 +37,17 @@ export class GenAiController {
     }
 
     if (setupInitialFiveAutomatedPosts) {
+      // Task 1:: Call the firebase cloud function to generate 5 posts behind the scenes using bullMQ
       responsePayload.startedSettingUpAutomatedPosts = true;
+      responsePayload.messageId = await GenaiQueue.client.produce(
+        MESSAGE_CALL_GENPOST_FN
+      );
       req.session.redis_message_called_serveless_fn = true;
     }
 
-    // Create a product in your in memory cache and set it's status in 'PENDING'
-
-    const pubsub = new PubSub();
-    const messages = [
-      {
-        key: 'key1',
-        value: true,
-      },
-    ];
-
-    pubsub.publish('my-topic', messages);
-
-    const temporaryProductIdentity = uuid();
-
-    await redis.set(
-      temporaryProductIdentity,
-      JSON.stringify({
-        productMoto,
-        productName,
-        status: IProductStatus.PENDING,
-        description: responsePayload.description || '',
-      })
-    );
-
     H.success(res, {
       statusCode: 200,
-      data: { ...responsePayload, temporaryProductIdentity },
+      data: responsePayload,
     });
   };
 }
