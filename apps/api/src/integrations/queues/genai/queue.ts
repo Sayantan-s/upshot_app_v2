@@ -6,6 +6,7 @@ export default class GenaiQueue {
   static messageName = 'call-gen-posts';
   private static workerFunction: JobFn = async (job) => {
     job;
+    console.log('call serverless function');
     // http call for firebase function
   };
   static get client() {
