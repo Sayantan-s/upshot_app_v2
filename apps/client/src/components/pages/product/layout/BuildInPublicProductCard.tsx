@@ -42,7 +42,8 @@ export const BuildInPublicProductCard = () => {
         <p className="mt-2">
           {product &&
           'productDescription' in product &&
-          product.productDescription?.trim() !== ''
+          product.productDescription &&
+          product.productDescription.trim() !== ''
             ? product.productDescription
             : 'Introducing our game-changing MVP - a sleek, intuitive tool revolutionizing task and project management. Boost productivity, enhance collaboration, and stay ahead with this cutting-edge solution. Experience the future of work today!'}
         </p>

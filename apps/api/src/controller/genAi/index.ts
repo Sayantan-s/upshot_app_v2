@@ -1,7 +1,7 @@
 import { MESSAGE_CALL_GENPOST_FN } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import { OpenApi } from '@api/integrations/openai';
-import GenaiQueue from '@api/integrations/queues/genpost.queue';
+import GenaiQueue from '@api/integrations/queues/genai/queue';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
 
 export class GenAiController {
@@ -37,10 +37,11 @@ export class GenAiController {
     }
 
     if (setupInitialFiveAutomatedPosts) {
-      // Task 1:: Call the firebase cloud function to generate 5 posts behind the scenes using bullMQ
+      // Task 2:: Call the firebase cloud function to generate 5 posts behind the scenes using bullMQ
       responsePayload.startedSettingUpAutomatedPosts = true;
       responsePayload.messageId = await GenaiQueue.client.produce(
-        MESSAGE_CALL_GENPOST_FN
+        MESSAGE_CALL_GENPOST_FN,
+        true
       );
       req.session.redis_message_called_serveless_fn = true;
     }
