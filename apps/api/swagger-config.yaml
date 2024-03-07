@@ -1,0 +1,17 @@
+openapi: 3.0.0
+info:
+  title: Welcome to Upshot API Docs
+  description: Explore the various routes available at Upshot.
+  version: 0.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local Server for Upshot API
+apis: ['./src/routes/*.route.ts']
+paths:
+  /register:
+    post:
+      summary: Registers A New User.
+      description: Registers a new user.
+      responses:
+        '200':    
+          description: A JSON array of user names
