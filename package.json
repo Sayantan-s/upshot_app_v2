@@ -8,8 +8,8 @@
     "build": "nx run-many --target=build --all --parallel",
     "build:api": "nx run api:build:production",
     "build:client": "nx run client:build:production",
-    "serve:api": "nx run api:serve:production",
-    "serve:client": "nx run client:serve:production"
+    "serve:api": "node ./dist/apps/api/main.js --max_old_space_size=400",
+    "serve:client": "nx run client:serve:production --verbose"
   },
   "private": true,
   "dependencies": {
