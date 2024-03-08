@@ -41,9 +41,8 @@ export class GenAiController {
       responsePayload.startedSettingUpAutomatedPosts = true;
       responsePayload.messageId = await GenaiQueue.client.produce(
         MESSAGE_CALL_GENPOST_FN,
-        true
+        { productMoto, productName }
       );
-      req.session.redis_message_called_serveless_fn = true;
     }
 
     H.success(res, {

@@ -4,11 +4,8 @@ import { Session } from 'inspector';
 import Controllers from './controller';
 import Middlewares from './middlewares';
 
-export interface IRedisPubSubKeyNames {
-  redis_message_called_serveless_fn: boolean;
-}
 declare module 'express-session' {
-  interface SessionData extends IRedisPubSubKeyNames {
+  interface SessionData {
     user_id: string;
   }
 }

@@ -23,8 +23,8 @@ export class MessageQueue<TData> {
     this.consume(callback);
   }
   async produce(msg: string, data: TData) {
-    const message = await this.queue.add(msg, data);
-    const producedId = `${uuid()}_${message.id}`;
+    const producedId = uuid();
+    const message = await this.queue.add(msg, { ...data, prodId: producedId });
     console.log(chalk.bgGray.bold.yellow(`BullMQ Produce -> ${message.id}`));
     return producedId;
   }
