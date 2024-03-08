@@ -7,7 +7,7 @@
     "build": "nx run-many --target=build --all --parallel",
     "prisma:generate:prod": "prisma generate --schema=./dist/apps/api/prisma/schema.prisma",
     "prisma:seed:prod": "prisma db push --schema=./dist/apps/api/prisma/schema.prisma",
-    "build:api": "yarn run prisma:seed:prod && yarn run prisma:generate:prod && nx run api:build:production",
+    "build:api": "nx run api:build:production && yarn run prisma:seed:prod && yarn run prisma:generate:prod",
     "serve:api": "node ./dist/apps/api/main.js --max_old_space_size=400",
     "serve:client": "nx run client:serve:production --verbose",
     "build:client": "nx run client:build:production"
