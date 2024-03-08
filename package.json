@@ -5,11 +5,10 @@
   "scripts": {
     "dev": "nx run-many --target=serve --projects=api,client",
     "build": "nx run-many --target=build --all --parallel",
-    "prisma:generate": "prisma generate --schema=./dist/apps/api/prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema=./apps/api/prisma/schema.prisma",
     "prisma:seed": "prisma db push",
-    "postbuild:api": "node ./scripts/createFolderInAPIBuild",
     "build:api": "nx run api:build:production",
-    "build:api:prod": "yarn run build:api && yarn run prisma:generate",
+    "build:api:prod": "yarn run prisma:generate && yarn run build:api",
     "serve:api": "node ./dist/apps/api/main.js --max_old_space_size=400",
     "serve:client": "nx run client:serve:production --verbose",
     "build:client": "nx run client:build:production"
