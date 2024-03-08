@@ -1,4 +1,5 @@
 import { generatePosts } from '@api/apis/serverless/generatePosts';
+import { Redis } from '@api/integrations/redis';
 import { Build_In_Public } from '@prisma/client';
 import { MessageQueue } from '..';
 import { JobFn } from '../type';
@@ -10,8 +11,9 @@ export default class GenaiQueue {
   static messageName = 'call-gen-posts';
   private static workerFunction: JobFn = async (job) => {
     try {
-      const data = await generatePosts(job.data);
-      console.log(data);
+      const { prodId, ...genPostMetaData } = job.data;
+      const data = await generatePosts(genPostMetaData);
+      await Redis.client.cache.set(prodId, JSON.stringify(data));
     } catch (error) {
       console.log(error);
     }
