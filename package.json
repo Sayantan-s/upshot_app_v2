@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prisma:generate": "prisma generate --schema=./apps/api/prisma/schema.prisma",
-    "prisma:seed": "prisma db push --schema=./apps/api/prisma/schema.prisma",
     "dev": "nx run-many --target=serve --projects=api,client",
     "build": "nx run-many --target=build --all --parallel",
-    "build:api": "yarn run prisma:seed && yarn run prisma:generate && nx run api:build:production",
+    "prisma:generate:prod": "prisma generate --schema=./dist/apps/api/prisma/schema.prisma",
+    "prisma:seed:prod": "prisma db push --schema=./dist/apps/api/prisma/schema.prisma",
+    "build:api": "yarn run prisma:seed:prod && yarn run prisma:generate:prod && nx run api:build:production",
     "serve:api": "node ./dist/apps/api/main.js --max_old_space_size=400",
     "serve:client": "nx run client:serve:production --verbose",
     "build:client": "nx run client:build:production"
