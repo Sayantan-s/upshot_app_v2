@@ -1,8 +1,0 @@
-services:
-  - name: api
-    buildCommand: yarn install && yarn build:api
-    startCommand: yarn serve:api
-
-  - name: client
-    buildCommand: yarn install && yarn build:client
-    startCommand: yarn serve:client
