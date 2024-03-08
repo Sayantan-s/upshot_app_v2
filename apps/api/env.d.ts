@@ -19,6 +19,8 @@ declare global {
       CLOUDINARY_SECRET_KEY: string;
       AAI_API_KEY: string;
       SERVERLESS_FN: string;
+      GEN_POSTS_DEV_TEST_API_KEY: string;
+      SERVERLESS_API_KEY: string;
     }
 
     interface Global {}
