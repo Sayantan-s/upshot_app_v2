@@ -1,5 +1,5 @@
 import { ORIGIN, PORT } from '@api/config';
-import redis from '@api/integrations/redis';
+import { Redis } from '@api/integrations/redis';
 import chalk from 'chalk';
 import express from 'express';
 import http from 'http';
@@ -14,10 +14,10 @@ export class Server {
     this.server.listen(PORT, () => {
       console.log(chalk.bgGray.bold.redBright(`SERVER RUNNING ON ${ORIGIN}`));
     });
-    process.on('SIGINT', () => {
-      redis.flushall();
-      redis.disconnect();
-      this.server.close();
+    process.on('SIGINT', async () => {
+      await Redis.client.cache.flushall();
+      await Redis.client.cache.disconnect();
+      await this.server.close();
     });
   }
   public static init() {

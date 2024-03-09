@@ -1,5 +1,5 @@
 import { IAuthResponse, User } from '@client/store/types/auth';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type AuthState = IAuthResponse & { user: User | null };
 

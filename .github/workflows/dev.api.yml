@@ -1,4 +1,4 @@
-name: Development Pipeline
+name: Development Pipeline(Api)
 
 on:
   push:
@@ -21,8 +21,5 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Generate Prisma Schema
-        run: yarn prisma:generate
-
-      - name: Build Both Projects
-        run: yarn build
+      - name: Build Api (Project)
+        run: yarn build:api:prod

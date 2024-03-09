@@ -32,7 +32,7 @@ export default class ErrorHandler extends Error {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     next: NextFunction
   ) {
-    console.log(chalk.red(err));
+    console.log(chalk.red(err.stack));
     if (err instanceof JsonWebTokenError) {
       H.error(res, {
         statusCode: 401,

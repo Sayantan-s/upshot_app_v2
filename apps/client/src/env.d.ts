@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_SERVER_ORIGIN: string;
   readonly VITE_API_KEY: string;
   readonly VITE_FREE_ACCESS_EMAIL: string;
+  readonly VITE_UPSTASH_REDIS_REST_URL: string;
+  readonly VITE_UPSTASH_REDIS_REST_TOKEN: string;
 }
 
 interface ImportMeta {
