@@ -1,6 +1,6 @@
 import prisma from '@api/integrations/prisma';
 import { Prisma, User } from '@prisma/client';
-import { IUser, IUserParams, IUserRegister } from './types';
+import { IUser, IUserParams } from './types';
 
 export class UserService {
   // CHECK USER IF EXISTS
@@ -35,7 +35,7 @@ export class UserService {
     return !!doesExists;
   }
 
-  public static async createUser(payload: IUserRegister) {
+  public static async createUser(payload: Prisma.UserCreateInput) {
     return await prisma.user.create({
       data: payload,
     });

@@ -8,7 +8,7 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 import {
   HookReturnType,
   IContextDetails,
@@ -17,12 +17,12 @@ import {
   Props,
   ReturnType,
   StepProps,
-} from "./types";
+} from './types';
 
 export const createMultiStep = <TData, TStepNames = string>({
   contextName,
 }: IContextDetails): ReturnType<TData, TStepNames> => {
-  if (!contextName.length) throw new Error("Provide a proper context name!");
+  if (!contextName.length) throw new Error('Provide a proper context name!');
 
   const MultiStepContext = createContext<IMultiStepContext<
     TData,

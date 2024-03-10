@@ -37,7 +37,7 @@ export const Feed = () => {
 
   const handleSelectWhatAction = (value: string) => {
     if (value === FEED_ACTION_TYPES.PRODUCT_ONBOARD)
-      return navigate('/product/upload');
+      navigate('/product/upload');
   };
 
   return (

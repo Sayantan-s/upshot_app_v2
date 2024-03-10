@@ -1,19 +1,26 @@
 import { generatePosts } from '@api/apis/serverless/generatePosts';
 import { Redis } from '@api/integrations/redis';
-import { Build_In_Public } from '@prisma/client';
+import { ProductService } from '@api/services/product';
 import { MessageQueue } from '..';
 import { JobFn } from '../type';
+import { MessageQueueInput } from './type';
 
 export default class GenaiQueue {
-  private static instance: MessageQueue<
-    Pick<Build_In_Public, 'productName' | 'productMoto'>
-  > = null;
+  private static instance: MessageQueue<MessageQueueInput> = null;
   static messageName = 'call-gen-posts';
   private static workerFunction: JobFn = async (job) => {
     try {
-      const { prodId, ...genPostMetaData } = job.data;
+      const { prodId: produceId, ...genPostMetaData } = job.data;
       const data = await generatePosts(genPostMetaData);
-      await Redis.client.cache.set(prodId, JSON.stringify(data));
+      const productId = genPostMetaData.productId;
+      await Redis.client.cache.set(produceId, JSON.stringify(data));
+      genPostMetaData.productDescription &&
+        (await ProductService.update(
+          { id: productId },
+          {
+            productDescription: genPostMetaData.productDescription,
+          }
+        ));
     } catch (error) {
       console.log(error);
     }

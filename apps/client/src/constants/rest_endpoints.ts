@@ -7,9 +7,12 @@ export enum AUTH_ENDPOINT {
   USER = '/auth/user',
 }
 
+export enum AI_ENDPOINT {
+  GENERATE_PRODUCT_ONBOARDING = '/ai/onboarding_generation',
+}
+
 export enum PRODUCT_ENDPOINT {
-  GENERATE = '/ai/product_inputs',
-  GENERATE_CV = '/ai/transcript_cvs',
+  CREATE = '/product/create',
 }
 
 export enum MEDIA_ENDPOINT {

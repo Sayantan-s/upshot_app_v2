@@ -41,7 +41,7 @@ export class AuthController {
     await UserService.updateUser(
       { id },
       {
-        refresh_token: refreshToken,
+        refreshToken,
       }
     );
     res.cookie('token', refreshToken, {
@@ -97,7 +97,7 @@ export class AuthController {
         },
         {
           ...(user.newUser ? { newUser: false } : {}), // Will update this only when the user is "new User" = true
-          refresh_token: refreshToken,
+          refreshToken,
         }
       );
       res.cookie('token', refreshToken, {
@@ -129,7 +129,7 @@ export class AuthController {
     await UserService.updateUser(
       { id: user.id },
       {
-        refresh_token: '',
+        refreshToken: '',
       }
     );
     res.clearCookie('token', { httpOnly: true });
@@ -147,10 +147,10 @@ export class AuthController {
         userName: true,
         email: true,
         newUser: true,
-        refresh_token: true,
+        refreshToken: true,
       }
     );
-    if (!user || cookies.token !== user.refresh_token)
+    if (!user || cookies.token !== user.refreshToken)
       throw new ErrorHandler(401, 'Not Authorized');
 
     const accessToken = AuthService.jwt.signAccessToken({
@@ -207,7 +207,7 @@ export class AuthController {
       },
       {
         ...(user.newUser ? { newUser: false } : {}), // Will update this only when the user is "new User" = true
-        refresh_token: refreshToken,
+        refreshToken,
       }
     );
 
@@ -238,7 +238,7 @@ export class AuthController {
         profilePic: true,
         coverPic: true,
         about: true,
-        created_at: true,
+        createdAt: true,
       }
     );
     if (!user) throw new ErrorHandler(400, `User doesn't exists!`);
