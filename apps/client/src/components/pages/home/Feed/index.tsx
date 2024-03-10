@@ -1,8 +1,9 @@
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
 import { FloatingActionButton } from '@client/components/ui/FloatingActionButton';
 import { useWindowScroll } from '@client/hooks';
+import { IPost } from '@client/store/types/posts';
 import { motion } from 'framer-motion';
-import { ChemicalGlass, DollarCircle, Drop, ElementPlus } from 'iconsax-react';
+import { ChemicalGlass, Drop, ElementPlus } from 'iconsax-react';
 import { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router';
 import Post from './Post';
@@ -10,9 +11,8 @@ import PostFallbackLoading from './Post/Fallback';
 import { PostTool } from './PostTool';
 
 enum FEED_ACTION_TYPES {
-  PRODUCT_UPLOAD = 'PRODUCT_UPLOAD',
-  PROMOTE_PRODUCT = 'PRODUCT_PROMOTE',
-  SELL_PRODUCT = 'PRODUCT_SELL',
+  PRODUCT_ONBOARD = 'PRODUCT_ONBOARD',
+  CREATE_A_SHOT = 'CREATE_A_SHOT',
 }
 
 export const Feed = () => {
@@ -36,7 +36,7 @@ export const Feed = () => {
   // handlers
 
   const handleSelectWhatAction = (value: string) => {
-    if (value === FEED_ACTION_TYPES.PRODUCT_UPLOAD)
+    if (value === FEED_ACTION_TYPES.PRODUCT_ONBOARD)
       return navigate('/product/upload');
   };
 
@@ -55,7 +55,7 @@ export const Feed = () => {
           <PostFallbackLoading value={3} />
         ) : isSuccess ? (
           <Fragment>
-            {data.data.map((post: any) => (
+            {data.data.map((post: IPost) => (
               <Post {...post} />
             ))}
             {/* <FloatingActionButton /> */}
@@ -69,25 +69,18 @@ export const Feed = () => {
           }
         >
           <FloatingActionButton.Option
-            value={FEED_ACTION_TYPES.PRODUCT_UPLOAD}
+            value={FEED_ACTION_TYPES.PRODUCT_ONBOARD}
             className="bg-orange-500 p-4 rounded-full shadow-md"
-            tooltip="Upload Product"
+            tooltip="Onboard your product"
           >
             <Drop size="24" variant="Bulk" color="rgb(255 247 237)" />
           </FloatingActionButton.Option>
           <FloatingActionButton.Option
-            value={FEED_ACTION_TYPES.PROMOTE_PRODUCT}
+            value={FEED_ACTION_TYPES.CREATE_A_SHOT}
             className="bg-white p-4 rounded-full shadow-md text-sky-500"
-            tooltip="Promote"
+            tooltip="Create a shot"
           >
             <ChemicalGlass size="24" variant="Bulk" />
-          </FloatingActionButton.Option>
-          <FloatingActionButton.Option
-            value={FEED_ACTION_TYPES.SELL_PRODUCT}
-            className="bg-white p-4 rounded-full shadow-md text-sky-500"
-            tooltip="Sell Product"
-          >
-            <DollarCircle size="24" variant="Bulk" />
           </FloatingActionButton.Option>
         </FloatingActionButton>
       </motion.div>
