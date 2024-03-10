@@ -5,6 +5,9 @@ on:
     branches:
       - development
 
+env:
+  HUSKY: 0
+
 jobs:
   build:
     runs-on: ubuntu-latest
