@@ -1,9 +1,12 @@
-name: Development Pipeline
+name: Development Pipeline(Client)
 
 on:
   push:
     branches:
       - development
+
+env:
+  HUSKY: 0
 
 jobs:
   build:
@@ -21,8 +24,5 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Generate Prisma Schema
-        run: yarn prisma:generate
-
-      - name: Build Both Projects
-        run: yarn build
+      - name: Build Api (Project)
+        run: yarn build:client

@@ -12,9 +12,7 @@ export const BuildInPublicProductCard = () => {
       <div className="bg-slate-100 h-24" />
       <div className="relative transform -translate-y-[3rem] ml-6">
         <div
-          className={`absolute z-10 bg-emerald-50 border-white border-4 rounded-full w-24 h-24 ${
-            false ? '' : 'flex items-center justify-center'
-          }`}
+          className={`absolute z-10 bg-emerald-50 border-white border-4 rounded-full w-24 h-24 ${'flex items-center justify-center'}`}
         >
           <FallbackAvatar className="w-8 h-8 fill-emerald-500" />
         </div>
@@ -44,6 +42,7 @@ export const BuildInPublicProductCard = () => {
         <p className="mt-2">
           {product &&
           'productDescription' in product &&
+          product.productDescription &&
           product.productDescription.trim() !== ''
             ? product.productDescription
             : 'Introducing our game-changing MVP - a sleek, intuitive tool revolutionizing task and project management. Boost productivity, enhance collaboration, and stay ahead with this cutting-edge solution. Experience the future of work today!'}

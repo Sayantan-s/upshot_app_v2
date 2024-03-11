@@ -14,6 +14,7 @@ import {
 } from 'iconsax-react';
 import { ChangeEventHandler, Fragment, SyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { BuildInPublicInformation } from '.';
 import { ProductTracker } from '../../context/ProductTracker';
 
@@ -22,8 +23,10 @@ export const ProductIdenity = () => {
     BuildInPublicInformation.useMultiStep();
   const [isOpen, { on: openConfirmationModal, off: closeConfirmationModal }] =
     useToggle();
-
+  const navigate = useNavigate();
   const [generate, { isLoading }] = productApi.useGenerateMutation();
+  const [createProduct, { isLoading: isCreatingProduct }] =
+    productApi.useCreateMutation();
   const { handleSetProduct } = ProductTracker.useProductTracker();
 
   const [generationConfig, setGenerationConfig] = useState({
@@ -66,12 +69,29 @@ export const ProductIdenity = () => {
     handleFormValues('productMoto', payload.productMoto);
     handleFormValues('productDescription', res.data.description);
     handleSetProduct('productDescription', res.data.description);
-    handleProceedNext();
+    closeConfirmationModal();
+    controls.next();
   };
 
-  const handleProceedNext = () => {
+  const handleProceedNext = async () => {
+    const payload = watch();
+    handleFormValues('productName', payload.productName);
+    handleFormValues('productMoto', payload.productMoto);
+
+    const { data: productId } = await createProduct({
+      productMoto: payload.productMoto,
+      productName: payload.productName,
+    }).unwrap();
+
+    navigate({
+      pathname: '/product/upload',
+      search: createSearchParams({
+        product: productId,
+      }).toString(),
+    });
+
     closeConfirmationModal();
-    setTimeout(() => controls.next(), 100);
+    controls.next();
   };
 
   const handleChange: ChangeEventHandler<
@@ -219,7 +239,9 @@ export const ProductIdenity = () => {
               onClick={handleProceedNext}
               variant={'danger.outline'}
               disabled={isLoading}
+              isLoading={isCreatingProduct}
               size={'md'}
+              loaderVersion="v1"
             >
               No, just proceed!
             </Button>
@@ -227,8 +249,9 @@ export const ProductIdenity = () => {
               variant={'neutral.solid'}
               onClick={handleGenerate}
               disabled={
-                !generationConfig.generateProductDescription &&
-                !generationConfig.setupInitialFiveAutomatedPosts
+                (!generationConfig.generateProductDescription &&
+                  !generationConfig.setupInitialFiveAutomatedPosts) ||
+                isCreatingProduct
               }
               isLoading={isLoading}
               rounded={'md'}

@@ -1,9 +1,9 @@
-import { Build_In_Public } from "@prisma/client";
-import { RequestHandler } from "express";
+import { Product } from '@prisma/client';
+import { RequestHandler } from 'express';
 
 export type IProductInputGenerationBody = Pick<
-  Build_In_Public,
-  "productName" | "productMoto"
+  Product,
+  'productName' | 'productMoto'
 > & {
   setupInitialFiveAutomatedPosts: boolean;
   generateProductDescription: boolean;
@@ -19,4 +19,6 @@ export interface IResponsePayload {
   description: string;
   logo?: string;
   startedSettingUpAutomatedPosts?: boolean;
+  messageId?: string;
+  productId: string;
 }

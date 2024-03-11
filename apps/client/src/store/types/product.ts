@@ -13,6 +13,7 @@ export interface IGenerationResponse {
   cover?: string;
 }
 
-export interface IGenerateResponseTranscriptCVs {
-  coverLetterText: string;
+export interface ICreateProduct {
+  productName: string;
+  productMoto: string;
 }
