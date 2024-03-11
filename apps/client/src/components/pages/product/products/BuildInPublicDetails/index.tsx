@@ -10,7 +10,6 @@ export enum BUILD_IN_PUBLIC_MULTISTEP {
   STEP_1 = 'STEP_1',
   STEP_2 = 'STEP_2',
   STEP_3 = 'STEP_3',
-  STEP_4 = 'STEP_4',
 }
 
 export interface IBuildInPublicInitialState {
@@ -61,7 +60,6 @@ const Component: FC = () => {
       <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_3}>
         <ProductMedia />
       </MultiStep.Step>
-      <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_4}></MultiStep.Step>
     </MultiStep>
   );
 };

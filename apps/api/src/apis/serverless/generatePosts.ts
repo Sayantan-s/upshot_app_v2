@@ -4,11 +4,11 @@ import {
   SERVERLESS_API_KEY,
 } from '@api/config';
 import { IGenaiPost } from '@api/integrations/queues/genai/type';
-import { Build_In_Public } from '@prisma/client';
+import { Product } from '@prisma/client';
 import { serverless } from '.';
 
 export const generatePosts = async (
-  data: Pick<Build_In_Public, 'productName' | 'productMoto'>
+  data: Pick<Product, 'productName' | 'productMoto'>
 ) => {
   const isDevelopment = NODE_ENV === 'development';
   const res = await serverless.post<IGenaiPost[]>('/posts/generate', data, {
