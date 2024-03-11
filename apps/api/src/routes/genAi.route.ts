@@ -5,7 +5,7 @@ import express from 'express';
 const genAiRouter = express.Router();
 
 genAiRouter
-  .route('/product_inputs')
-  .post(ErrorHandler.tryCatch(GenAiController.generateProductInputs));
+  .route('/onboarding_generation')
+  .post(ErrorHandler.tryCatch(GenAiController.generateProductOnboarding));
 
 export default genAiRouter;

@@ -1,8 +1,11 @@
 ///api/v1/ai/product_inputs
-import { PRODUCT_ENDPOINT } from '@client/constants/rest_endpoints';
+import {
+  AI_ENDPOINT,
+  PRODUCT_ENDPOINT,
+} from '@client/constants/rest_endpoints';
 import { api } from '.';
 import {
-  IGenerateResponseTranscriptCVs,
+  ICreateProduct,
   IGenerationRequest,
   IGenerationResponse,
 } from '../types/product';
@@ -14,17 +17,14 @@ export const productApi = api.injectEndpoints({
       IGenerationRequest
     >({
       query: (credentials) => ({
-        url: PRODUCT_ENDPOINT.GENERATE,
+        url: AI_ENDPOINT.GENERATE_PRODUCT_ONBOARDING,
         method: 'POST',
         body: credentials,
       }),
     }),
-    generateTranscriptBasedCVs: builder.mutation<
-      Api.SuccessResponse<IGenerateResponseTranscriptCVs>,
-      FormData
-    >({
+    create: builder.mutation<Api.SuccessResponse<string>, ICreateProduct>({
       query: (credentials) => ({
-        url: PRODUCT_ENDPOINT.GENERATE_CV,
+        url: PRODUCT_ENDPOINT.CREATE,
         method: 'POST',
         body: credentials,
       }),

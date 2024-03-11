@@ -87,7 +87,7 @@ model Build_In_Public {
   updated_at         DateTime        @default(now()) @updatedAt
   created_at         DateTime        @default(now())
   post               Post[]
-  user               User?           @relation(fields: [userId], references: [id])
+  // user               User?           @relation(fields: [userId], references: [id])
   userId             String?         @db.ObjectId
 }
 
@@ -104,7 +104,7 @@ model Product_Sell {
   updated_at         DateTime                    @default(now()) @updatedAt
   created_at         DateTime                    @default(now())
   post               Post[]
-  user               User?                       @relation(fields: [userId], references: [id])
+  // user               User?                       @relation(fields: [userId], references: [id])
   userId             String?                     @db.ObjectId
 }
 
@@ -133,23 +133,91 @@ model Post {
   product_ps     Product_Sell?    @relation(fields: [product_id_ps], references: [id])
 }
 
-model User {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  email         String            @unique
-  newUser       Boolean           @default(true)
-  userName      String            @unique
+model IUser {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  email         String          @unique
+  newUser       Boolean         @default(true)
+  userName      String          @unique
   pwd           String
-  updated_at    DateTime          @default(now()) @updatedAt
-  created_at    DateTime          @default(now())
-  refresh_token String            @default("")
-  firstName      String?
+  updated_at    DateTime        @default(now()) @updatedAt
+  created_at    DateTime        @default(now())
+  refresh_token String          @default("")
+  firstName     String?
   lastName      String?
   about         String?
   interests     InterestsType[]
-  profileLinks   ProfileLinks?
-  profilePic     String?
+  profileLinks  ProfileLinks?
+  profilePic    String?
   coverPic      String?
   location      String?
-  bip_products  Build_In_Public[]
-  ps_products   Product_Sell[]
+}
+
+model User {
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  email        String          @unique
+  newUser      Boolean?         @default(true)
+  userName     String          @unique
+  pwd          String
+  refreshToken String?
+  firstName    String?
+  lastName     String?
+  about        String?
+  interests    InterestsType[]
+  profilePic   String?
+  coverPic     String?
+  location     String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now()) @updatedAt
+  createdBy    String          @default("system")
+  updatedBy    String          @default("system")
+
+  // Relation::
+  products Product[]
+
+  @@map("user_dtl")
+}
+
+enum ProductPriceCurrency {
+  USD
+  INR
+}
+
+enum ProductStatus {
+  IDLE
+  COMING_SOON
+  LAUNCHED
+  SOLD
+}
+
+type ProductMedia {
+  productLogo  String
+  productCover String?
+}
+
+type ProductPrice {
+  amount   Float
+  currency ProductPriceCurrency
+  soldAt   Float
+}
+
+model Product {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  productName        String
+  productMoto        String
+  productDescription String?
+  media              ProductMedia?
+  tags               InterestsType[]
+  price              ProductPriceCurrency?
+  status             ProductStatus?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+  launchedAt         DateTime?
+  createdBy          String               @default("system")
+  updatedBy          String               @default("system")
+
+  // Relation::
+  userId String @db.ObjectId
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@map("product_dtl")
 }
