@@ -1,6 +1,7 @@
 openapi: 3.0.0
 components:
   schemas:
+    # Auth Route Schemas Here
     RegisterUser:
       type: object
       required:
@@ -29,15 +30,52 @@ components:
         pwd:
           type: string
           description: The User Password.
+    EasyAccessUser:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          description: Email For Free Access User to Test the App
+    #Gen AI Route Schemas Here
+    GenAI_ProductInput:
+      type: object
+      required:
+        - productMoto
+        - productName
+        - setupInitialFiveAutomatedPosts
+        - generateProductDescription
+      properties:
+        productMoto:
+          type: string
+          description: State your Product Motto
+        productName:
+          type: string
+          description: State your Product Name
+        setupInitialFiveAutomatedPosts:
+          type: boolean
+          description: Do you want to set up 5 Initial Posts using A.I ? 
+        generateProductDescription:
+          type: boolean
+          description: Do you want to generate your Product Description using A.I ?
   securitySchemes:
     bearerAuth:            
       type: http
       scheme: bearer
       bearerFormat: JWT
+    accessToken:
+      type: apiKey
+      in: header
+      name: authorization
     apiKey:
       type: apiKey
       in: header
       name: X-API-KEY
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
 info:
   title: Welcome to Upshot API Docs
   description: Explore the various routes available at Upshot.
@@ -50,8 +88,11 @@ security:
   - apiKey: []
   - bearerAuth: []
 paths:
+  # Auth Route Endpoints Here ------------------------------- ||
   /api/v1/auth/register:
     post:
+      tags:
+        - AuthRoutes
       summary: Registers A New User.
       description: Registers a new user.
       requestBody:
@@ -63,10 +104,14 @@ paths:
       responses:
         '201':    
           description: Successful User Registration
+        '400':
+          description: Not Authorized
         '403':
           description: API KEY not found. Hence Forbidden!
   /api/v1/auth/login:
     post:
+      tags:
+        - AuthRoutes
       summary: Logs in An Existing User using email/username & password.
       description: Logs in An Existing User using email/username & password.
       requestBody:
@@ -78,20 +123,132 @@ paths:
       responses:
         '201':    
           description: Successful User Login
+        '400':
+          description: Not Authorized
         '403':
           description: API KEY not found. Hence Forbidden!
   /api/v1/auth/logout:
     post:
+      tags:
+        - AuthRoutes
+      security:
+        - cookieAuth: []
+          apiKey: []
       summary: Logs out An Existing User .
       description: Logs Out An Existing User .
+      responses:
+        '204':    
+          description: Successful User Logout
+        '400':
+          description: Not Authorized
+        '403':
+          description: API KEY not found. Hence Forbidden!
+  /api/v1/auth/easy:
+      post:
+        tags:
+         - AuthRoutes
+        security:
+          - apiKey: []
+        summary: Gives Free Access to User to Test the App .
+        description: Gives Free Access to User to Test the App .
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EasyAccessUser'
+        responses:
+          '200':    
+            description: User Free Access Granted!
+          '400':
+            description: Not Authorized
+          '403':
+            description: API KEY not found. Hence Forbidden! or Denied For Easy Access!
+          '404':
+            description: Easy Access User Not Registered!
+  /api/v1/auth/refresh:
+      get:
+        tags:
+          - AuthRoutes
+        security:
+          - apiKey: []
+            cookieAuth: []
+        summary: Refreshes ACCESS_TOKEN by sending REFRESH_TOKEN via cookies!
+        description: Refreshes ACCESS_TOKEN by sending REFRESH_TOKEN via cookies!
+        responses:
+          '200':    
+            description: Successful Token Refresh
+          '400':
+            description: Not Authorized
+          '403':
+            description: API KEY not found. Hence Forbidden!
+  /api/v1/auth/user:
+      get:
+        tags:
+          - AuthRoutes
+        security:
+          - cookieAuth: []
+            apiKey: []
+        summary: Logs out An Existing User .
+        description: Logs Out An Existing User .
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutUser'
+        responses:
+          '204':    
+            description: Successful User Login
+          '400':
+            description: Not Authorized
+          '403':
+            description: API KEY not found. Hence Forbidden!
+  # GenAI Route Endpoints Here -------------------------------------||
+  /api/v1/ai/product_inputs:
+    post:
+      tags:
+        - GenAIRoutes
+      security:
+        - cookieAuth: []
+          apiKey: []
+          accessToken: []
+      summary: Generates required content using A.I .
+      description: Generates required content using A.I .
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LogoutUser'
+              $ref: '#/components/schemas/GenAI_ProductInput'
       responses:
-        '204':    
-          description: Successful User Login
+        '200':    
+          description: Successfully Generated!
+        '400':
+          description: Not Authorized
         '403':
           description: API KEY not found. Hence Forbidden!
+  /api/v1/upload/image:
+      post:
+        tags:
+          - MediaRoutes
+        security:
+          - cookieAuth: []
+            apiKey: []
+            accessToken: []
+        summary: Uploads Single Image .
+        description: Uploads Single Image .
+        requestBody:
+          required: true
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        responses:
+          '200':    
+            description: Successfully Uploaded!
+          '400':
+            description: File Not Found! or Not Authorized!
+          '403':
+            description: API KEY not found. Hence Forbidden!

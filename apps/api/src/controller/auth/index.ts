@@ -225,7 +225,7 @@ export class AuthController {
 
   public static getUser: IGetUserRequestHandler = async (req, res) => {
     const { user_id: userId } = req.session;
-    if (!userId) throw new ErrorHandler(400, `User doesn't exists!`);
+    if (!userId) throw new ErrorHandler(400, `User doesn't exist!`);
     const user = await UserService.getUser(
       { id: userId as string },
       {
@@ -241,7 +241,7 @@ export class AuthController {
         created_at: true,
       }
     );
-    if (!user) throw new ErrorHandler(400, `User doesn't exists!`);
+    if (!user) throw new ErrorHandler(400, `User doesn't exist!`);
     H.success<User>(res, {
       statusCode: 200,
       data: user,
