@@ -32,6 +32,7 @@ export class GenAiController {
           },
         },
       });
+
       responsePayload.productId = product.id;
 
       if (generateProductDescription) {

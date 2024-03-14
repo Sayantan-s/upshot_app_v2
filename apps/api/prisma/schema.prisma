@@ -100,7 +100,6 @@ model Product {
 
 // Shot enums and types::
 
-
 enum ShotStatus {
   IDLE
   SCHEDULED
@@ -115,8 +114,7 @@ model Shot {
   status      ShotStatus
   votes       Int
   media       String[]
-  launchedAt    DateTime
-  scheduledAt DateTime
+  launchedAt  DateTime
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @default(now()) @updatedAt
   createdBy   String        @default("system")
