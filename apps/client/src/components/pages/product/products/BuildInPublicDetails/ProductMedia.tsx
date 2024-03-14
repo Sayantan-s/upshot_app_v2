@@ -14,8 +14,7 @@ import { BuildInPublicInformation } from '.';
 type IPhotoType = 'productLogo' | 'productCover';
 
 export const ProductMedia = () => {
-  const { controls, handleFormValues, state } =
-    BuildInPublicInformation.useMultiStep();
+  const { handleFormValues, state } = BuildInPublicInformation.useMultiStep();
 
   const [showCropperLogoPhotoTool, { on: onLogo, off: offLogo }] = useToggle();
   const [showCropperCoverPhotoTool, { on, off }] = useToggle();

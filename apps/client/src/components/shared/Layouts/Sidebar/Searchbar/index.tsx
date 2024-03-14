@@ -6,15 +6,16 @@ const Searchbar = () => {
   const [search, setSearch] = useState('');
   const handleChange: ChangeEventHandler<HTMLInputElement> = (eve) => {
     setSearch(eve.target.value);
+    debounce(eve.target.value);
   };
 
-  useDebounce(
-    search,
-    () => {
-      console.log(search);
-    },
-    1000
-  );
+  const [debounce, debouncedValue] = useDebounce({
+    currentValue: search,
+    delay: 500,
+    options: { leading: true, trailing: true },
+  });
+
+  console.log(debouncedValue);
 
   return (
     <div className="relative w-full">

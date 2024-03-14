@@ -1,6 +1,8 @@
 import { createMultiStep } from '@client/components/ui/MultiStep';
+import { ProductOnboardingStatus } from '@client/constants/Product';
 import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { withProductInformationLayout } from '../../layout';
 import { ProductDescription } from './ProductDescription';
 import { ProductIdenity } from './ProductIdenity';
@@ -40,13 +42,26 @@ const [MultiStep, useMultiStep] = createMultiStep<
 const Component: FC = () => {
   const handleSubmit = () => {};
 
+  const [params] = useSearchParams();
+  const productId = params.get('product');
+  const mode = params.get('status');
+
   const handleCacheCurrentChanges = (state: IBuildInPublicInitialState) => {
     console.log(state);
   };
 
+  const defaultStep = useMemo(
+    () =>
+      (productId && mode === ProductOnboardingStatus.CREATE) ||
+      (productId && mode === ProductOnboardingStatus.EDIT)
+        ? BUILD_IN_PUBLIC_MULTISTEP.STEP_2
+        : BUILD_IN_PUBLIC_MULTISTEP.STEP_1,
+    [productId, mode]
+  );
+
   return (
     <MultiStep
-      defaultStep={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}
+      defaultStep={defaultStep}
       state={buildInPublicInitialState}
       onSubmit={handleSubmit}
       onStepChange={handleCacheCurrentChanges}

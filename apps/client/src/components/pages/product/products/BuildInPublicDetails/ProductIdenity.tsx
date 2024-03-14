@@ -1,5 +1,6 @@
 import { Button, TextField } from '@client/components/ui';
 import { Modal } from '@client/components/ui/Modal';
+import { ProductOnboardingStatus } from '@client/constants/Product';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { useToggle } from '@client/hooks';
 import { productApi } from '@client/store/services/product';
@@ -87,6 +88,7 @@ export const ProductIdenity = () => {
       pathname: '/product/upload',
       search: createSearchParams({
         product: productId,
+        status: ProductOnboardingStatus.CREATE,
       }).toString(),
     });
 
