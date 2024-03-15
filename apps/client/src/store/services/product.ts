@@ -8,6 +8,7 @@ import {
   ICreateProduct,
   IGenerationRequest,
   IGenerationResponse,
+  IUpdateProduct,
 } from '../types/product';
 
 export const productApi = api.injectEndpoints({
@@ -25,6 +26,13 @@ export const productApi = api.injectEndpoints({
     create: builder.mutation<Api.SuccessResponse<string>, ICreateProduct>({
       query: (credentials) => ({
         url: PRODUCT_ENDPOINT.CREATE,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+    update: builder.mutation<Api.SuccessResponse<null>, IUpdateProduct>({
+      query: (credentials) => ({
+        url: PRODUCT_ENDPOINT.UPDATE,
         method: 'POST',
         body: credentials,
       }),

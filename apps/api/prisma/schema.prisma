@@ -11,12 +11,15 @@ datasource db {
 }
 
 // User enums and types::
-
 enum InterestsType {
-  Generative_AI
-  SaaS
-  No_Code_Tools
-  Developer_Tools
+  PT // "Productivity"
+  MT // "Marketing"
+  AI // "Artificial Intelligence"
+  FT // "FinTech"
+  ET // "EdTech"
+  OSS // "Open Source"
+  DTT // "Developer Tool"
+  SaaS // "SAAS"
 }
 
 enum CurrencyType {
@@ -81,7 +84,7 @@ model Product {
   productDescription String?
   media              ProductMedia?
   tags               InterestsType[]
-  price              ProductPriceCurrency?
+  price              ProductPrice?
   status             ProductStatus?
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @default(now()) @updatedAt

@@ -1,6 +1,7 @@
 import { Button, ListBoxInit, TextField } from '@client/components/ui';
 import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
 import ValidationSchema from '@client/constants/validation_schemas';
+import { productApi } from '@client/store/services/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Add, ArrowRight } from 'iconsax-react';
 import { useForm } from 'react-hook-form';
@@ -11,6 +12,8 @@ const SelectionList = ListBoxInit<(typeof PRDOUCT_TYPE_TAGS)[number]>();
 export const ProductDescription = () => {
   const { controls, handleFormValues, state } =
     BuildInPublicInformation.useMultiStep();
+
+  const [updateProduct, { isLoading }] = productApi.useUpdateMutation();
 
   const {
     handleSubmit,
@@ -31,10 +34,11 @@ export const ProductDescription = () => {
     handleFormValues('tags', selectedTags);
   };
 
-  const handleSetDescription = (
+  const handleSetDescription = async (
     values: Pick<typeof state, 'productDescription'>
   ) => {
     handleFormValues('productDescription', values.productDescription);
+    await updateProduct({ productDescription: values.productDescription });
     controls.next();
   };
 
@@ -98,6 +102,7 @@ export const ProductDescription = () => {
             className="mt-10"
             icon={<ArrowRight color="white" size={20} />}
             iconPlacement="right"
+            isLoading={isLoading}
           >
             Next
           </Button>

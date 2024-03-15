@@ -15,7 +15,7 @@ import {
 } from 'iconsax-react';
 import { ChangeEventHandler, Fragment, SyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { BuildInPublicInformation } from '.';
 import { ProductTracker } from '../../context/ProductTracker';
 
@@ -24,10 +24,10 @@ export const ProductIdenity = () => {
     BuildInPublicInformation.useMultiStep();
   const [isOpen, { on: openConfirmationModal, off: closeConfirmationModal }] =
     useToggle();
-  const navigate = useNavigate();
   const [generate, { isLoading }] = productApi.useGenerateMutation();
   const [createProduct, { isLoading: isCreatingProduct }] =
     productApi.useCreateMutation();
+  const [, setParams] = useSearchParams();
   const { handleSetProduct } = ProductTracker.useProductTracker();
 
   const [generationConfig, setGenerationConfig] = useState({
@@ -84,13 +84,7 @@ export const ProductIdenity = () => {
       productName: payload.productName,
     }).unwrap();
 
-    navigate({
-      pathname: '/product/upload',
-      search: createSearchParams({
-        product: productId,
-        status: ProductOnboardingStatus.CREATE,
-      }).toString(),
-    });
+    setParams({ product: productId, status: ProductOnboardingStatus.CREATE });
 
     closeConfirmationModal();
     controls.next();

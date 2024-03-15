@@ -8,4 +8,8 @@ productRouter
   .route('/create')
   .post(ErrorHandler.tryCatch(ProductController.createProduct));
 
+productRouter
+  .route('/update/:productId')
+  .post(ErrorHandler.tryCatch(ProductController.updateProduct));
+
 export default productRouter;
