@@ -12,8 +12,7 @@ export enum AI_ENDPOINT {
 }
 
 export enum PRODUCT_ENDPOINT {
-  CREATE = '/product/create',
-  UPDATE = '/product/update',
+  NAME = '/product',
 }
 
 export enum MEDIA_ENDPOINT {

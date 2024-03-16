@@ -1,8 +1,9 @@
+import { Loader } from '@client/components/ui';
 import { createMultiStep } from '@client/components/ui/MultiStep';
 import { ProductOnboardingStatus } from '@client/constants/Product';
 import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
+import { useOnboardingProductState } from '@client/hooks';
 import { FC, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { withProductInformationLayout } from '../../layout';
 import { ProductDescription } from './ProductDescription';
 import { ProductIdenity } from './ProductIdenity';
@@ -15,6 +16,7 @@ export enum BUILD_IN_PUBLIC_MULTISTEP {
 }
 
 export interface IBuildInPublicInitialState {
+  productId: string;
   productName: string;
   productMoto: string;
   productDescription: string;
@@ -24,6 +26,7 @@ export interface IBuildInPublicInitialState {
 }
 
 export const buildInPublicInitialState: IBuildInPublicInitialState = {
+  productId: '',
   productName: '',
   productMoto: '',
   productDescription: '',
@@ -42,29 +45,39 @@ const [MultiStep, useMultiStep] = createMultiStep<
 const Component: FC = () => {
   const handleSubmit = () => {};
 
-  const [params] = useSearchParams();
-  const productId = params.get('product');
-  const mode = params.get('status');
+  const {
+    state,
+    productId,
+    mode,
+    isPreviouslySavedDataPopulated,
+    apiStatus: { isFetching },
+  } = useOnboardingProductState();
 
-  const handleCacheCurrentChanges = (state: IBuildInPublicInitialState) => {
-    console.log(state);
-  };
-
-  const defaultStep = useMemo(
+  const inOnboardingMode = useMemo(
     () =>
       (productId && mode === ProductOnboardingStatus.CREATE) ||
-      (productId && mode === ProductOnboardingStatus.EDIT)
-        ? BUILD_IN_PUBLIC_MULTISTEP.STEP_2
-        : BUILD_IN_PUBLIC_MULTISTEP.STEP_1,
+      (productId && mode === ProductOnboardingStatus.EDIT),
     [productId, mode]
   );
 
-  return (
+  const defaultStep = useMemo(
+    () =>
+      inOnboardingMode
+        ? BUILD_IN_PUBLIC_MULTISTEP.STEP_2
+        : BUILD_IN_PUBLIC_MULTISTEP.STEP_1,
+    [inOnboardingMode]
+  );
+
+  const defaultStepCount = Number(inOnboardingMode);
+
+  return isFetching || (inOnboardingMode && !isPreviouslySavedDataPopulated) ? (
+    <Loader size={'lg'} version="v2" variant={'primary.flat'} />
+  ) : (
     <MultiStep
       defaultStep={defaultStep}
-      state={buildInPublicInitialState}
+      state={state}
       onSubmit={handleSubmit}
-      onStepChange={handleCacheCurrentChanges}
+      defaultStepCount={defaultStepCount}
     >
       <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}>
         <ProductIdenity />

@@ -3,11 +3,13 @@ import {
   AI_ENDPOINT,
   PRODUCT_ENDPOINT,
 } from '@client/constants/rest_endpoints';
-import { api } from '.';
+import { ProductTags, api } from '.';
 import {
   ICreateProduct,
+  IFetchProduct,
   IGenerationRequest,
   IGenerationResponse,
+  IProduct,
   IUpdateProduct,
 } from '../types/product';
 
@@ -23,19 +25,33 @@ export const productApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    fetch: builder.query<Api.SuccessResponse<IProduct>, IFetchProduct>({
+      query: (credentials) => ({
+        url: `${PRODUCT_ENDPOINT.NAME}/${credentials.id}`,
+        method: 'GET',
+      }),
+      providesTags: (...args) => {
+        const { id } = args[2];
+        return [{ type: ProductTags.PRODUCT, id }];
+      },
+    }),
     create: builder.mutation<Api.SuccessResponse<string>, ICreateProduct>({
       query: (credentials) => ({
-        url: PRODUCT_ENDPOINT.CREATE,
+        url: PRODUCT_ENDPOINT.NAME,
         method: 'POST',
         body: credentials,
       }),
     }),
     update: builder.mutation<Api.SuccessResponse<null>, IUpdateProduct>({
-      query: (credentials) => ({
-        url: PRODUCT_ENDPOINT.UPDATE,
-        method: 'POST',
-        body: credentials,
+      query: ({ id, ...data }) => ({
+        url: `${PRODUCT_ENDPOINT.NAME}/${id}`,
+        method: 'PATCH',
+        body: data,
       }),
+      // invalidatesTags: (...args) => {
+      //   const { id } = args[2];
+      //   return [{ type: ProductTags.PRODUCT, id }];
+      // },
     }),
   }),
 });

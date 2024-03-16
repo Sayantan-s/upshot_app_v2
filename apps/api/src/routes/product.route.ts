@@ -5,11 +5,14 @@ import express from 'express';
 const productRouter = express.Router();
 
 productRouter
-  .route('/create')
+  .route('/')
   .post(ErrorHandler.tryCatch(ProductController.createProduct));
 
 productRouter
-  .route('/update/:productId')
-  .post(ErrorHandler.tryCatch(ProductController.updateProduct));
+  .route('/:productId')
+  .get(ErrorHandler.tryCatch(ProductController.fetchProduct))
+  .patch(ErrorHandler.tryCatch(ProductController.updateProduct));
+
+productRouter.route('');
 
 export default productRouter;

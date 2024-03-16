@@ -35,7 +35,7 @@ export interface IProduct {
   id: string;
   productName: string;
   productMoto: string;
-  productDescription: string | null;
+  productDescription: string;
   tags: (keyof typeof EInterestsType)[];
   status: keyof typeof EProductStatus | null;
   createdAt: Date;
@@ -66,3 +66,7 @@ export type ICreateProduct = Pick<IProduct, 'productName' | 'productMoto'>;
 // UPDATE
 
 export type IUpdateProduct = Partial<IProduct>;
+
+// FETECH
+
+export type IFetchProduct = Partial<IProduct>;

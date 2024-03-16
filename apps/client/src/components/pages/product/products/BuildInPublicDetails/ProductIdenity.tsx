@@ -83,9 +83,8 @@ export const ProductIdenity = () => {
       productMoto: payload.productMoto,
       productName: payload.productName,
     }).unwrap();
-
+    handleFormValues('productId', productId);
     setParams({ product: productId, status: ProductOnboardingStatus.CREATE });
-
     closeConfirmationModal();
     controls.next();
   };

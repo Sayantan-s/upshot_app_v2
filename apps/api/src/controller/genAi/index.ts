@@ -3,8 +3,8 @@ import H from '@api/helpers/ResponseHelper';
 import { OpenApi } from '@api/integrations/openai';
 import GenaiQueue from '@api/integrations/queues/genai/queue';
 import { ProductService } from '@api/services/product';
+import { v4 as uuid } from 'uuid';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
-
 export class GenAiController {
   public static generateProductOnboarding: IProductInputGenerationHandler =
     async (req, res) => {
@@ -66,6 +66,8 @@ export class GenAiController {
           }
         );
       }
+
+      res.cookie('onboarding-session', uuid());
 
       H.success(res, {
         statusCode: 200,

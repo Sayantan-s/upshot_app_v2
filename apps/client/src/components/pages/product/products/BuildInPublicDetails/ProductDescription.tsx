@@ -2,6 +2,7 @@ import { Button, ListBoxInit, TextField } from '@client/components/ui';
 import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { productApi } from '@client/store/services/product';
+import { IProduct } from '@client/store/types/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Add, ArrowRight } from 'iconsax-react';
 import { useForm } from 'react-hook-form';
@@ -21,8 +22,9 @@ export const ProductDescription = () => {
     formState,
     watch,
     setValue,
+    getValues,
   } = useForm<Pick<typeof state, 'productDescription' | 'tags'>>({
-    defaultValues: {
+    values: {
       productDescription: state.productDescription,
       tags: state.tags,
     },
@@ -34,11 +36,16 @@ export const ProductDescription = () => {
     handleFormValues('tags', selectedTags);
   };
 
-  const handleSetDescription = async (
+  const handleUpdateProductDescription = async (
     values: Pick<typeof state, 'productDescription'>
   ) => {
     handleFormValues('productDescription', values.productDescription);
-    await updateProduct({ productDescription: values.productDescription });
+    const tags = watch().tags.map((tag) => tag.value) as IProduct['tags'];
+    await updateProduct({
+      id: state.productId,
+      productDescription: values.productDescription,
+      tags,
+    }).unwrap();
     controls.next();
   };
 
@@ -53,11 +60,11 @@ export const ProductDescription = () => {
           </span>
           .
         </h1>
-        <form onSubmit={handleSubmit(handleSetDescription)}>
+        <form onSubmit={handleSubmit(handleUpdateProductDescription)}>
           <div className="space-y-8">
             <SelectionList
               options={PRDOUCT_TYPE_TAGS}
-              value={watch().tags}
+              value={getValues().tags}
               onChange={handleTagChange}
               renderTag={(tag, handleDelete) => (
                 <div
@@ -93,8 +100,17 @@ export const ProductDescription = () => {
               {...formStateHandler('productDescription')}
               error={formState.errors.productDescription}
             />
+            <div>
+              <h1>Price Infromation</h1>
+              <TextField
+                type="number"
+                placeholder="$00.00"
+                {...formStateHandler('productDescription')}
+              />
+            </div>
           </div>
           <Button
+            type="submit"
             variant={'neutral.solid'}
             size={'xl'}
             rounded={'lg'}
@@ -103,6 +119,7 @@ export const ProductDescription = () => {
             icon={<ArrowRight color="white" size={20} />}
             iconPlacement="right"
             isLoading={isLoading}
+            disabled={isLoading}
           >
             Next
           </Button>

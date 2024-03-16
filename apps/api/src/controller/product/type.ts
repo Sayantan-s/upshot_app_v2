@@ -19,3 +19,10 @@ export type IProductUpdateHandler = RequestHandler<
   unknown,
   Partial<IProductUpdateBody>
 >;
+
+// Product Fetch
+
+export type IProductFetchHandler = RequestHandler<
+  { productId: string },
+  unknown
+>;

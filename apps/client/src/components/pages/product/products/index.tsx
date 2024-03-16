@@ -2,7 +2,6 @@ import { PRODUCT_TYPES } from '@client/constants/product_types';
 import { ProductDetailsInstance } from '../context';
 import { ProductTracker } from '../context/ProductTracker';
 import { BuildInPublicInformation } from './BuildInPublicDetails';
-import { ProductSellInformation } from './ProductSellDetails';
 
 export const ProductInformationCollector = () => {
   const { values } = ProductDetailsInstance.useProductDetails();
@@ -12,9 +11,11 @@ export const ProductInformationCollector = () => {
     >
       {values.productType === PRODUCT_TYPES.BUILD_IN_PUBLIC ? (
         <BuildInPublicInformation />
-      ) : values.productType === PRODUCT_TYPES.PRODUCT_SELL ? (
-        <ProductSellInformation />
-      ) : null}
+      ) : //   :
+      //   values.productType === PRODUCT_TYPES.PRODUCT_SELL ? (
+      //   <ProductSellInformation />
+      // )
+      null}
     </ProductTracker>
   );
 };
