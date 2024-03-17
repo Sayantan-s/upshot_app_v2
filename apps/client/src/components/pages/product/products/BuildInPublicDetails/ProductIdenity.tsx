@@ -4,7 +4,7 @@ import { ProductOnboardingStatus } from '@client/constants/Product';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { useToggle } from '@client/hooks';
 import { productApi } from '@client/store/services/product';
-import { IGenerationRequest } from '@client/store/types/product';
+import { IGenerationRequest, IProduct } from '@client/store/types/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Switch from '@radix-ui/react-switch';
 import {
@@ -84,6 +84,7 @@ export const ProductIdenity = () => {
       productName: payload.productName,
     }).unwrap();
     handleFormValues('productId', productId);
+    handleSetProduct('productId', productId);
     setParams({ product: productId, status: ProductOnboardingStatus.CREATE });
     closeConfirmationModal();
     controls.next();
@@ -94,7 +95,7 @@ export const ProductIdenity = () => {
   > = (eve) => {
     const { name, value } = eve.target;
     const inputName = name as keyof Pick<
-      IGenerationRequest,
+      IProduct,
       'productMoto' | 'productName'
     >;
     formStateHandler(inputName).onChange({

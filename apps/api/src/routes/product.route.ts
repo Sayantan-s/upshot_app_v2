@@ -13,6 +13,10 @@ productRouter
   .get(ErrorHandler.tryCatch(ProductController.fetchProduct))
   .patch(ErrorHandler.tryCatch(ProductController.updateProduct));
 
+productRouter
+  .route('/:productId/finalise')
+  .patch(ErrorHandler.tryCatch(ProductController.finaliseProduct));
+
 productRouter.route('');
 
 export default productRouter;

@@ -48,10 +48,14 @@ export const productApi = api.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      // invalidatesTags: (...args) => {
-      //   const { id } = args[2];
-      //   return [{ type: ProductTags.PRODUCT, id }];
-      // },
     }),
+    finalise: builder.mutation<Api.SuccessResponse<null>, Pick<IProduct, 'id'>>(
+      {
+        query: ({ id }) => ({
+          url: `${PRODUCT_ENDPOINT.NAME}/${id}/finalise`,
+          method: 'PATCH',
+        }),
+      }
+    ),
   }),
 });

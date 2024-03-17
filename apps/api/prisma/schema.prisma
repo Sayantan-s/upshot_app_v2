@@ -85,6 +85,7 @@ type MediaCropArea{
 }
 
 type Config{
+  fileName String
   metadata MediaCropMetaData?
   area MediaCropArea?
 }

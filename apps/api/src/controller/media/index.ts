@@ -2,7 +2,6 @@ import { MESSAGE_MEDIA } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import { Cloudinary } from '@api/integrations/cloudinary';
 import MediaQueue from '@api/integrations/queues/media/queue';
-import { MessageQueueInput } from '@api/integrations/queues/media/type';
 import ErrorHandler from '@api/middlewares/error';
 import { MediaService } from '@api/services/media';
 import { ICropArea, ICropState } from '@api/services/media/type';
@@ -36,12 +35,13 @@ export class MediaController {
     const [collection, entity] = intent.split('_');
 
     await MediaQueue.client.produce(MESSAGE_MEDIA, {
-      collection: collection as MessageQueueInput['collection'],
+      collection: collection,
       entity,
       mediaKeyName: name,
       raw: rawImage.secure_url,
       current: croppedImage.secure_url,
       config: {
+        fileName: rawImage.original_filename,
         metadata: cropConfig,
         area: cropMetaDataValues,
       },

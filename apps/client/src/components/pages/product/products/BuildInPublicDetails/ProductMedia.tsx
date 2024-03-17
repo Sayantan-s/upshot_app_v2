@@ -10,11 +10,13 @@ import { Fragment, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodError } from 'zod';
 import { BuildInPublicInformation } from '.';
+import { ProductTracker } from '../../context/ProductTracker';
 
 type IPhotoType = 'productLogo' | 'productCover';
 
 export const ProductMedia = () => {
   const { handleFormValues, state } = BuildInPublicInformation.useMultiStep();
+  const { handleSetProduct } = ProductTracker.useProductTracker();
 
   const [showCropperLogoPhotoTool, { on: onLogo, off: offLogo }] = useToggle();
   const [showCropperCoverPhotoTool, { on, off }] = useToggle();
@@ -68,6 +70,8 @@ export const ProductMedia = () => {
   const handleLogoUploadComplete = async (data: ISingleImageUploadResponse) => {
     setValue('productLogo', data.croppedImageUrl);
     handleFormValues('productLogo', data.croppedImageUrl);
+    handleSetProduct('productLogoName', image.file?.name || '');
+    handleSetProduct('productLogo', data.croppedImageUrl);
   };
 
   const handleCoverUploadComplete = async (
@@ -75,6 +79,8 @@ export const ProductMedia = () => {
   ) => {
     setValue('productCover', data.croppedImageUrl);
     handleFormValues('productCover', data.croppedImageUrl);
+    handleSetProduct('productCoverName', image.file?.name || '');
+    handleSetProduct('productCover', data.croppedImageUrl);
   };
 
   return (
@@ -96,7 +102,7 @@ export const ProductMedia = () => {
                     variant={'secondary'}
                     src={getValues('productLogo')}
                     alt="product-cover-image"
-                    fileName={image.file!.name!}
+                    fileName={image.file?.name || state.productLogoName}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />
@@ -136,7 +142,7 @@ export const ProductMedia = () => {
                     variant={'primary'}
                     src={getValues('productCover')}
                     alt="product-cover-image"
-                    fileName={image.file!.name!}
+                    fileName={image.file!.name! || state.productCoverName}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />

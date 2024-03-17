@@ -24,6 +24,7 @@ interface MediaCropArea {
 }
 
 interface IMediaPayloadConfig {
+  fileName: string;
   metadata?: MediaCropMetaData;
   area?: MediaCropArea;
 }

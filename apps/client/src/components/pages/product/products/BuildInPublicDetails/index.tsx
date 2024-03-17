@@ -6,7 +6,10 @@ import {
   IBuildInPublicInitialState,
   useOnboardingProductState,
 } from '@client/hooks';
-import { FC, useMemo } from 'react';
+import { productApi } from '@client/store/services/product';
+import { ArrowRight } from 'iconsax-react';
+import { FC, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import { ProductTracker } from '../../context/ProductTracker';
 import { withProductInformationLayout } from '../../layout';
 import { ProductDescription } from './ProductDescription';
@@ -26,9 +29,9 @@ const [MultiStep, useMultiStep] = createMultiStep<
   contextName: 'build-in-public-product',
 });
 
-const Component: FC = () => {
-  const handleSubmit = () => {};
+const handleSubmit = () => {};
 
+const Component: FC = () => {
   const {
     state,
     productId,
@@ -37,8 +40,16 @@ const Component: FC = () => {
     apiStatus: { isFetching },
   } = useOnboardingProductState();
 
-  const { state: bipState } = ProductTracker.useProductTracker();
+  const { state: bipState, handleSetProduct } =
+    ProductTracker.useProductTracker();
   const productState = bipState as IBuildInPublicInitialState;
+  const navigate = useNavigate();
+
+  const [finaliseProduct, { isLoading }] = productApi.useFinaliseMutation();
+  const handleFinalise = async () => {
+    await finaliseProduct({ id: state.productId });
+    navigate(`/product/postmanualedits/${state.productId}`);
+  };
 
   const inOnboardingMode = useMemo(
     () =>
@@ -56,6 +67,20 @@ const Component: FC = () => {
   );
 
   const defaultStepCount = Number(inOnboardingMode);
+
+  useEffect(() => {
+    if (isPreviouslySavedDataPopulated) {
+      handleSetProduct('productId', state.productId);
+      handleSetProduct('productName', state.productName);
+      handleSetProduct('productMoto', state.productMoto);
+      handleSetProduct('productDescription', state.productDescription);
+      handleSetProduct('productCover', state.productCoverName);
+      handleSetProduct('productLogo', state.productLogo);
+      handleSetProduct('productPrice', '' + state.productPrice);
+      handleSetProduct('productCurrency', state.productCurrency);
+      handleSetProduct('tags', '');
+    }
+  }, [isPreviouslySavedDataPopulated, isFetching, inOnboardingMode, state]);
 
   return isFetching || (inOnboardingMode && !isPreviouslySavedDataPopulated) ? (
     <Loader size={'lg'} version="v2" variant={'primary.flat'} />
@@ -78,8 +103,19 @@ const Component: FC = () => {
         </MultiStep.Step>
       </MultiStep>
       {productState.productLogo ? (
-        <button className="absolute right-0 bottom-0 z-50 bg-red-200">
-          Continue to dashboard
+        <button
+          className="absolute right-10 bottom-10 z-50 bg-white flex items-center justify-between p-3 shadow-md shadow-gray-500/10 space-x-2 h-12 w-56"
+          disabled={isLoading}
+          onClick={handleFinalise}
+        >
+          <span>Continue to dashboard</span>
+          <span className="bg-gray-900 w-8 aspect-square flex items-center justify-center rounded-full">
+            {isLoading ? (
+              <Loader version="v2" size={'sm'} />
+            ) : (
+              <ArrowRight size={16} color="white" />
+            )}
+          </span>
         </button>
       ) : null}
     </>

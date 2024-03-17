@@ -10,7 +10,9 @@ export interface IBuildInPublicInitialState {
   productMoto: string;
   productDescription: string;
   productLogo: string;
+  productLogoName: string;
   productCover: string;
+  productCoverName: string;
   productPrice: number;
   productCurrency: keyof typeof ProductPriceCurrency;
   tags: typeof PRDOUCT_TYPE_TAGS;
@@ -22,7 +24,9 @@ export const buildInPublicInitialState: IBuildInPublicInitialState = {
   productMoto: '',
   productDescription: '',
   productLogo: '',
+  productLogoName: '',
   productCover: '',
+  productCoverName: '',
   productPrice: 0.0,
   productCurrency: ProductPriceCurrency.USD,
   tags: [],
@@ -43,7 +47,12 @@ export const useOnboardingProductState = () => {
   );
 
   useEffect(() => {
-    if (!isFetching && isSuccess && data?.data) {
+    if (
+      !isFetching &&
+      isSuccess &&
+      data?.data &&
+      !isPreviouslySavedDataPopulated
+    ) {
       const {
         id,
         productName,
@@ -53,13 +62,15 @@ export const useOnboardingProductState = () => {
         tags,
         price,
       } = data.data;
-      setState({
+      const bipState = {
         productId: id,
         productName,
         productMoto,
         productDescription,
         productLogo: media?.productLogo?.current || '',
+        productLogoName: media?.productLogo?.config.fileName || '',
         productCover: media?.productCover?.current || '',
+        productCoverName: media?.productCover?.config.fileName || '',
         productPrice: price?.amount || 0.0,
         productCurrency: price?.currency || ProductPriceCurrency.USD,
         tags: tags.reduce((acc, curr) => {
@@ -69,10 +80,11 @@ export const useOnboardingProductState = () => {
           presentTag && acc.push(presentTag);
           return acc;
         }, [] as typeof PRDOUCT_TYPE_TAGS),
-      });
+      };
+      setState(bipState);
       setsPreviouslySavedDataPopulated(true);
     }
-  }, [data?.data, isSuccess, isFetching]);
+  }, [data?.data, isSuccess, isFetching, isPreviouslySavedDataPopulated]);
 
   return {
     state,

@@ -1,3 +1,4 @@
+import { ManualEditing } from '@client/components/pages/product/manulediting';
 import RootLayout from '@client/components/shared/Layouts/Rootlayout';
 import { useTitle } from '@client/hooks/useTitle';
 import {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter(
             <Route path="chat" element={<Messages />} />
           </Route>
           <Route path="product/upload" element={<ProductUpload />} />
+          <Route
+            path="product/postmanualedits/:productId"
+            element={<ManualEditing />}
+          />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

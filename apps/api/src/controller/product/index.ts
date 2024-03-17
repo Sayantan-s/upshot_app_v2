@@ -1,5 +1,7 @@
 import H from '@api/helpers/ResponseHelper';
+import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
+import { ProductStatus } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
 import {
   IProductCreateHandler,
@@ -39,6 +41,25 @@ export class ProductController {
     const data = req.body;
     const { productId } = req.params;
     await ProductService.update({ id: productId }, data);
+    H.success(res, {
+      statusCode: 204,
+      data: null,
+    });
+  };
+
+  public static finaliseProduct: IProductUpdateHandler = async (req, res) => {
+    const { productId } = req.params;
+    const key = `PRODUCT_FINALISE_${productId}`;
+    const isProductFinalized = await Redis.client.cache.get(key);
+    if (!isProductFinalized) {
+      await ProductService.update(
+        { id: productId },
+        {
+          status: ProductStatus.COMING_SOON,
+        }
+      );
+      await Redis.client.cache.setex(key, 3 * 1000, 1);
+    }
     H.success(res, {
       statusCode: 204,
       data: null,
