@@ -1,9 +1,13 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import { Loader } from '@client/components/ui';
 import { createMultiStep } from '@client/components/ui/MultiStep';
 import { ProductOnboardingStatus } from '@client/constants/Product';
-import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
-import { useOnboardingProductState } from '@client/hooks';
+import {
+  IBuildInPublicInitialState,
+  useOnboardingProductState,
+} from '@client/hooks';
 import { FC, useMemo } from 'react';
+import { ProductTracker } from '../../context/ProductTracker';
 import { withProductInformationLayout } from '../../layout';
 import { ProductDescription } from './ProductDescription';
 import { ProductIdenity } from './ProductIdenity';
@@ -15,28 +19,8 @@ export enum BUILD_IN_PUBLIC_MULTISTEP {
   STEP_3 = 'STEP_3',
 }
 
-export interface IBuildInPublicInitialState {
-  productId: string;
-  productName: string;
-  productMoto: string;
-  productDescription: string;
-  productLogo: string;
-  productCover: string;
-  tags: typeof PRDOUCT_TYPE_TAGS;
-}
-
-export const buildInPublicInitialState: IBuildInPublicInitialState = {
-  productId: '',
-  productName: '',
-  productMoto: '',
-  productDescription: '',
-  productLogo: '',
-  productCover: '',
-  tags: [],
-};
-
 const [MultiStep, useMultiStep] = createMultiStep<
-  typeof buildInPublicInitialState,
+  IBuildInPublicInitialState,
   keyof typeof BUILD_IN_PUBLIC_MULTISTEP
 >({
   contextName: 'build-in-public-product',
@@ -52,6 +36,9 @@ const Component: FC = () => {
     isPreviouslySavedDataPopulated,
     apiStatus: { isFetching },
   } = useOnboardingProductState();
+
+  const { state: bipState } = ProductTracker.useProductTracker();
+  const productState = bipState as IBuildInPublicInitialState;
 
   const inOnboardingMode = useMemo(
     () =>
@@ -73,22 +60,29 @@ const Component: FC = () => {
   return isFetching || (inOnboardingMode && !isPreviouslySavedDataPopulated) ? (
     <Loader size={'lg'} version="v2" variant={'primary.flat'} />
   ) : (
-    <MultiStep
-      defaultStep={defaultStep}
-      state={state}
-      onSubmit={handleSubmit}
-      defaultStepCount={defaultStepCount}
-    >
-      <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}>
-        <ProductIdenity />
-      </MultiStep.Step>
-      <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_2}>
-        <ProductDescription />
-      </MultiStep.Step>
-      <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_3}>
-        <ProductMedia />
-      </MultiStep.Step>
-    </MultiStep>
+    <>
+      <MultiStep
+        defaultStep={defaultStep}
+        state={state}
+        onSubmit={handleSubmit}
+        defaultStepCount={defaultStepCount}
+      >
+        <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_1}>
+          <ProductIdenity />
+        </MultiStep.Step>
+        <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_2}>
+          <ProductDescription />
+        </MultiStep.Step>
+        <MultiStep.Step value={BUILD_IN_PUBLIC_MULTISTEP.STEP_3}>
+          <ProductMedia />
+        </MultiStep.Step>
+      </MultiStep>
+      {productState.productLogo ? (
+        <button className="absolute right-0 bottom-0 z-50 bg-red-200">
+          Continue to dashboard
+        </button>
+      ) : null}
+    </>
   );
 };
 

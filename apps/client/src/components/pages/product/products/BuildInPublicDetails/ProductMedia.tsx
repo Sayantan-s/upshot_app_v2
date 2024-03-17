@@ -18,7 +18,6 @@ export const ProductMedia = () => {
 
   const [showCropperLogoPhotoTool, { on: onLogo, off: offLogo }] = useToggle();
   const [showCropperCoverPhotoTool, { on, off }] = useToggle();
-
   const [image, setImage] = useState<IImageMetaData>({
     base64URL: '',
     file: null,
@@ -66,12 +65,14 @@ export const ProductMedia = () => {
     [on, onLogo]
   );
 
-  const handleLogoUploadComplete = (data: ISingleImageUploadResponse) => {
+  const handleLogoUploadComplete = async (data: ISingleImageUploadResponse) => {
     setValue('productLogo', data.croppedImageUrl);
     handleFormValues('productLogo', data.croppedImageUrl);
   };
 
-  const handleCoverUploadComplete = (data: ISingleImageUploadResponse) => {
+  const handleCoverUploadComplete = async (
+    data: ISingleImageUploadResponse
+  ) => {
     setValue('productCover', data.croppedImageUrl);
     handleFormValues('productCover', data.croppedImageUrl);
   };
@@ -95,7 +96,7 @@ export const ProductMedia = () => {
                     variant={'secondary'}
                     src={getValues('productLogo')}
                     alt="product-cover-image"
-                    fileName={image.file?.name!}
+                    fileName={image.file!.name!}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />
@@ -135,7 +136,7 @@ export const ProductMedia = () => {
                     variant={'primary'}
                     src={getValues('productCover')}
                     alt="product-cover-image"
-                    fileName={image.file?.name!}
+                    fileName={image.file!.name!}
                   />
                 ) : (
                   <Export size="32" color="rgb(16,185,129)" />
@@ -164,6 +165,7 @@ export const ProductMedia = () => {
         </div>
       </div>
       <CropperTool
+        intent={`PRODUCT_${state.productId}`}
         name="productCover"
         show={showCropperCoverPhotoTool}
         onHide={off}
@@ -173,6 +175,7 @@ export const ProductMedia = () => {
         onUploadComplete={handleCoverUploadComplete}
       />
       <CropperTool
+        intent={`PRODUCT_${state.productId}`}
         name="productLogo"
         show={showCropperLogoPhotoTool}
         onHide={offLogo}

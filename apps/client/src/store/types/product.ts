@@ -1,3 +1,5 @@
+import { IMediaPayload } from './media';
+
 export enum EInterestsType {
   PT = 'PT',
   MT = 'MT',
@@ -22,13 +24,13 @@ export enum ProductPriceCurrency {
 }
 
 export interface IProductMediaPayload {
-  productLogo: string;
-  productCover: string | null;
+  productLogo: IMediaPayload | null;
+  productCover: IMediaPayload | null;
 }
 export interface IProductPricePayload {
   amount: number;
   currency: keyof typeof ProductPriceCurrency;
-  soldAt: number;
+  soldAt?: number;
 }
 
 export interface IProduct {

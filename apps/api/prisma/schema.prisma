@@ -66,15 +66,44 @@ enum ProductStatus {
   SOLD
 }
 
+type MediaCropConfigCoords {
+  x Float
+  y Float
+}
+
+type MediaCropMetaData {
+  crop MediaCropConfigCoords
+  zoom Float?
+  rotate Float?
+}
+
+type MediaCropArea{
+  width Float?
+  height Float?
+  x Float?
+  y Float?
+}
+
+type Config{
+  metadata MediaCropMetaData?
+  area MediaCropArea?
+}
+
+type MediaConfig{
+  raw String
+  current String
+  config Config
+}
+
 type ProductMedia {
-  productLogo  String
-  productCover String?
+  productLogo  MediaConfig?
+  productCover MediaConfig?
 }
 
 type ProductPrice {
   amount   Float
   currency ProductPriceCurrency
-  soldAt   Float
+  soldAt   Float?
 }
 
 model Product {

@@ -1,6 +1,6 @@
 import { PRODUCT_TYPES } from '@client/constants/product_types';
+import { buildInPublicInitialState } from '@client/hooks';
 import { createContext, useContext, useState } from 'react';
-import { buildInPublicInitialState } from '../products/BuildInPublicDetails';
 import { productSellInitialState } from '../products/ProductSellDetails';
 import { IProductTrackerProps } from './types';
 

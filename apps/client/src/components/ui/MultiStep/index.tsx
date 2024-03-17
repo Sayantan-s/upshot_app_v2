@@ -38,7 +38,6 @@ export const createMultiStep = <TData, TStepNames = string>({
     onChange,
     defaultStepCount,
   }) => {
-    console.log(formState);
     const [state, setState] = useState(formState);
 
     const { component, ...controls } = useController({

@@ -2,7 +2,7 @@ import { Button, ListBoxInit, TextField } from '@client/components/ui';
 import { PRDOUCT_TYPE_TAGS } from '@client/constants/tags/producttype';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { productApi } from '@client/store/services/product';
-import { IProduct } from '@client/store/types/product';
+import { IProduct, ProductPriceCurrency } from '@client/store/types/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Add, ArrowRight } from 'iconsax-react';
 import { useForm } from 'react-hook-form';
@@ -23,10 +23,17 @@ export const ProductDescription = () => {
     watch,
     setValue,
     getValues,
-  } = useForm<Pick<typeof state, 'productDescription' | 'tags'>>({
+  } = useForm<
+    Pick<
+      typeof state,
+      'productDescription' | 'tags' | 'productPrice' | 'productCurrency'
+    >
+  >({
     values: {
       productDescription: state.productDescription,
       tags: state.tags,
+      productCurrency: state.productCurrency,
+      productPrice: state.productPrice,
     },
     resolver: zodResolver(ValidationSchema.productDescription),
   });
@@ -37,14 +44,23 @@ export const ProductDescription = () => {
   };
 
   const handleUpdateProductDescription = async (
-    values: Pick<typeof state, 'productDescription'>
+    values: Pick<
+      typeof state,
+      'productDescription' | 'productCurrency' | 'productPrice'
+    >
   ) => {
     handleFormValues('productDescription', values.productDescription);
+    handleFormValues('productPrice', values.productPrice);
+    handleFormValues('productCurrency', values.productCurrency);
     const tags = watch().tags.map((tag) => tag.value) as IProduct['tags'];
     await updateProduct({
       id: state.productId,
       productDescription: values.productDescription,
       tags,
+      price: {
+        amount: values.productPrice,
+        currency: values.productCurrency,
+      },
     }).unwrap();
     controls.next();
   };
@@ -101,12 +117,25 @@ export const ProductDescription = () => {
               error={formState.errors.productDescription}
             />
             <div>
-              <h1>Price Infromation</h1>
-              <TextField
-                type="number"
-                placeholder="$00.00"
-                {...formStateHandler('productDescription')}
-              />
+              <h1>Price Information</h1>
+              <div className="flex w-full">
+                <TextField
+                  type="number"
+                  placeholder="$00.00"
+                  className="flex-[0.7]"
+                  step="0.25"
+                  {...formStateHandler('productPrice')}
+                  error={formState.errors.productPrice?.message}
+                />
+                <select
+                  className="w-full bg-red-100 flex-[0.3]"
+                  defaultValue={ProductPriceCurrency.USD}
+                  {...formStateHandler('productCurrency')}
+                >
+                  <option value={ProductPriceCurrency.USD}>USD</option>
+                  <option value={ProductPriceCurrency.INR}>INR</option>
+                </select>
+              </div>
             </div>
           </div>
           <Button

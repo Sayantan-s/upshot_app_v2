@@ -65,17 +65,14 @@ export default class ValidationSchema {
       .max(600, {
         message: 'Product description cannot exceed 300 characters.',
       }),
-    price: z.object({
-      amount: z
-        .number({ required_error: 'Product price is required!' })
-        .min(99, {
-          message: 'Product description must be at least 50 characters long.',
-        }),
-      currency: z
-        .number({ required_error: 'Product price is required!' })
-        .min(99, {
-          message: 'Product description must be at least 50 characters long.',
-        }),
+    productPrice: z.coerce
+      .number()
+      .positive({ message: 'You cannot add a negative amount' })
+      .min(99, {
+        message: 'Minimum price should 99',
+      }),
+    productCurrency: z.string({
+      required_error: 'Product currency is required!',
     }),
     tags: z
       .array(
