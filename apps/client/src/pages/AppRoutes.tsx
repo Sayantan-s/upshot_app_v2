@@ -23,6 +23,7 @@ import { Design } from './design';
 import { ErrorPage } from './error';
 import { Home } from './home';
 import { Messages } from './messages';
+import { Products } from './product';
 import { ProductUpload } from './product/productupload';
 import { Profile } from './profile';
 
@@ -39,14 +40,15 @@ export const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route element={<RequireUserDetails />}>
           <Route element={<RootLayout />}>
-            <Route element={<Sidebar />}>
-              <Route element={<Trending />}>
+            <Route element={<Trending />}>
+              <Route element={<Sidebar />}>
                 <Route element={<WrapperLayout />}>
                   <Route index element={<Home />} />
                   <Route path="profile" element={<Profile />} />
                   <Route path="chat" element={<Messages />} />
                 </Route>
               </Route>
+              <Route element={<Products />} path="product/:productId" />
             </Route>
           </Route>
           <Route path="product/upload" element={<ProductUpload />} />
