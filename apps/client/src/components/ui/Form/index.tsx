@@ -1,18 +1,18 @@
-import { Eye, EyeSlash } from "iconsax-react";
-import { FC, forwardRef, useReducer } from "react";
-import { FileInput } from "./File";
-import { ITextAreaProps, ITextFieldProps } from "./types";
+import { Eye, EyeSlash } from 'iconsax-react';
+import { FC, forwardRef, useReducer } from 'react';
+import { FileInput } from './File';
+import { ITextAreaProps, ITextFieldProps } from './types';
 
 const Root = forwardRef<HTMLInputElement, ITextFieldProps>(
   ({ type, ...rest }, ref) => {
-    if (type === "password") return <PasswordField {...rest} ref={ref} />;
-    return <InputField {...rest} ref={ref} />;
+    if (type === 'password') return <PasswordField {...rest} ref={ref} />;
+    return <InputField {...rest} type={type} ref={ref} />;
   }
 );
 
 const PasswordField = forwardRef<
   HTMLInputElement,
-  Omit<ITextFieldProps, "type">
+  Omit<ITextFieldProps, 'type'>
 >(({ error, ...rest }, ref) => {
   const [isPassword, togglePassword] = useReducer(
     (prevState) => !prevState,
@@ -29,28 +29,28 @@ const PasswordField = forwardRef<
       <div
         className={`flex border-b border-slate-300 ${
           error
-            ? "focus-within:border-red-500 border-rose-300"
-            : "focus-within:border-slate-400"
+            ? 'focus-within:border-red-500 border-rose-300'
+            : 'focus-within:border-slate-400'
         }`}
       >
         <input
           {...rest}
           className={`w-full text-gray-600 placeholder:tracking-normal ${
-            isPassword ? "tracking-[0.3rem]" : "tracking-normal"
+            isPassword ? 'tracking-[0.3rem]' : 'tracking-normal'
           } py-2.5 text-base focus:outline-none`}
-          type={isPassword ? "password" : "text"}
+          type={isPassword ? 'password' : 'text'}
           ref={ref}
           autoComplete="off"
         />
         <button
           onClick={handleToggle}
-          className={`mr-2 ${error ? "text-red-500" : "text-slate-300"}`}
+          className={`mr-2 ${error ? 'text-red-500' : 'text-slate-300'}`}
         >
           {isPassword ? (
             <Eye size={16} variant="Bulk" />
           ) : (
             <EyeSlash size={16} variant="Bulk" />
-          )}{" "}
+          )}{' '}
         </button>
       </div>
       <ErrorMessage error={error} />
@@ -67,9 +67,9 @@ const InputField = forwardRef<HTMLInputElement, ITextFieldProps>(
             {...rest}
             ref={ref}
             className={`text-gray-600 ${
-              error ? "border-rose-300" : ""
+              error ? 'border-rose-300' : ''
             } w-full py-2.5 text-base border-b border-slate-300 focus:outline-none ${
-              error ? "focus:border-red-500" : "focus:border-slate-400"
+              error ? 'focus:border-red-500' : 'focus:border-slate-400'
             }`}
             autoComplete="off"
           />
@@ -89,9 +89,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
             {...rest}
             ref={ref}
             className={`text-gray-600 resize-none ${
-              error ? "border-rose-300" : ""
+              error ? 'border-rose-300' : ''
             } w-full py-2.5 text-base border-b border-slate-300 focus:outline-none ${
-              error ? "focus:border-red-500" : "focus:border-slate-400"
+              error ? 'focus:border-red-500' : 'focus:border-slate-400'
             }`}
             autoComplete="off"
           />
@@ -102,9 +102,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
   }
 );
 
-const ErrorMessage: FC<Pick<ITextFieldProps, "error">> = ({ error }) => (
+const ErrorMessage: FC<Pick<ITextFieldProps, 'error'>> = ({ error }) => (
   <p className="text-rose-600 h-2 text-xs mt-1">
-    {typeof error === "string" ? error : error?.message}
+    {typeof error === 'string' ? error : error?.message}
   </p>
 );
 

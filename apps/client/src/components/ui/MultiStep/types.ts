@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from 'react';
 
 export interface Props<TData, TStepNames> {
   state: TData;
@@ -7,6 +7,7 @@ export interface Props<TData, TStepNames> {
   defaultStep: TStepNames;
   onStepChange?: (state: TData, stepCount: number) => void;
   onChange?: (state: TData) => void;
+  defaultStepCount: number;
 }
 
 export interface StepProps<TStepNames = string> {
@@ -20,7 +21,7 @@ export interface IControls<TStepNames> {
 }
 
 export interface IMultiStepContext<TData, TStepNames>
-  extends Pick<Props<TData, TStepNames>, "state"> {
+  extends Pick<Props<TData, TStepNames>, 'state'> {
   handleFormValues: (key: keyof TData, value: TData[keyof TData]) => void;
   controls: IControls<TStepNames>;
   onSubmit: (data: TData) => void;
@@ -30,6 +31,7 @@ export interface IMultiStepContext<TData, TStepNames>
 export interface IControllerHook<TStepNames> {
   children: React.ReactElement[];
   defaultStep: TStepNames;
+  defaultCount: number;
   onPrev?: (stepCount: number) => void;
   onNext?: (stepCount: number) => void;
 }

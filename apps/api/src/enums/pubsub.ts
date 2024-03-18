@@ -1,3 +1,5 @@
 // MESSAGES
 
 export const MESSAGE_CALL_GENPOST_FN = 'CALL_GENPOST_FN';
+
+export const MESSAGE_MEDIA = 'MESSAGE_MEDIA';

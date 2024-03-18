@@ -36,9 +36,12 @@ export const createMultiStep = <TData, TStepNames = string>({
     onSubmit,
     onStepChange,
     onChange,
+    defaultStepCount,
   }) => {
     const [state, setState] = useState(formState);
+
     const { component, ...controls } = useController({
+      defaultCount: defaultStepCount,
       children,
       defaultStep,
       onNext: (step) => onStepChange?.(state, step),
@@ -69,12 +72,13 @@ export const createMultiStep = <TData, TStepNames = string>({
 
   const useController = ({
     defaultStep,
+    defaultCount,
     children,
     onPrev,
     onNext,
   }: IControllerHook<TStepNames>) => {
     const [currentStep, setCurrentStep] = useState(defaultStep);
-    const [stepCount, setStepCount] = useState(0);
+    const [stepCount, setStepCount] = useState(defaultCount || 0);
     const [currentStepComponent, setCurrentStepComponent] =
       useState<ReactElement | null>(null);
 

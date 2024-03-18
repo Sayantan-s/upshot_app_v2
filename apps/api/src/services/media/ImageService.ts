@@ -18,7 +18,6 @@ export class ImageService {
   }
 
   static async crop({ file, config, metaData }: ICropInput) {
-    console.log(metaData, config);
     const cropInfo = {
       left: metaData.x,
       top: metaData.y,

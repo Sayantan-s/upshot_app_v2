@@ -9,11 +9,11 @@ export const withProductInformationLayout = (Component: FC) => {
   return () => {
     const { values } = ProductDetailsInstance.useProductDetails();
     return (
-      <Page className="flex">
+      <Page className="flex relative">
         <div className="flex-1">
           <Component />
         </div>
-        <div className="flex-1 bg-emerald-50 flex items-center justify-center">
+        <div className="flex-1 bg-emerald-50 flex items-center justify-center relative">
           {values.productType === PRODUCT_TYPES.BUILD_IN_PUBLIC ? (
             <BuildInPublicProductCard />
           ) : values.productType === PRODUCT_TYPES.PRODUCT_SELL ? (

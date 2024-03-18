@@ -1,5 +1,7 @@
+import { MESSAGE_MEDIA } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import { Cloudinary } from '@api/integrations/cloudinary';
+import MediaQueue from '@api/integrations/queues/media/queue';
 import ErrorHandler from '@api/middlewares/error';
 import { MediaService } from '@api/services/media';
 import { ICropArea, ICropState } from '@api/services/media/type';
@@ -9,7 +11,7 @@ export class MediaController {
   public static singleImage: ISingleImageRequestHandler = async (req, res) => {
     const file = req.file;
     if (!file) throw new ErrorHandler(400, 'File not found!');
-    const { type, config, cropMetaData } = req.body;
+    const { type, config, cropMetaData, intent, name } = req.body;
 
     const cropConfig: ICropState = JSON.parse(config);
     const cropMetaDataValues: ICropArea = JSON.parse(cropMetaData);
@@ -29,6 +31,21 @@ export class MediaController {
     const [rawImage, croppedImage] = await uploadCloudinaryImages;
 
     await image.destroy();
+
+    const [collection, entity] = intent.split('_');
+
+    await MediaQueue.client.produce(MESSAGE_MEDIA, {
+      collection: collection,
+      entity,
+      mediaKeyName: name,
+      raw: rawImage.secure_url,
+      current: croppedImage.secure_url,
+      config: {
+        fileName: rawImage.original_filename,
+        metadata: cropConfig,
+        area: cropMetaDataValues,
+      },
+    });
 
     H.success(res, {
       statusCode: 200,

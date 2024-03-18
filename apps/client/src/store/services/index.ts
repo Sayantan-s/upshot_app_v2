@@ -8,6 +8,11 @@ import {
 import { saveCredentials } from '../slices/auth';
 import { IRefreshResponse } from '../types/auth';
 
+export enum ProductTags {
+  PRODUCT = 'PRODUCT',
+  PRODUCTS = 'PRODUCTS',
+}
+
 export const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_SERVER_ORIGIN,
   credentials: 'include',
@@ -40,4 +45,5 @@ export const baseQueryWithReAuth: BaseQueryFn = async (
 export const api = createApi({
   baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({}),
+  tagTypes: [ProductTags.PRODUCT, ProductTags.PRODUCTS],
 });

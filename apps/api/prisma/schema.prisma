@@ -11,12 +11,15 @@ datasource db {
 }
 
 // User enums and types::
-
 enum InterestsType {
-  Generative_AI
-  SaaS
-  No_Code_Tools
-  Developer_Tools
+  PT // "Productivity"
+  MT // "Marketing"
+  AI // "Artificial Intelligence"
+  FT // "FinTech"
+  ET // "EdTech"
+  OSS // "Open Source"
+  DTT // "Developer Tool"
+  SaaS // "SAAS"
 }
 
 enum CurrencyType {
@@ -63,15 +66,45 @@ enum ProductStatus {
   SOLD
 }
 
+type MediaCropConfigCoords {
+  x Float
+  y Float
+}
+
+type MediaCropMetaData {
+  crop MediaCropConfigCoords
+  zoom Float?
+  rotate Float?
+}
+
+type MediaCropArea{
+  width Float?
+  height Float?
+  x Float?
+  y Float?
+}
+
+type Config{
+  fileName String
+  metadata MediaCropMetaData?
+  area MediaCropArea?
+}
+
+type MediaConfig{
+  raw String
+  current String
+  config Config
+}
+
 type ProductMedia {
-  productLogo  String
-  productCover String?
+  productLogo  MediaConfig?
+  productCover MediaConfig?
 }
 
 type ProductPrice {
   amount   Float
   currency ProductPriceCurrency
-  soldAt   Float
+  soldAt   Float?
 }
 
 model Product {
@@ -81,7 +114,7 @@ model Product {
   productDescription String?
   media              ProductMedia?
   tags               InterestsType[]
-  price              ProductPriceCurrency?
+  price              ProductPrice?
   status             ProductStatus?
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @default(now()) @updatedAt

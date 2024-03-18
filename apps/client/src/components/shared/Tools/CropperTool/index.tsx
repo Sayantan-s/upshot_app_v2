@@ -31,6 +31,7 @@ export const CropperTool: FC<PropsWithChildren<Props>> = ({
   showGrid = true,
   name,
   onUploadComplete,
+  intent,
   ...rest
 }) => {
   const [uploadImage, { isLoading: isUploading }] =
@@ -74,6 +75,8 @@ export const CropperTool: FC<PropsWithChildren<Props>> = ({
   const handleUpload = async () => {
     if (!imageMetaData.file) return;
     const formData = new FormData();
+    formData.append('intent', intent);
+    formData.append('name', name);
     formData.append('type', name);
     formData.append('config', JSON.stringify(config));
     formData.append('cropMetaData', JSON.stringify(areaPixel));
