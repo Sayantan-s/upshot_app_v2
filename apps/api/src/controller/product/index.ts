@@ -40,7 +40,12 @@ export class ProductController {
   public static updateProduct: IProductUpdateHandler = async (req, res) => {
     const data = req.body;
     const { productId } = req.params;
-    await ProductService.update({ id: productId }, data);
+    const currentStringifiedData = JSON.stringify(data);
+    const cacheCurrentData = await Redis.client.cache.get(productId);
+    if (cacheCurrentData !== currentStringifiedData) {
+      await ProductService.update({ id: productId }, data);
+      await Redis.client.cache.setex(productId, 1000, JSON.stringify(data));
+    }
     H.success(res, {
       statusCode: 204,
       data: null,

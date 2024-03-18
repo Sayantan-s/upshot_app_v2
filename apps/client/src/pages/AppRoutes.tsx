@@ -1,5 +1,8 @@
 import { ManualEditing } from '@client/components/pages/product/manulediting';
 import RootLayout from '@client/components/shared/Layouts/Rootlayout';
+import { Sidebar } from '@client/components/shared/Layouts/Sidebar';
+import Trending from '@client/components/shared/Layouts/Trending';
+import { WrapperLayout } from '@client/components/shared/Layouts/WrapperLayout';
 import { useTitle } from '@client/hooks/useTitle';
 import {
   Route,
@@ -36,9 +39,15 @@ export const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route element={<RequireUserDetails />}>
           <Route element={<RootLayout />}>
-            <Route index element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="chat" element={<Messages />} />
+            <Route element={<Sidebar />}>
+              <Route element={<Trending />}>
+                <Route element={<WrapperLayout />}>
+                  <Route index element={<Home />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="chat" element={<Messages />} />
+                </Route>
+              </Route>
+            </Route>
           </Route>
           <Route path="product/upload" element={<ProductUpload />} />
           <Route
