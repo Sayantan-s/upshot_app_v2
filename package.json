@@ -8,7 +8,7 @@
     "npm": "please-use-yarn"
   },
   "scripts": {
-    "prepare": "node .husky/install.mjs",
+    "prepare": "cd ../../ && node .husky/install.mjs",
     "dev": "nx run-many --target=serve --projects=api,client",
     "build": "nx run-many --target=build --all --parallel",
     "prisma:format": "prisma format --schema=./apps/api/prisma/schema.prisma",
