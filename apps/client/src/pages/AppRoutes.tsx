@@ -44,18 +44,16 @@ export const router = createBrowserRouter(
               <Route element={<Sidebar />}>
                 <Route element={<WrapperLayout />}>
                   <Route index element={<Home />} />
-                  <Route path="profile" element={<Profile />} />
                   <Route path="chat" element={<Messages />} />
                 </Route>
               </Route>
-              <Route element={<Products />} path="product/:productId" />
+              <Route path="profile" element={<Profile />} />
+              <Route element={<Products />} path="profile/product" />
+              <Route element={<Products />} path="profile/product/:productId" />
             </Route>
           </Route>
-          <Route path="product/upload" element={<ProductUpload />} />
-          <Route
-            path="product/postmanualedits/:productId"
-            element={<ManualEditing />}
-          />
+          <Route path="product/onboard" element={<ProductUpload />} />
+          <Route path="product/edit/:productId" element={<ManualEditing />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />
