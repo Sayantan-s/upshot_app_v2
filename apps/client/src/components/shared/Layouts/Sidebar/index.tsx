@@ -25,7 +25,7 @@ const Root = () => (
   </div>
 );
 
-export const Sidebar = () => {
+export const SidebarLayout = () => {
   const router = useLocation();
   return (
     <Fragment>

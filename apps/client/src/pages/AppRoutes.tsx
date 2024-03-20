@@ -1,8 +1,8 @@
 import { ManualEditing } from '@client/components/pages/product/manulediting';
 import RootLayout from '@client/components/shared/Layouts/Rootlayout';
-import { Sidebar } from '@client/components/shared/Layouts/Sidebar';
-import Trending from '@client/components/shared/Layouts/Trending';
-import { WrapperLayout } from '@client/components/shared/Layouts/WrapperLayout';
+import { SidebarLayout } from '@client/components/shared/Layouts/Sidebar';
+import { TrendingLayout } from '@client/components/shared/Layouts/Trending';
+import { FeedLayout } from '@client/components/shared/Layouts/WrapperLayout';
 import { useTitle } from '@client/hooks/useTitle';
 import {
   Route,
@@ -25,7 +25,8 @@ import { Home } from './home';
 import { Messages } from './messages';
 import { Products } from './product';
 import { ProductUpload } from './product/productupload';
-import { Profile } from './profile';
+import { ProfileLayout } from './profile';
+import { Shots } from './shots';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,16 +41,17 @@ export const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route element={<RequireUserDetails />}>
           <Route element={<RootLayout />}>
-            <Route element={<Trending />}>
-              <Route element={<Sidebar />}>
-                <Route element={<WrapperLayout />}>
+            <Route element={<TrendingLayout />}>
+              <Route element={<SidebarLayout />}>
+                <Route element={<FeedLayout />}>
                   <Route index element={<Home />} />
                   <Route path="chat" element={<Messages />} />
                 </Route>
               </Route>
-              <Route path="profile" element={<Profile />} />
-              <Route element={<Products />} path="profile/product" />
-              <Route element={<Products />} path="profile/product/:productId" />
+              <Route element={<ProfileLayout />}>
+                <Route element={<Products />} path="profile/products" />
+                <Route element={<Shots />} path="profile/shots" />
+              </Route>
             </Route>
           </Route>
           <Route path="product/onboard" element={<ProductUpload />} />

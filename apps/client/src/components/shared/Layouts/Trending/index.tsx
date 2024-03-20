@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { ProfilePopper } from './ProfilePopper';
 import { RecentActivity } from './RecentActivity';
 
-export const Trending = () => {
+export const TrendingLayout = () => {
   return (
     <Fragment>
       <Outlet />
@@ -16,5 +16,3 @@ export const Trending = () => {
     </Fragment>
   );
 };
-
-export default Trending;
