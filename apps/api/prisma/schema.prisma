@@ -33,7 +33,7 @@ model User {
   newUser      Boolean?        @default(true)
   userName     String          @unique
   pwd          String
-  refreshToken String?
+  refreshToken String?         @unique
   firstName    String?
   lastName     String?
   about        String?
@@ -72,28 +72,28 @@ type MediaCropConfigCoords {
 }
 
 type MediaCropMetaData {
-  crop MediaCropConfigCoords
-  zoom Float?
+  crop   MediaCropConfigCoords
+  zoom   Float?
   rotate Float?
 }
 
-type MediaCropArea{
-  width Float?
+type MediaCropArea {
+  width  Float?
   height Float?
-  x Float?
-  y Float?
+  x      Float?
+  y      Float?
 }
 
-type Config{
-  fileName String
+type Config {
+  fileName String?
   metadata MediaCropMetaData?
-  area MediaCropArea?
+  area     MediaCropArea?
 }
 
-type MediaConfig{
-  raw String
+type MediaConfig {
+  raw     String
   current String
-  config Config
+  config  Config?
 }
 
 type ProductMedia {
@@ -108,7 +108,7 @@ type ProductPrice {
 }
 
 model Product {
-  id                 String                @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
   productName        String
   productMoto        String
   productDescription String?
@@ -116,11 +116,11 @@ model Product {
   tags               InterestsType[]
   price              ProductPrice?
   status             ProductStatus?
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @default(now()) @updatedAt
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now()) @updatedAt
   launchedAt         DateTime?
-  createdBy          String                @default("system")
-  updatedBy          String                @default("system")
+  createdBy          String          @default("system")
+  updatedBy          String          @default("system")
 
   // Relation::
   shots Shot[]

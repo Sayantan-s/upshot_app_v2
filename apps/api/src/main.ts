@@ -23,7 +23,7 @@ async function main() {
   Middlewares.commonMiddlewares(app);
 
   // GraphQL API Endpoint
-  Controllers.GraphqlControllers(app);
+  await Controllers.GraphqlControllers(app);
 
   // Middlewares [:: REST Specific middlewares]
   Middlewares.restMiddlewares(app);
