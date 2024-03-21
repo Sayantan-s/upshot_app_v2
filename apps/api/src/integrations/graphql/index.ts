@@ -1,21 +1,27 @@
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
+import { withContext } from '@api/middlewares/gql-authorization';
+import { ApolloServer } from '@apollo/server';
+
+import { expressMiddleware } from '@apollo/server/express4';
+import { Product } from './product';
 
 export class GQLService {
   public static async init() {
     const server = new ApolloServer({
-      typeDefs: `#graphql
+      typeDefs: `
         type Query{
-            health: String   
+            ${Product.queries}
         }
+        ${Product.typeDefs}
       `,
       resolvers: {
         Query: {
-          health: () => `World!`,
+          ...Product.resolvers.queries,
         },
       },
     });
     await server.start();
-    return expressMiddleware(server);
+    return expressMiddleware(server, {
+      context: withContext,
+    });
   }
 }

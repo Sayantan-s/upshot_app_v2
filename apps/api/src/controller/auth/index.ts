@@ -64,12 +64,13 @@ export class AuthController {
       throw new ErrorHandler(400, 'username or password entered is incorrect!');
     // eslint-disable-next-line no-useless-escape
     const isEmail = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(identity); // Regex to check if it is "email" or "userName"
-    const user = await UserService.getUser(
-      {
-        [isEmail ? 'email' : 'userName']: identity,
-      },
-      { pwd: true, email: true, userName: true, newUser: true }
-    );
+    const whereQuery = isEmail ? { email: identity } : { userName: identity };
+    const user = await UserService.fetch(whereQuery, undefined, {
+      pwd: true,
+      email: true,
+      userName: true,
+      newUser: true,
+    });
     if (!user) throw new ErrorHandler(401, 'user is not registered!');
     const isMatched = await AuthService.pwd.match(pwd, user.pwd); // Hash password using bcrypt
     if (isMatched) {
@@ -119,8 +120,8 @@ export class AuthController {
     if (!cookies.token) {
       return H.success(res, { statusCode: 204 });
     }
-    const user = await UserService.getUser({
-      refresh_token: cookies.token,
+    const user = await UserService.fetch({
+      refreshToken: cookies.token,
     });
     if (!user) {
       res.clearCookie('token', { httpOnly: true });
@@ -141,15 +142,12 @@ export class AuthController {
     const cookies = req.cookies as ICookies;
     if (!cookies.token) throw new ErrorHandler(401, 'Not Authorized');
     const { id } = await AuthService.jwt.verifyRefreshToken(cookies.token);
-    const user = await UserService.getUser(
-      { id },
-      {
-        userName: true,
-        email: true,
-        newUser: true,
-        refreshToken: true,
-      }
-    );
+    const user = await UserService.fetch({ id }, undefined, {
+      userName: true,
+      email: true,
+      newUser: true,
+      refreshToken: true,
+    });
     if (!user || cookies.token !== user.refreshToken)
       throw new ErrorHandler(401, 'Not Authorized');
 
@@ -173,14 +171,11 @@ export class AuthController {
     const { email } = req.body;
     if (email !== FREE_ACCESS_EMAIL)
       throw new ErrorHandler(403, 'Denied for easy access');
-    const user = await UserService.getUser(
-      { email },
-      {
-        userName: true,
-        newUser: true,
-        id: true,
-      }
-    );
+    const user = await UserService.fetch({ email }, undefined, {
+      userName: true,
+      newUser: true,
+      id: true,
+    });
     if (!user) throw new ErrorHandler(404, 'EASY ACCESS USER not registered!');
     const [accessToken, refreshToken] = [
       AuthService.jwt.signAccessToken({
@@ -226,21 +221,18 @@ export class AuthController {
   public static getUser: IGetUserRequestHandler = async (req, res) => {
     const { user_id: userId } = req.session;
     if (!userId) throw new ErrorHandler(400, `User doesn't exists!`);
-    const user = await UserService.getUser(
-      { id: userId as string },
-      {
-        firstName: true,
-        lastName: true,
-        userName: true,
-        email: true,
-        location: true,
-        newUser: true,
-        profilePic: true,
-        coverPic: true,
-        about: true,
-        createdAt: true,
-      }
-    );
+    const user = await UserService.fetch({ id: userId as string }, undefined, {
+      firstName: true,
+      lastName: true,
+      userName: true,
+      email: true,
+      location: true,
+      newUser: true,
+      profilePic: true,
+      coverPic: true,
+      about: true,
+      createdAt: true,
+    });
     if (!user) throw new ErrorHandler(400, `User doesn't exists!`);
     H.success<User>(res, {
       statusCode: 200,
