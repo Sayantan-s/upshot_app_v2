@@ -9,15 +9,14 @@ export const withContext: ContextFunction<
   [ExpressContextFunctionArgument],
   BaseContext
 > = async ({ req }) => {
-  const isCodegen = withApiKeys(req);
-  if (!isCodegen) return withAuthorization(req);
+  const codegen = req.headers['codegen'];
+  if (codegen) return {};
+  withApiKeys(req);
+  return withAuthorization(req);
 };
 
 const withApiKeys = async (req: Request) => {
   const apikey = req.headers['x-api-key'];
-  console.log(apikey);
-  const codegen = req.headers['codegen'];
-  if (codegen) return true;
   if (!apikey || apikey !== API_KEY)
     throw new GraphQLError('Access Denied. Invalid API_KEY.', {
       extensions: {
