@@ -15,6 +15,10 @@ export enum PRODUCT_ENDPOINT {
   NAME = '/product',
 }
 
+export enum SHOT_ENDPOINT {
+  NAME = '/shot',
+}
+
 export enum MEDIA_ENDPOINT {
   SINGLE_IMAGE = '/upload/image',
 }

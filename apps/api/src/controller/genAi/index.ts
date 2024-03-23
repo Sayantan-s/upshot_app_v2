@@ -1,7 +1,9 @@
 import { MESSAGE_CALL_GENPOST_FN } from '@api/enums/pubsub';
+import { OnboardingShotCreationStatus } from '@api/enums/shot';
 import H from '@api/helpers/ResponseHelper';
 import { OpenApi } from '@api/integrations/openai';
 import GenaiQueue from '@api/integrations/queues/genai/queue';
+import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { v4 as uuid } from 'uuid';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
@@ -64,6 +66,10 @@ export class GenAiController {
               ? { productDescription: responsePayload.description }
               : {}),
           }
+        );
+        await Redis.client.cache.set(
+          responsePayload.productId,
+          OnboardingShotCreationStatus.CREATING
         );
       }
 

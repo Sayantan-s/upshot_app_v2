@@ -1,10 +1,6 @@
-import { Product } from '@prisma/client';
+import { Product, Shot } from '@prisma/client';
 
-export interface IGenaiPost {
-  id: string;
-  title: string;
-  content: string;
-}
+export type IGenaiPost = Pick<Shot, 'title' | 'content'>;
 
 export type MessageQueueInput = Partial<
   Pick<Product, 'productName' | 'productMoto' | 'productDescription'> & {

@@ -139,19 +139,25 @@ enum ShotStatus {
   SHOOT
 }
 
+enum CreationMethod {
+  GEN_AI
+  MANUAL
+}
+
 model Shot {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  body        String
-  productType ProductStatus
-  status      ShotStatus
-  votes       Int
-  media       String[]
-  launchedAt  DateTime
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  createdBy   String        @default("system")
-  updatedBy   String        @default("system")
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  content        String
+  productType    ProductStatus
+  status         ShotStatus
+  votes          Int             @default(0)
+  media          String[]
+  launchedAt     DateTime?
+  creationMethod CreationMethod?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+  createdBy      String          @default("system")
+  updatedBy      String          @default("system")
 
   // Relation::
 
