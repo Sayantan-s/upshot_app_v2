@@ -1,0 +1,63 @@
+import { User } from './auth';
+import { EProductStatus } from './product';
+
+export type Activity = 'promote' | 'sell';
+
+export type PostDetails = {
+  heading: string;
+  body: string;
+  images?: string[];
+  salePrice?: number;
+};
+
+export interface IPost {
+  id: string;
+  activity: Activity;
+  details: PostDetails;
+  userId: string;
+  updated_at: Date;
+  created_at: Date;
+  likes: number;
+  user?: User;
+}
+
+export interface InitialStateOfPosts {
+  posts: IPost[];
+}
+
+export type TCreatePost = {
+  activity: Activity | '';
+  details: PostDetails;
+};
+
+export interface IFetchOnboardingShotsParams {
+  productId: string;
+}
+
+export enum CreationMethod {
+  GEN_AI = 'GEN_AI',
+  MANUAL = 'MANUAL',
+}
+
+export enum ShotStatus {
+  IDLE = 'IDLE',
+  SCHEDULED = 'SCHEDULED',
+  SHOOT = 'SHOOT',
+}
+
+export interface IShot {
+  id: string;
+  title: string;
+  content: string;
+  productType: EProductStatus;
+  status: ShotStatus;
+  votes: number;
+  media: string[];
+  launchedAt: Date | null;
+  creationMethod: CreationMethod | null;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+  productId: string;
+}

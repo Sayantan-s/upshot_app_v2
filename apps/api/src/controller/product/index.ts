@@ -65,6 +65,7 @@ export class ProductController {
       );
       await Redis.client.cache.setex(key, 3 * 1000, 1);
     }
+    res.clearCookie('onboarding-session');
     H.success(res, {
       statusCode: 204,
       data: null,

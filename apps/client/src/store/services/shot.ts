@@ -1,8 +1,13 @@
+import { SHOT_ENDPOINT } from '@client/constants/rest_endpoints';
 import { sseStream } from '@client/helpers/httpClient';
-import { IPost, TCreatePost } from '@client/store/types/posts';
+import {
+  IFetchOnboardingShotsParams,
+  IPost,
+  IShot,
+} from '@client/store/types/shot';
 import { api } from '.';
 
-export const postsApi = api.injectEndpoints({
+export const shotsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     posts: builder.query<Api.SuccessResponse<IPost[]>, void>({
       query: () => '/',
@@ -27,11 +32,14 @@ export const postsApi = api.injectEndpoints({
         postSSEStream?.close();
       },
     }),
-    createPost: builder.mutation<Api.SuccessResponseNoPayload, TCreatePost>({
+    fetchOnboardingShots: builder.query<
+      Api.SuccessResponse<IShot[]>,
+      IFetchOnboardingShotsParams
+    >({
       query: (data) => ({
-        url: '/',
-        method: 'POST',
-        body: data,
+        url: SHOT_ENDPOINT.NAME,
+        method: 'GET',
+        params: data,
       }),
     }),
   }),

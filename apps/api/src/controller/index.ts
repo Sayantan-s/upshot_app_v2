@@ -5,6 +5,7 @@ import authRouter from '@api/routes/auth.route';
 import genAiRouter from '@api/routes/genAi.route';
 import mediaRouter from '@api/routes/media.route';
 import productRouter from '@api/routes/product.route';
+import shotRouter from '@api/routes/shots.route';
 import cors from 'cors';
 import { Express } from 'express';
 
@@ -15,6 +16,7 @@ export default class Controllers {
     app.use(AuthMiddleware.withAuthorization);
     app.use('/api/v1/ai', genAiRouter);
     app.use('/api/v1/product', productRouter);
+    app.use('/api/v1/shot', shotRouter);
     app.use('/api/v1/upload', mediaRouter);
   }
 

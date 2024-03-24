@@ -1,4 +1,3 @@
-import { ManualEditing } from '@client/components/pages/product/manulediting';
 import RootLayout from '@client/components/shared/Layouts/Rootlayout';
 import { SidebarLayout } from '@client/components/shared/Layouts/Sidebar';
 import { TrendingLayout } from '@client/components/shared/Layouts/Trending';
@@ -27,6 +26,7 @@ import { Products } from './product';
 import { ProductUpload } from './product/productupload';
 import { ProfileLayout } from './profile';
 import { Shots } from './shots';
+import { ManualEdits } from './shots/manualedits';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
           <Route path="product/onboard" element={<ProductUpload />} />
-          <Route path="product/edit/:productId" element={<ManualEditing />} />
+          <Route path="product/edit/:productId" element={<ManualEdits />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

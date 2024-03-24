@@ -1,7 +1,7 @@
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
 import { FloatingActionButton } from '@client/components/ui/FloatingActionButton';
 import { useWindowScroll } from '@client/hooks';
-import { IPost } from '@client/store/types/posts';
+import { IPost } from '@client/store/types/shot';
 import { motion } from 'framer-motion';
 import { ChemicalGlass, Drop, ElementPlus } from 'iconsax-react';
 import { Fragment, useState } from 'react';
