@@ -1,16 +1,12 @@
-import { shotsApi } from '@client/store/services/shot';
-import { useParams } from 'react-router-dom';
+import { ShotPanel } from '@client/components/pages/shots/manulediting/components/ShotPanel';
+import { Toolbar } from '@client/components/pages/shots/manulediting/components/Toolbar';
+import { Page } from '@client/components/ui';
 
 export const ManualEdits = () => {
-  const location = useParams();
-  console.log(location);
-  const { isLoading, data } = shotsApi.useFetchOnboardingShotsQuery(
-    {
-      productId: location.productId!,
-    },
-    {
-      skip: !location.productId,
-    }
+  return (
+    <Page>
+      <Toolbar />
+      <ShotPanel />
+    </Page>
   );
-  return <div> {isLoading ? 'loading...' : JSON.stringify(data)}</div>;
 };
