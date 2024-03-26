@@ -1,12 +1,24 @@
 ---
-import Layout from '@web/layouts/Layout.astro';
+import {Layout} from "../layouts/Layout";
+
+
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-    Hello world! <span class="text-red-500">king!</span>
-	</main>
-</Layout>
-
-<style>
-</style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upshot</title>
+  </head>
+  <body
+    class="container z-20 relative bg-gradient-to-r from-teal-100 to-white w-screen h-screen"
+  >
+    <Layout client:load />
+    <div class="flex justify-center items-center">
+      <span class="text-slate-400 top-0 font-semibold"
+        >&copy; 2024 Sayantan &amp; Shankhadeep. All rights reserved.
+	  </span>
+    </div>
+  </body>
+</html>
