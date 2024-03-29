@@ -1,3 +1,3 @@
 export const Toolbar = () => {
-  return <nav>Toolbar</nav>;
+  return <nav className="fixed">Toolbar</nav>;
 };
