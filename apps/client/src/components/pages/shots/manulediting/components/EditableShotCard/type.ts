@@ -1,6 +1,7 @@
 import { IShot } from '@client/store/types/shot';
 
 export interface IProps extends IShot {
-  onEditAndSave: (data: string | null) => void;
+  onEdit: (id: string) => void;
+  onSave: (id: string) => void;
   disabled: boolean;
 }

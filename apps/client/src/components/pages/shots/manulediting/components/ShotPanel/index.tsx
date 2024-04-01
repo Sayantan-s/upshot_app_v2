@@ -1,12 +1,12 @@
 import { shotsApi } from '@client/store/services/shot';
-import { motion, useDragControls } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { EditableShotCard } from '../EditableShotCard';
 
 /**
  * Once one post is edit clicked
- * - Disable the draggable feature
+ * - Disable the draggable feature -> IDLE | EDITING | IDLE
  * - Make all other posts disabled and blur them
  * - Once done save that target post.
  */
@@ -23,16 +23,23 @@ export const ShotPanel = () => {
   );
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [width, setWidth] = useState(0);
-  const [currentlyEditingShot, setCurrentlyEditingShot] = useState<
-    string | null
-  >(null);
-  const controls = useDragControls();
+  const [currentlyEditing, setCurrentlyEditing] = useState<string | null>(null);
+  const [isNotEditing, setIsNotEditing] = useState(true);
 
   useEffect(() => {
-    if (data?.data.length) {
+    if (data?.data.length)
       setWidth(ref.current.scrollWidth - ref.current.offsetWidth);
-    }
   }, [data?.data]);
+
+  const handleEdit = (id: string) => {
+    setIsNotEditing(false);
+    setCurrentlyEditing(id);
+  };
+
+  const handleSave = () => {
+    setIsNotEditing(true);
+    setCurrentlyEditing(null);
+  };
 
   return (
     <motion.div
@@ -46,14 +53,15 @@ export const ShotPanel = () => {
         dragTransition={{ bounceDamping: 30 }}
         dragElastic={0.9}
         dragMomentum
-        dragControls={controls}
+        dragListener={isNotEditing}
       >
         {data?.data.map((shot) => (
           <EditableShotCard
             key={shot.id}
             {...shot}
-            disabled={currentlyEditingShot !== shot.id}
-            onEditAndSave={setCurrentlyEditingShot}
+            disabled={!isNotEditing && currentlyEditing !== shot.id}
+            onEdit={handleEdit}
+            onSave={handleSave}
           />
         ))}
       </motion.div>

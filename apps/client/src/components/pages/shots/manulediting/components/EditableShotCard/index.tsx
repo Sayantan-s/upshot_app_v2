@@ -6,7 +6,8 @@ import { IProps } from './type';
 export const EditableShotCard: FC<IProps> = ({
   content,
   title,
-  onEditAndSave,
+  onEdit,
+  onSave,
   disabled,
   id,
 }) => {
@@ -30,18 +31,20 @@ export const EditableShotCard: FC<IProps> = ({
     eve.preventDefault();
     eve.stopPropagation();
     setAllowEdit(true);
-    onEditAndSave?.(id);
+    onEdit(id);
   };
   const handleSave: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
     eve.stopPropagation();
     setAllowEdit(false);
-    onEditAndSave?.(null);
+    onSave(id);
   };
 
   return (
     <div
-      className={`w-[400px] bg-white shadow-md shadow-slate-900/5 h-[400px] aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col`}
+      className={`w-[400px] bg-white shadow-md shadow-slate-900/5 h-[400px] aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
+        disabled ? 'blur-md disabled:cursor-not-allowed' : ''
+      }`}
       id={id}
     >
       <header className="px-3 pt-3 flex justify-between items-start">
