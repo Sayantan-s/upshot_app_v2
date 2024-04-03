@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from 'iconsax-react';
+import { ArrowLeft2, ArrowRight2 } from 'iconsax-react';
 import * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 
@@ -16,7 +16,7 @@ function Calendar({
       className={className}
       classNames={{
         months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-        month: 'space-y-4 text-slate-700',
+        month: 'space-y-4 text-slate-700 font-semibold',
         caption: 'flex justify-center pt-1 relative items-center',
         caption_label: 'text-sm font-medium',
         nav: 'space-x-1 flex items-center',
@@ -32,9 +32,9 @@ function Calendar({
         day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-xs &:not(.day-selected):text-slate-500',
         day_range_end: 'text-slate-700 day-range-end',
         day_selected:
-          'day-selected bg-emerald-500 text-emerald-50 hover:bg-emerald-600 rounded-full shadow-md shadow-emerald-500/30',
+          'bg-emerald-500 text-emerald-50 hover:bg-emerald-600 rounded-full font-semibold',
         day_today:
-          'day-today bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/25 rounded-full',
+          'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/25 rounded-full',
         day_outside: 'text-slate-300 day-outside',
         day_disabled: 'text-muted-foreground opacity-50',
         day_range_middle:
@@ -43,8 +43,8 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ArrowLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ArrowRight className="h-4 w-4" />,
+        IconLeft: () => <ArrowLeft2 className="h-4 w-4" />,
+        IconRight: () => <ArrowRight2 className="h-4 w-4" />,
       }}
       {...props}
     />
