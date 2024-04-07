@@ -1,4 +1,6 @@
+import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
+import { shotActions } from '@client/store/slices/shots';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
@@ -13,7 +15,7 @@ import { EditableShotCard } from '../EditableShotCard';
 
 export const ShotPanel = () => {
   const location = useParams();
-  const { data } = shotsApi.useFetchOnboardingShotsQuery(
+  shotsApi.useFetchOnboardingShotsQuery(
     {
       productId: location.productId!,
     },
@@ -21,24 +23,35 @@ export const ShotPanel = () => {
       skip: !location.productId,
     }
   );
+  const { entities: data, ids: shotIds } = useSelector(
+    (state) => state.shots.manualEdits.shots
+  );
+  const dispatch = useDispatch();
+
+  const currentlyEditing = useSelector(
+    (state) => state.shots.manualEdits.currentlyEditing
+  );
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [width, setWidth] = useState(0);
-  const [currentlyEditing, setCurrentlyEditing] = useState<string | null>(null);
   const [isNotEditing, setIsNotEditing] = useState(true);
 
   useEffect(() => {
-    if (data?.data.length)
+    if (shotIds.length)
       setWidth(ref.current.scrollWidth - ref.current.offsetWidth);
-  }, [data?.data]);
+  }, [shotIds?.length]);
 
   const handleEdit = (id: string) => {
+    dispatch(
+      shotActions.setupCurrentlyEditing({
+        chosenEditingShotId: id,
+      })
+    );
     setIsNotEditing(false);
-    setCurrentlyEditing(id);
   };
 
   const handleSave = () => {
+    dispatch(shotActions.flushCurrentlyEditing());
     setIsNotEditing(true);
-    setCurrentlyEditing(null);
   };
 
   return (
@@ -56,11 +69,11 @@ export const ShotPanel = () => {
           dragMomentum
           dragListener={isNotEditing}
         >
-          {data?.data.map((shot) => (
+          {shotIds?.map((shotId) => (
             <EditableShotCard
-              key={shot.id}
-              {...shot}
-              disabled={!isNotEditing && currentlyEditing !== shot.id}
+              key={data[shotId]?.id}
+              {...data[shotId]!}
+              disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
               onEdit={handleEdit}
               onSave={handleSave}
             />

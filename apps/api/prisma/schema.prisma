@@ -152,7 +152,7 @@ model Shot {
   status         ShotStatus
   votes          Int             @default(0)
   media          String[]
-  launchedAt     DateTime?
+  launchedAt     Int?
   creationMethod CreationMethod?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @default(now()) @updatedAt

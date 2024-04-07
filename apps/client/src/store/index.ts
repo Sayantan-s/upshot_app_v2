@@ -3,11 +3,14 @@ import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 import * as rr from 'react-redux';
 import { api } from './services';
 import authReducer from './slices/auth';
+import shotReducer from './slices/shots';
+
 const middlewares = [api.middleware];
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    shots: shotReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
