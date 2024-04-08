@@ -7,6 +7,16 @@ import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { v4 as uuid } from 'uuid';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
+import { z } from 'zod';
+import ErrorHandler from '@api/middlewares/error';
+
+const GenAIBodySchema = z.object({
+  productMoto: z.string(),
+  productName: z.string(),
+  setupInitialFiveAutomatedPosts: z.boolean().optional(),
+  generateProductDescription: z.boolean().optional(),
+});
+
 export class GenAiController {
   public static generateProductOnboarding: IProductInputGenerationHandler =
     async (req, res) => {
@@ -16,6 +26,13 @@ export class GenAiController {
         setupInitialFiveAutomatedPosts,
         generateProductDescription,
       } = req.body;
+      const validBody = GenAIBodySchema.safeParse({
+        productMoto,
+        productName,
+        setupInitialFiveAutomatedPosts,
+        generateProductDescription,
+      }).success;
+      if (!validBody) throw new ErrorHandler(400, 'Invalid Request Body!!');
 
       const userId = req.session.user_id;
 
