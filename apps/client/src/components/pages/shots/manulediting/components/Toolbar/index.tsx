@@ -1,7 +1,9 @@
 import { Button } from '@client/components/ui';
 import { Calendar } from '@client/components/ui/Calendar';
+import { convertDateToEpoch } from '@client/helpers/date';
 import { useToggle } from '@client/hooks';
 import { useDispatch, useSelector } from '@client/store';
+import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
 import { IDateFormatter, TimeConvention } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
@@ -12,6 +14,7 @@ import { ChangeEventHandler, Fragment, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 
 export const Toolbar = () => {
+  const [updateShot, { isLoading }] = shotsApi.useUpdateShotMutation();
   const { shots, currentlyEditing } = useSelector(
     (state) => state.shots.manualEdits
   );
@@ -30,7 +33,6 @@ export const Toolbar = () => {
   const dispatch = useDispatch();
 
   const [isApplied, setIsApplied] = useState(false);
-  // const [timeConvention, setTimeconvention] = useState(TimeConvention.AM);
 
   const [isOpen, { off, toggle }] = useToggle();
   const [isOpenTimePicker, { toggle: toggleTimePicker, off: offTimePicker }] =
@@ -98,6 +100,16 @@ export const Toolbar = () => {
           mins: time.mins,
         })
       );
+  };
+
+  const handleUpdateShot = async () => {
+    const epoch = convertDateToEpoch(selectedDate!, timeConvention, time);
+    await updateShot({
+      shotId: currentShot!.id,
+      shotInput: {
+        launchedAt: epoch,
+      },
+    });
   };
 
   return (
@@ -259,7 +271,9 @@ export const Toolbar = () => {
         <Button
           size={'md'}
           className="shadow-md shadow-emerald-700/20"
-          disabled={!currentShot}
+          disabled={!currentShot || isLoading}
+          isLoading={isLoading}
+          onClick={handleUpdateShot}
         >
           Save schedule time
         </Button>

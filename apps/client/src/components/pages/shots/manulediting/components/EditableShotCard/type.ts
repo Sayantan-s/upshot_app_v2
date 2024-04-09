@@ -8,3 +8,7 @@ export interface IProps extends IShotModified {
   onSave: (id: string) => void;
   disabled: boolean;
 }
+
+export interface IScheduleNotifierProps {
+  shotId: string;
+}

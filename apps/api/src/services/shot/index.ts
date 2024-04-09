@@ -22,4 +22,14 @@ export class ShotService {
   public static async createMany(data: Prisma.ShotCreateManyInput[]) {
     return await prisma.shot.createMany({ data });
   }
+
+  public static async update(
+    where: Prisma.ShotWhereUniqueInput,
+    data: Prisma.XOR<Prisma.ShotUpdateInput, Prisma.ShotUncheckedUpdateInput>
+  ) {
+    return await prisma.shot.update({
+      data,
+      where,
+    });
+  }
 }

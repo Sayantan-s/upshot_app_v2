@@ -5555,6 +5555,14 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@upstash/qstash@^2.4.3":
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/@upstash/qstash/-/qstash-2.4.3.tgz#56ff3a288a61a47e9ea9bfdf35ee697db8b0155a"
+  integrity sha512-Qm8mKmLyWo/qPsJZ5iELPxKdr9MfzFTRzR31zlidWKUFYggsJuou3Fc3PLOM8KaNoAqi0vxxoCSnmyWMsvJkiw==
+  dependencies:
+    crypto-js ">=4.2.0"
+    jose "^ 5.2.3"
+
 "@upstash/redis@^1.28.2":
   version "1.28.2"
   resolved "https://registry.yarnpkg.com/@upstash/redis/-/redis-1.28.2.tgz#40e8b39e96d20c7309810559089e762fc3e2305f"
@@ -7867,7 +7875,7 @@ crypt@0.0.2:
   resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
   integrity sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==
 
-crypto-js@^4.2.0:
+crypto-js@>=4.2.0, crypto-js@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
@@ -8030,6 +8038,13 @@ dataloader@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-2.2.2.tgz#216dc509b5abe39d43a9b9d97e6e5e473dfbe3e0"
   integrity sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==
+
+date-fns-tz@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-3.0.0.tgz#0559cd6a1aa8eca1d140f1682ad7f0e77429c13e"
+  integrity sha512-YgRowJwvCAAjN1A5F2l1ZjnYKThX7YDq399qo+ThXFpeOqinN1u8SUqfM5IdRQSpai18Iy3EBMb6/CXTSnDstg==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
 
 date-fns@^3.6.0:
   version "3.6.0"
@@ -11346,6 +11361,11 @@ jiti@^1.17.1, jiti@^1.18.2, jiti@^1.19.1:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.0.tgz#7c97f8fe045724e136a397f7340475244156105d"
   integrity sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==
 
+"jose@^ 5.2.3":
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.2.4.tgz#c0d296caeeed0b8444a8b8c3b68403d61aa4ed72"
+  integrity sha512-6ScbIk2WWCeXkmzF6bRPmEuaqy1m8SbsRFMa/FLrSCkGIhj8OLVG/IH+XHVmNMx/KUo8cVWEE6oKR4dJ+S0Rkg==
+
 jose@^5.0.0:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/jose/-/jose-5.2.3.tgz#071c87f9fe720cff741a403c8080b69bfe13164a"
@@ -11778,6 +11798,11 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==
+
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"

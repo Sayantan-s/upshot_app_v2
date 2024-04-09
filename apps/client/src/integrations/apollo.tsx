@@ -23,10 +23,10 @@ const httpLink = createHttpLink({
   uri: `${import.meta.env.VITE_SERVER_ORIGIN}/gql`,
 });
 
-const client = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 export const Apollo: FC<PropsWithChildren> = ({ children }) => {
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 };

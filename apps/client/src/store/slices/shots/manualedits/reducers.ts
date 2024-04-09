@@ -1,3 +1,4 @@
+import { convertEpochToDate } from '@client/helpers/date';
 import { shotsApi } from '@client/store/services/shot';
 import {
   IChooseToEdit,
@@ -27,14 +28,6 @@ export const ManualEditCaseReducers = {
       action: PayloadAction<IDateFormatter>
     ) => {
       const shotId = state.manualEdits.currentlyEditing;
-      // const date = parseISO(action.payload.date.toISOString());
-      // const hrs =
-      //   action.payload.timeConvention === TimeConvention.PM
-      //     ? +action.payload.hours + 12
-      //     : +action.payload.hours;
-      // const mins = +action.payload.mins;
-      // addHours(date, hrs);
-      // addMinutes(date, mins);
       state.manualEdits.shots.entities[shotId]!.launchedAt!.selectedDate =
         action.payload.date;
       state.manualEdits.shots.entities[shotId]!.launchedAt!.hours =
@@ -66,12 +59,14 @@ export const ManualEditCaseReducers = {
         state.manualEdits.shots.isLoading = false;
         const shotData = action.payload.data.map((shot) => ({
           ...shot,
-          launchedAt: {
-            selectedDate: undefined,
-            timeConvention: TimeConvention.AM,
-            hours: '',
-            mins: '',
-          },
+          launchedAt: shot.launchedAt
+            ? convertEpochToDate(shot.launchedAt)
+            : {
+                selectedDate: undefined,
+                timeConvention: TimeConvention.AM,
+                hours: '',
+                mins: '',
+              },
         }));
         shotsAdapter.setAll(state.manualEdits.shots, shotData);
       }
