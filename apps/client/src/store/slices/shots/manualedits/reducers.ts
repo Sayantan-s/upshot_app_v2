@@ -10,7 +10,6 @@ import {
   Draft,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { addHours, addMinutes, getUnixTime, parseISO } from 'date-fns';
 import { ShotState } from '..';
 import { shotsAdapter } from './state';
 
@@ -28,15 +27,24 @@ export const ManualEditCaseReducers = {
       action: PayloadAction<IDateFormatter>
     ) => {
       const shotId = state.manualEdits.currentlyEditing;
-      const date = parseISO(action.payload.date.toISOString());
-      const hrs =
-        action.payload.timeConvention === TimeConvention.PM
-          ? +action.payload.hours + 12
-          : +action.payload.hours;
-      addHours(date, hrs);
-      addMinutes(date, +action.payload.mins);
-      state.manualEdits.shots.entities[shotId]!.launchedAt = getUnixTime(date);
+      // const date = parseISO(action.payload.date.toISOString());
+      // const hrs =
+      //   action.payload.timeConvention === TimeConvention.PM
+      //     ? +action.payload.hours + 12
+      //     : +action.payload.hours;
+      // const mins = +action.payload.mins;
+      // addHours(date, hrs);
+      // addMinutes(date, mins);
+      state.manualEdits.shots.entities[shotId]!.launchedAt!.selectedDate =
+        action.payload.date;
+      state.manualEdits.shots.entities[shotId]!.launchedAt!.hours =
+        action.payload.hours;
+      state.manualEdits.shots.entities[shotId]!.launchedAt!.mins =
+        action.payload.mins;
+      state.manualEdits.shots.entities[shotId]!.launchedAt!.timeConvention =
+        action.payload.timeConvention;
     },
+
     flushCurrentlyEditing: (state: Draft<ShotState>) => {
       state.manualEdits.currentlyEditing = '';
     },
@@ -56,7 +64,16 @@ export const ManualEditCaseReducers = {
       shotsApi.endpoints.fetchOnboardingShots.matchFulfilled,
       (state, action: PayloadAction<Api.SuccessResponse<IShot[]>>) => {
         state.manualEdits.shots.isLoading = false;
-        shotsAdapter.setAll(state.manualEdits.shots, action.payload.data);
+        const shotData = action.payload.data.map((shot) => ({
+          ...shot,
+          launchedAt: {
+            selectedDate: undefined,
+            timeConvention: TimeConvention.AM,
+            hours: '',
+            mins: '',
+          },
+        }));
+        shotsAdapter.setAll(state.manualEdits.shots, shotData);
       }
     );
   },

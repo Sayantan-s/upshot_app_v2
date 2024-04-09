@@ -6,9 +6,9 @@ import { shotActions } from '@client/store/slices/shots';
 import { IDateFormatter, TimeConvention } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { addSeconds, format, formatDate } from 'date-fns';
+import { formatDate } from 'date-fns';
 import { Clock, Calendar as Datepicker } from 'iconsax-react';
-import { ChangeEventHandler, Fragment, useMemo, useState } from 'react';
+import { ChangeEventHandler, Fragment, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 
 export const Toolbar = () => {
@@ -17,29 +17,14 @@ export const Toolbar = () => {
   );
   const currentShot = shots.entities[currentlyEditing];
 
-  const selectedDate = useMemo(
-    () =>
-      currentShot?.launchedAt
-        ? new Date(currentShot.launchedAt * 1000)
-        : undefined,
-    [currentShot]
-  );
-
-  const { timeConvention, ...time } = (() => {
-    if (currentShot?.launchedAt) {
-      const date = new Date(currentShot.launchedAt * 1000);
-      const timezoneOffsetInMinutes = new Date().getTimezoneOffset();
-      const offsetDate = addSeconds(date, timezoneOffsetInMinutes * 60);
-      const formattedTime = format(offsetDate, 'hh:mm a');
-      const [time, timeConvention] = formattedTime.split(' ');
-      const [hours, minutes] = time.split(':').map(Number);
-      return {
-        hours: hours.toString(),
-        minutes: minutes.toString(),
-        timeConvention: timeConvention.toUpperCase() as TimeConvention,
-      };
-    }
-    return { hours: '', minutes: '', timeConvention: TimeConvention.AM };
+  const { timeConvention, selectedDate, ...time } = (() => {
+    if (currentShot?.launchedAt) return currentShot.launchedAt;
+    return {
+      hours: '',
+      mins: '',
+      timeConvention: TimeConvention.AM,
+      selectedDate: undefined,
+    };
   })();
 
   const dispatch = useDispatch();
@@ -58,7 +43,7 @@ export const Toolbar = () => {
         timeConvention,
         date: dateData,
         hours: time.hours,
-        mins: time.minutes,
+        mins: time.hours,
       })
     );
 
@@ -81,7 +66,7 @@ export const Toolbar = () => {
     const dateFormatter: IDateFormatter = {
       timeConvention: value as TimeConvention,
       date: selectedDate!,
-      mins: time.minutes,
+      mins: time.mins,
       hours: time.hours,
     };
     dispatch(shotActions.updateLaunchDate(dateFormatter));
@@ -92,8 +77,8 @@ export const Toolbar = () => {
     const dateFormatter: IDateFormatter = {
       timeConvention,
       date: selectedDate!,
-      mins: name === 'mins' ? value : time.minutes,
-      hours: name === 'hours' ? value : time.hours,
+      mins: name === 'mins' ? value || '00' : time.mins,
+      hours: name === 'hours' ? value || '00' : time.hours,
     };
     dispatch(shotActions.updateLaunchDate(dateFormatter));
   };
@@ -104,13 +89,13 @@ export const Toolbar = () => {
   };
 
   const handleSetEpoch = () => {
-    if (timeConvention && time.hours && time.minutes && selectedDate)
+    if (timeConvention && time.hours && time.mins && selectedDate)
       dispatch(
         shotActions.updateLaunchDate({
           timeConvention,
           date: selectedDate,
           hours: time.hours,
-          mins: time.minutes,
+          mins: time.mins,
         })
       );
   };
@@ -179,24 +164,24 @@ export const Toolbar = () => {
         >
           <Popover.Trigger asChild>
             <button
-              disabled={!currentShot}
+              disabled={!currentShot || !selectedDate}
               className="disabled:opacity-50 flex rounded-md stroke-slate-500 items-center justify-between border shadow-sm w-52 px-3 py-2.5"
             >
               <span
                 className={
-                  time.hours && time.minutes && timeConvention
+                  time.hours && time.mins && timeConvention
                     ? 'text-gray-600'
                     : ''
                 }
               >
-                {timeConvention && time.hours && time.minutes
-                  ? `${time.hours}:${time.minutes} ${timeConvention}`
+                {timeConvention && time.hours && time.mins
+                  ? `${time.hours}:${time.mins} ${timeConvention}`
                   : 'Pick a slot'}
               </span>
               <Clock
                 size={16}
                 color={
-                  time.hours && time.minutes && timeConvention
+                  time.hours && time.mins && timeConvention
                     ? '#10b981'
                     : '#64748b'
                 }
@@ -223,7 +208,7 @@ export const Toolbar = () => {
                 type="number"
                 placeholder="00"
                 className="w-1/2 aspect-square text-5xl text-center text-slate-600 focus:outline-none border border-transparent focus:border-slate-200 rounded-lg"
-                value={time.minutes}
+                value={time.mins}
                 name="mins"
                 onChange={handleChangeTime}
               />

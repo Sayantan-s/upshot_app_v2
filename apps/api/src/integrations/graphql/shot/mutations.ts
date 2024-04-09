@@ -1,4 +1,3 @@
-export class GQLShotMutations {
-  public static create = () => `#graphql
-    `;
-}
+export const mutations = `#graphql
+    updateShot(shotId:ID!, shotInput:ShotInput!): String!
+`;

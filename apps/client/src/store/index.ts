@@ -14,7 +14,7 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(...middlewares),
+    getDefaultMiddleware({ serializableCheck: false }).concat(...middlewares),
   devTools: true,
 });
 

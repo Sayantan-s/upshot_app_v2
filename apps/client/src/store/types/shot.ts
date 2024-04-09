@@ -64,8 +64,17 @@ export interface IShot {
 }
 
 export interface IManualEdit {
-  shots: EntityState<IShot> & { isLoading: boolean; error: string };
+  shots: EntityState<
+    Omit<IShot, 'launchedAt'> & { launchedAt?: ILaunchedAtClientState }
+  > & { isLoading: boolean; error: string };
   currentlyEditing: string;
+}
+
+export interface ILaunchedAtClientState {
+  selectedDate: Date | undefined;
+  hours: string;
+  mins: string;
+  timeConvention: TimeConvention;
 }
 
 // ManualEditReducers:: Type

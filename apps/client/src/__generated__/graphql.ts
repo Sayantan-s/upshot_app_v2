@@ -36,6 +36,11 @@ export type Config = {
   metadata?: Maybe<MediaCropMetaData>;
 };
 
+export enum CreationMethod {
+  GenAi = 'GEN_AI',
+  Manual = 'MANUAL',
+}
+
 export enum InterestsType {
   Ai = 'AI',
   Dtt = 'DTT',
@@ -73,6 +78,16 @@ export type MediaCropMetaData = {
   crop?: Maybe<MediaCropConfigCoords>;
   rotate?: Maybe<Scalars['Float']['output']>;
   zoom?: Maybe<Scalars['Float']['output']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  updateShot: Scalars['String']['output'];
+};
+
+export type MutationUpdateShotArgs = {
+  shotId: Scalars['ID']['input'];
+  shotInput: ShotInput;
 };
 
 export type Product = {
@@ -121,7 +136,54 @@ export enum ProductStatus {
 export type Query = {
   __typename?: 'Query';
   getProducts: Array<Product>;
+  getShots: Array<Shot>;
 };
+
+export type QueryGetShotsArgs = {
+  productId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Shot = {
+  __typename?: 'Shot';
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<Scalars['String']['output']>;
+  creationMethod?: Maybe<CreationMethod>;
+  id?: Maybe<Scalars['ID']['output']>;
+  launchedAt?: Maybe<Scalars['Int']['output']>;
+  media?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  product?: Maybe<Product>;
+  productId?: Maybe<Scalars['String']['output']>;
+  productType?: Maybe<ProductStatus>;
+  status?: Maybe<ShotStatus>;
+  title?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['String']['output']>;
+  updatedBy?: Maybe<Scalars['String']['output']>;
+  votes?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ShotInput = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['String']['input']>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
+  creationMethod?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  launchedAt?: InputMaybe<Scalars['Int']['input']>;
+  media?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  productId?: InputMaybe<Scalars['String']['input']>;
+  productType?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['String']['input']>;
+  updatedBy?: InputMaybe<Scalars['String']['input']>;
+  votes?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum ShotStatus {
+  Idle = 'IDLE',
+  Scheduled = 'SCHEDULED',
+  Shoot = 'SHOOT',
+}
 
 export type GetAllProductsQueryVariables = Exact<{ [key: string]: never }>;
 

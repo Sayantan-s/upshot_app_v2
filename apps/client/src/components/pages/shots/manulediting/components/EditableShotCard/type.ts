@@ -1,6 +1,9 @@
-import { IShot } from '@client/store/types/shot';
+import { ShotState } from '@client/store/slices/shots';
 
-export interface IProps extends IShot {
+type IShotModified = NonNullable<
+  ShotState['manualEdits']['shots']['entities'][string]
+>;
+export interface IProps extends IShotModified {
   onEdit: (id: string) => void;
   onSave: (id: string) => void;
   disabled: boolean;
