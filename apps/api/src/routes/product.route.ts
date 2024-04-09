@@ -17,6 +17,4 @@ productRouter
   .route('/:productId/finalise')
   .patch(ErrorHandler.tryCatch(ProductController.finaliseProduct));
 
-productRouter.route('');
-
 export default productRouter;
