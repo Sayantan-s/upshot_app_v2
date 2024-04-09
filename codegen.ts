@@ -19,6 +19,13 @@ const config: CodegenConfig = {
         gqlTagName: 'gql',
       },
     },
+    './apps/api/src/__generated__/': {
+      preset: 'client',
+      plugins: [],
+      presetConfig: {
+        gqlTagName: 'gql',
+      },
+    },
   },
   ignoreNoDocuments: true,
 };

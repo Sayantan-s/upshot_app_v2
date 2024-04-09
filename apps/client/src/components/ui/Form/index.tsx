@@ -59,7 +59,7 @@ const PasswordField = forwardRef<
 });
 
 const InputField = forwardRef<HTMLInputElement, ITextFieldProps>(
-  ({ error, ...rest }, ref) => {
+  ({ error, className, ...rest }, ref) => {
     return (
       <div>
         <div>
@@ -70,7 +70,7 @@ const InputField = forwardRef<HTMLInputElement, ITextFieldProps>(
               error ? 'border-rose-300' : ''
             } w-full py-2.5 text-base border-b border-slate-300 focus:outline-none ${
               error ? 'focus:border-red-500' : 'focus:border-slate-400'
-            }`}
+            } ${className || ''}`}
             autoComplete="off"
           />
         </div>
@@ -81,10 +81,10 @@ const InputField = forwardRef<HTMLInputElement, ITextFieldProps>(
 );
 
 const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
-  ({ error, ...rest }, ref) => {
+  ({ error, className, ...rest }, ref) => {
     return (
-      <div>
-        <div>
+      <div className="w-full">
+        <div className="w-full">
           <textarea
             {...rest}
             ref={ref}
@@ -92,7 +92,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
               error ? 'border-rose-300' : ''
             } w-full py-2.5 text-base border-b border-slate-300 focus:outline-none ${
               error ? 'focus:border-red-500' : 'focus:border-slate-400'
-            }`}
+            } ${className || ''}`}
             autoComplete="off"
           />
         </div>
