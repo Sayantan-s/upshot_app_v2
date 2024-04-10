@@ -70,6 +70,12 @@ export const ProductIdenity = () => {
     handleFormValues('productMoto', payload.productMoto);
     handleFormValues('productDescription', res.data.description);
     handleSetProduct('productDescription', res.data.description);
+
+    setParams({
+      product: res.data.productId,
+      status: ProductOnboardingStatus.CREATE,
+    });
+
     closeConfirmationModal();
     controls.next();
   };
@@ -83,6 +89,7 @@ export const ProductIdenity = () => {
       productMoto: payload.productMoto,
       productName: payload.productName,
     }).unwrap();
+
     handleFormValues('productId', productId);
     handleSetProduct('productId', productId);
     setParams({ product: productId, status: ProductOnboardingStatus.CREATE });

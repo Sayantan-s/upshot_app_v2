@@ -41,10 +41,11 @@ export class ProductController {
     const data = req.body;
     const { productId } = req.params;
     const currentStringifiedData = JSON.stringify(data);
-    const cacheCurrentData = await Redis.client.cache.get(productId);
+    const keyName = `${productId}_updateProduct`;
+    const cacheCurrentData = await Redis.client.cache.get(keyName);
     if (cacheCurrentData !== currentStringifiedData) {
       await ProductService.update({ id: productId }, data);
-      await Redis.client.cache.setex(productId, 1000, JSON.stringify(data));
+      await Redis.client.cache.setex(keyName, 10, JSON.stringify(data));
     }
     H.success(res, {
       statusCode: 204,
@@ -63,7 +64,7 @@ export class ProductController {
           status: ProductStatus.COMING_SOON,
         }
       );
-      await Redis.client.cache.setex(key, 3 * 1000, 1);
+      await Redis.client.cache.setex(key, 20, 1);
     }
     res.clearCookie('onboarding-session');
     H.success(res, {

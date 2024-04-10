@@ -13,6 +13,7 @@ export default class GenaiQueue {
   static messageName = 'call-gen-posts';
   private static workerFunction: JobFn = async (job) => {
     let productId: string | null = null;
+    const keyName = `${productId}_generateProductOnboarding`;
     try {
       const genPostMetaData = job.data;
       const data = await generatePosts(genPostMetaData);
@@ -34,11 +35,11 @@ export default class GenaiQueue {
       }));
 
       await ShotService.createMany(shotsPayload);
-      await Redis.client.cache.del(productId);
+      await Redis.client.cache.del(keyName);
     } catch (error) {
       productId &&
         (await Redis.client.cache.set(
-          productId,
+          keyName,
           OnboardingShotCreationStatus.FAILED
         ));
     }
