@@ -67,8 +67,9 @@ export class GenAiController {
               : {}),
           }
         );
+        const keyName = `${responsePayload.productId}_generateProductOnboarding`;
         await Redis.client.cache.set(
-          responsePayload.productId,
+          keyName,
           OnboardingShotCreationStatus.CREATING
         );
       }

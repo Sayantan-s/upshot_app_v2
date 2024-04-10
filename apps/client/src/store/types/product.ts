@@ -59,6 +59,7 @@ export interface IGenerationResponse {
   description: string;
   logo?: string;
   cover?: string;
+  productId: string;
 }
 
 // CREATE
