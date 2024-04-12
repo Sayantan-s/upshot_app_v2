@@ -2,6 +2,8 @@ import {
   MutationUpdateShotArgs,
   QueryGetShotsArgs,
 } from '@api/__generated__/graphql';
+import { CacheKey } from '@api/enums/cache';
+import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
 import { Shot } from '.';
@@ -18,7 +20,12 @@ const queries = {
 const mutations = {
   updateShot: async (...args) => {
     const { shotInput, shotId }: MutationUpdateShotArgs = args[1];
-    await ShotService.update({ id: shotId }, shotInput as Shot);
+    const shotData = await ShotService.update(
+      { id: shotId },
+      shotInput as Shot
+    );
+    const key = `${CacheKey.SHOT_UPDATE}_${shotId}`;
+    await Redis.client.cache.setex(key, 200, JSON.stringify(shotData));
     return 'Success';
   },
 };

@@ -8,3 +8,20 @@ export type IShotsFetchHandler = RequestHandler<
   unknown,
   { productId: string }
 >;
+
+export type IShotsScheduleRegistrationHandler = RequestHandler<
+  { shotId: string },
+  unknown,
+  unknown
+>;
+
+export interface IShotExecuterRequest {
+  shotId: string;
+  scheduleReference: string;
+}
+
+export type IShotsScheduleExecuterHandler = RequestHandler<
+  unknown,
+  unknown,
+  IShotExecuterRequest
+>;

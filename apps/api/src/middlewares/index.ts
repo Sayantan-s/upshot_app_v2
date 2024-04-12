@@ -13,7 +13,6 @@ export default class Middlewares {
   static commonMiddlewares(app: Express) {
     if (NODE_ENV !== 'production') app.use(morgan('dev'));
     app.use(express.json());
-    app.use(express.static('dist/apps/client'));
   }
 
   static restMiddlewares(app: Express) {

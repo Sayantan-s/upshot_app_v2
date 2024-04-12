@@ -8,4 +8,10 @@ shotRouter
   .route('/')
   .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductPosts));
 
+shotRouter.route('/schedule/webhook').post(ShotController.shotScheduleExecutor);
+
+shotRouter
+  .route('/schedule/:shotId')
+  .get(ShotController.shotScheduleRegistrationHandler);
+
 export default shotRouter;
