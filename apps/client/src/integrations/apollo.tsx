@@ -1,0 +1,32 @@
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { store } from '@client/store';
+import { FC, PropsWithChildren } from 'react';
+
+const authLink = setContext((_, { headers }) => {
+  const token = store.getState().auth.accessToken;
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+      'x-api-key': import.meta.env.VITE_API_KEY,
+    },
+  };
+});
+
+const httpLink = createHttpLink({
+  uri: `${import.meta.env.VITE_SERVER_ORIGIN}/gql`,
+});
+
+export const apolloClient = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+export const Apollo: FC<PropsWithChildren> = ({ children }) => {
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+};

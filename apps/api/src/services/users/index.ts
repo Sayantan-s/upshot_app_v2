@@ -1,6 +1,7 @@
 import prisma from '@api/integrations/prisma';
 import { Prisma, User } from '@prisma/client';
-import { IUser, IUserParams, IUserRegister } from './types';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { IUser } from './types';
 
 export class UserService {
   // CHECK USER IF EXISTS
@@ -35,39 +36,30 @@ export class UserService {
     return !!doesExists;
   }
 
-  public static async createUser(payload: IUserRegister) {
+  public static async createUser(payload: Prisma.UserCreateInput) {
     return await prisma.user.create({
       data: payload,
     });
   }
 
-  public static async getUser(
-    payload: Partial<IUserParams>,
-    select?: Prisma.UserSelect
+  public static async fetch(
+    where?: Prisma.UserWhereUniqueInput,
+    include?: Prisma.UserInclude<DefaultArgs>,
+    select?: Prisma.UserSelect<DefaultArgs>
   ) {
-    let user: User | null = null;
-    if ('userName' in payload) {
-      user = await prisma.user.findFirst({
-        where: {
-          userName: payload.userName,
-        },
+    try {
+      if (include)
+        return await prisma.user.findUnique({
+          where,
+          include,
+        });
+      return await prisma.user.findUnique({
+        where,
+        select,
       });
-    } else if ('email' in payload) {
-      user = await prisma.user.findFirst({
-        where: {
-          email: payload.email,
-        },
-        ...(select ? { select } : {}),
-      });
-    } else if ('id' in payload) {
-      user = await prisma.user.findFirst({
-        where: {
-          id: payload.id,
-        },
-        ...(select ? { select } : {}),
-      });
-    } else return null; // If no property return false!
-    return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public static async updateUser(

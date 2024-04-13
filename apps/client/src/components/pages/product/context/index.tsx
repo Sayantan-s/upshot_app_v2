@@ -21,8 +21,8 @@ const Root: FC<PropsWithChildren<Props>> = ({ children, persist }) => {
     new StorageManager({
       // Managing a storage manager cause to handle state changes & persistence internally
       data: {
-        productType: '',
-        instance: '',
+        productType: PRODUCT_TYPES.BUILD_IN_PUBLIC,
+        instance: uuid(),
       },
       persistenceConfig: {
         status: !!persist,
@@ -38,7 +38,10 @@ const Root: FC<PropsWithChildren<Props>> = ({ children, persist }) => {
 
   // HANDLERS
   const handleCreateInstance = (productType: PRODUCT_TYPES | string) => {
-    const instancePayload = { productType, instance: uuid() };
+    const instancePayload = {
+      productType: productType as PRODUCT_TYPES,
+      instance: uuid(),
+    };
     setProductDetailInstance(instancePayload);
     if (persist) {
       state.current.set('instance', instancePayload.instance);

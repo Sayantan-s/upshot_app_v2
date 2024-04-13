@@ -1,9 +1,10 @@
 import { Button, TextField } from '@client/components/ui';
 import { Modal } from '@client/components/ui/Modal';
+import { ProductOnboardingStatus } from '@client/constants/Product';
 import ValidationSchema from '@client/constants/validation_schemas';
 import { useToggle } from '@client/hooks';
 import { productApi } from '@client/store/services/product';
-import { IGenerationRequest } from '@client/store/types/product';
+import { IGenerationRequest, IProduct } from '@client/store/types/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Switch from '@radix-ui/react-switch';
 import {
@@ -14,6 +15,7 @@ import {
 } from 'iconsax-react';
 import { ChangeEventHandler, Fragment, SyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { BuildInPublicInformation } from '.';
 import { ProductTracker } from '../../context/ProductTracker';
 
@@ -22,8 +24,10 @@ export const ProductIdenity = () => {
     BuildInPublicInformation.useMultiStep();
   const [isOpen, { on: openConfirmationModal, off: closeConfirmationModal }] =
     useToggle();
-
   const [generate, { isLoading }] = productApi.useGenerateMutation();
+  const [createProduct, { isLoading: isCreatingProduct }] =
+    productApi.useCreateMutation();
+  const [, setParams] = useSearchParams();
   const { handleSetProduct } = ProductTracker.useProductTracker();
 
   const [generationConfig, setGenerationConfig] = useState({
@@ -66,12 +70,31 @@ export const ProductIdenity = () => {
     handleFormValues('productMoto', payload.productMoto);
     handleFormValues('productDescription', res.data.description);
     handleSetProduct('productDescription', res.data.description);
-    handleProceedNext();
+
+    setParams({
+      product: res.data.productId,
+      status: ProductOnboardingStatus.CREATE,
+    });
+
+    closeConfirmationModal();
+    controls.next();
   };
 
-  const handleProceedNext = () => {
+  const handleProceedNext = async () => {
+    const payload = watch();
+    handleFormValues('productName', payload.productName);
+    handleFormValues('productMoto', payload.productMoto);
+
+    const { data: productId } = await createProduct({
+      productMoto: payload.productMoto,
+      productName: payload.productName,
+    }).unwrap();
+
+    handleFormValues('productId', productId);
+    handleSetProduct('productId', productId);
+    setParams({ product: productId, status: ProductOnboardingStatus.CREATE });
     closeConfirmationModal();
-    setTimeout(() => controls.next(), 100);
+    controls.next();
   };
 
   const handleChange: ChangeEventHandler<
@@ -79,7 +102,7 @@ export const ProductIdenity = () => {
   > = (eve) => {
     const { name, value } = eve.target;
     const inputName = name as keyof Pick<
-      IGenerationRequest,
+      IProduct,
       'productMoto' | 'productName'
     >;
     formStateHandler(inputName).onChange({
@@ -219,7 +242,9 @@ export const ProductIdenity = () => {
               onClick={handleProceedNext}
               variant={'danger.outline'}
               disabled={isLoading}
+              isLoading={isCreatingProduct}
               size={'md'}
+              loaderVersion="v1"
             >
               No, just proceed!
             </Button>
@@ -227,8 +252,9 @@ export const ProductIdenity = () => {
               variant={'neutral.solid'}
               onClick={handleGenerate}
               disabled={
-                !generationConfig.generateProductDescription &&
-                !generationConfig.setupInitialFiveAutomatedPosts
+                (!generationConfig.generateProductDescription &&
+                  !generationConfig.setupInitialFiveAutomatedPosts) ||
+                isCreatingProduct
               }
               isLoading={isLoading}
               rounded={'md'}

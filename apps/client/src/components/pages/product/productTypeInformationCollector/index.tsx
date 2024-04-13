@@ -21,9 +21,6 @@ export const ProductTypeInformationCollector: FC = () => {
           <RadioGroup.Option value={PRODUCT_TYPES.BUILD_IN_PUBLIC}>
             Build in public
           </RadioGroup.Option>
-          <RadioGroup.Option value={PRODUCT_TYPES.PRODUCT_SELL}>
-            Saleable product
-          </RadioGroup.Option>
         </RadioGroup>
       </div>
     </Page>

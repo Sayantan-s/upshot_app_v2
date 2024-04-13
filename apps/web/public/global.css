@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply text-slate-400 font-display text-sm box-border font-medium;
+    font-display: optional;
+  }
+}

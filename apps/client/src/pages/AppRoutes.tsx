@@ -1,4 +1,7 @@
 import RootLayout from '@client/components/shared/Layouts/Rootlayout';
+import { SidebarLayout } from '@client/components/shared/Layouts/Sidebar';
+import { TrendingLayout } from '@client/components/shared/Layouts/Trending';
+import { FeedLayout } from '@client/components/shared/Layouts/WrapperLayout';
 import { useTitle } from '@client/hooks/useTitle';
 import {
   Route,
@@ -19,8 +22,11 @@ import { Design } from './design';
 import { ErrorPage } from './error';
 import { Home } from './home';
 import { Messages } from './messages';
+import { Products } from './product';
 import { ProductUpload } from './product/productupload';
-import { Profile } from './profile';
+import { ProfileLayout } from './profile';
+import { Shots } from './shots';
+import { ManualEdits } from './shots/manualedits';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,11 +41,21 @@ export const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route element={<RequireUserDetails />}>
           <Route element={<RootLayout />}>
-            <Route index element={<Home />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="chat" element={<Messages />} />
+            <Route element={<TrendingLayout />}>
+              <Route element={<SidebarLayout />}>
+                <Route element={<FeedLayout />}>
+                  <Route index element={<Home />} />
+                  <Route path="chat" element={<Messages />} />
+                </Route>
+              </Route>
+              <Route element={<ProfileLayout />}>
+                <Route element={<Products />} path="profile/products" />
+                <Route element={<Shots />} path="profile/shots" />
+              </Route>
+            </Route>
           </Route>
-          <Route path="product/upload" element={<ProductUpload />} />
+          <Route path="product/onboard" element={<ProductUpload />} />
+          <Route path="product/edit/:productId" element={<ManualEdits />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

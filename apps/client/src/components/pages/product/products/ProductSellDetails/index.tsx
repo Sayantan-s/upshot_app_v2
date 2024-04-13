@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { ProductDetailsInstance } from '../../context';
 import { withProductInformationLayout } from '../../layout';
 
 export const productSellInitialState = {
@@ -9,7 +8,7 @@ export const productSellInitialState = {
 };
 
 const Component: FC = () => {
-  const { values } = ProductDetailsInstance.useProductDetails();
+  // const { values } = ProductDetailsInstance.useProductDetails();
   return <div>ProductSell</div>;
 };
 

@@ -16,9 +16,10 @@ export interface Props
   title: string;
   imageSuggestions: string;
   onUploadComplete?: (data: ISingleImageUploadResponse) => void;
+  intent: string;
 }
 
-export type IAspectRatio = 'video' | 'square' ;
+export type IAspectRatio = 'video' | 'square';
 
 export interface ReducerAction<T, P> {
   type: T;

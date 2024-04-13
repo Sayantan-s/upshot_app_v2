@@ -8,7 +8,7 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 import {
   HookReturnType,
   IContextDetails,
@@ -17,12 +17,12 @@ import {
   Props,
   ReturnType,
   StepProps,
-} from "./types";
+} from './types';
 
 export const createMultiStep = <TData, TStepNames = string>({
   contextName,
 }: IContextDetails): ReturnType<TData, TStepNames> => {
-  if (!contextName.length) throw new Error("Provide a proper context name!");
+  if (!contextName.length) throw new Error('Provide a proper context name!');
 
   const MultiStepContext = createContext<IMultiStepContext<
     TData,
@@ -36,9 +36,12 @@ export const createMultiStep = <TData, TStepNames = string>({
     onSubmit,
     onStepChange,
     onChange,
+    defaultStepCount,
   }) => {
     const [state, setState] = useState(formState);
+
     const { component, ...controls } = useController({
+      defaultCount: defaultStepCount,
       children,
       defaultStep,
       onNext: (step) => onStepChange?.(state, step),
@@ -69,12 +72,13 @@ export const createMultiStep = <TData, TStepNames = string>({
 
   const useController = ({
     defaultStep,
+    defaultCount,
     children,
     onPrev,
     onNext,
   }: IControllerHook<TStepNames>) => {
     const [currentStep, setCurrentStep] = useState(defaultStep);
-    const [stepCount, setStepCount] = useState(0);
+    const [stepCount, setStepCount] = useState(defaultCount || 0);
     const [currentStepComponent, setCurrentStepComponent] =
       useState<ReactElement | null>(null);
 

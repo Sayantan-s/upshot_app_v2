@@ -1,5 +1,5 @@
 import { useAuthor } from '@client/hooks';
-import { IPost } from '@client/store/types/posts';
+import { IPost } from '@client/store/types/shot';
 import { motion } from 'framer-motion';
 import { AlignBottom, Heart, Messages2, Send2 } from 'iconsax-react';
 import moment from 'moment';

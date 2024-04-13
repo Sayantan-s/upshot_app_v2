@@ -1,5 +1,6 @@
 import { FallbackScreen } from '@client/components/pages/auth/FallbackScreen';
 import { useAuth } from '@client/hooks';
+import { Apollo } from '@client/integrations/apollo';
 import { authApi } from '@client/store/services/auth';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useRef } from 'react';
@@ -10,12 +11,9 @@ export const RequireAuth = () => {
   const effectRan = useRef(false);
   const [refresh, { isFetching }] = authApi.useLazyRefreshQuery();
 
-  const { isLoading } = authApi.useUserQuery(
-    undefined,
-    {
-      skip: !isAuthenticated || !!!tokenMetaData?.id,
-    }
-  );
+  const { isLoading } = authApi.useUserQuery(undefined, {
+    skip: !isAuthenticated || !!!tokenMetaData?.id,
+  });
 
   useEffect(() => {
     if (effectRan.current || !import.meta.env.DEV)
@@ -33,7 +31,13 @@ export const RequireAuth = () => {
 
   return (
     <AnimatePresence initial={false}>
-      {isFetching || (isLoading && !user) ? <FallbackScreen /> : <Outlet />}
+      {isFetching || (isLoading && !user) ? (
+        <FallbackScreen />
+      ) : (
+        <Apollo>
+          <Outlet />
+        </Apollo>
+      )}
     </AnimatePresence>
   );
 };

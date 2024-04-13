@@ -42,3 +42,5 @@ Thumbs.db
 
 apps/client/.env*
 apps/api/.env*
+
+.astro
