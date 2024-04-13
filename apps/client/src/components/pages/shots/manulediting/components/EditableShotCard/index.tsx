@@ -44,7 +44,7 @@ export const EditableShotCard: FC<IProps> = ({
   return (
     <div>
       <div
-        className={`w-[400px] bg-white shadow-md shadow-slate-900/5 h-[400px] aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
+        className={`bg-white shadow-md shadow-slate-900/5 aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
           disabled ? 'blur-md disabled:cursor-not-allowed' : ''
         }`}
         id={id}

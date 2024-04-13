@@ -114,7 +114,7 @@ export const Toolbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 w-max mx-auto mt-10 z-50 border p-2.5 flex items-center justify-center rounded-xl shadow-md shadow-slate-900/5 bg-white`}
+      className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-max mx-auto mt-10 z-50 border p-2.5 flex items-center justify-center rounded-xl shadow-md shadow-slate-900/5 bg-white`}
     >
       <div className="space-x-3 flex items-center">
         <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
