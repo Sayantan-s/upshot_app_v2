@@ -44,8 +44,10 @@ export const EditableShotCard: FC<IProps> = ({
   return (
     <div>
       <div
-        className={`bg-white shadow-md shadow-slate-900/5 aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
-          disabled ? 'blur-md disabled:cursor-not-allowed' : ''
+        className={`w-[400px] bg-white shadow-md shadow-slate-900/5 h-[400px] aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
+          disabled
+            ? 'filter grayscale disabled:cursor-not-allowed opacity-40'
+            : ''
         }`}
         id={id}
       >
@@ -98,8 +100,7 @@ export const EditableShotCard: FC<IProps> = ({
           </div>
         </div>
       </div>
-
-      <ScheduleNotifier shotId={id} />
+      <ScheduleNotifier shotId={id} disabled={disabled} />
     </div>
   );
 };

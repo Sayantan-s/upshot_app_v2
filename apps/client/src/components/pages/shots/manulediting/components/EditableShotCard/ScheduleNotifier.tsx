@@ -4,13 +4,22 @@ import { Calendar } from 'iconsax-react';
 import { FC } from 'react';
 import { IScheduleNotifierProps } from './type';
 
-export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({ shotId }) => {
+export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
+  shotId,
+  disabled,
+}) => {
   const shot = useSelector(
     (state) => state.shots.manualEdits.shots.entities[shotId]
   );
 
   return shot?.launchedAt?.selectedDate ? (
-    <div className="mt-4 flex items-center space-x-2 px-4 py-2 bg-emerald-100 w-max rounded-full mx-auto">
+    <div
+      className={`mt-4 flex items-center space-x-2 px-4 py-2 bg-emerald-100 w-max rounded-full mx-auto ${
+        disabled
+          ? 'filter grayscale disabled:cursor-not-allowed opacity-40'
+          : ''
+      }`}
+    >
       <p className="text-xs flex space-x-1">
         <Calendar variant="Bulk" size={15} color="#047857" />{' '}
         <span className="text-emerald-700 text-xs">Schedule time</span>

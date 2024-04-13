@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
-import useEmblaCarousel from 'embla-carousel-react';
-import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { EditableShotCard } from '../EditableShotCard';
 
@@ -31,12 +31,14 @@ export const ShotPanel = () => {
   const currentlyEditing = useSelector(
     (state) => state.shots.manualEdits.currentlyEditing
   );
+  const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const [width, setWidth] = useState(0);
   const [isNotEditing, setIsNotEditing] = useState(true);
-  const [carouselRef] = useEmblaCarousel({
-    dragFree: true,
-    align: 'end',
-    skipSnaps: true,
-  });
+
+  useEffect(() => {
+    if (shotIds.length)
+      setWidth(ref.current.scrollWidth - ref.current.offsetWidth);
+  }, [shotIds?.length]);
 
   const handleEdit = (id: string) => {
     dispatch(
@@ -54,23 +56,34 @@ export const ShotPanel = () => {
 
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="mx-auto max-w-[1200px] flex justify-center items-start flex-col relative">
-        <div className="overflow-hidden" ref={carouselRef}>
-          <div className="flex items-center space-x-6 flex-nowrap">
-            {shotIds?.map((shotId) => (
-              <EditableShotCard
-                key={data[shotId]?.id}
-                {...data[shotId]!}
-                disabled={
-                  !isNotEditing && currentlyEditing !== data[shotId]?.id
-                }
-                onEdit={handleEdit}
-                onSave={handleSave}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <motion.div
+        className="overflow-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+        ref={ref}
+      >
+        <div className="w-16 h-full absolute left-0 z-50 bg-gradient-to-r from-white via-white/50 to-white/0" />
+        <motion.div
+          drag="x"
+          className="flex items-center space-x-6 flex-nowrap"
+          dragConstraints={{ right: 0, left: -width }}
+          dragTransition={{ bounceDamping: 30 }}
+          dragElastic={0.9}
+          dragMomentum
+          dragListener={isNotEditing}
+          onMeasureDragConstraints={(constraints) => console.log(constraints)}
+          onDragStart={(_, info) => console.log(info)}
+        >
+          {shotIds?.map((shotId) => (
+            <EditableShotCard
+              key={data[shotId]?.id}
+              {...data[shotId]!}
+              disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
+              onEdit={handleEdit}
+              onSave={handleSave}
+            />
+          ))}
+        </motion.div>
+        <div className="w-16 h-full absolute right-0 z-50 bg-gradient-to-r from-white/0 via-white/50 to-white" />
+      </motion.div>
     </div>
   );
 };
