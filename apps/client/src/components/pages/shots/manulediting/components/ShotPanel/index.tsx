@@ -1,6 +1,8 @@
+import { Button } from '@client/components/ui';
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
+import { Add } from 'iconsax-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import 'swiper/css';
@@ -93,7 +95,7 @@ export const ShotPanel = () => {
             gradients.right ? 'visible' : 'hidden'
           }`}
         />
-        <div slot="container-start" className="mb-6 z-50">
+        <div slot="container-start" className="mb-6 z-50  w-full">
           <SwiperPagination />
         </div>
       </Swiper>
@@ -127,20 +129,33 @@ const SwiperPagination = () => {
   }, [swiper]);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto space-x-2 flex">
-      {shotIds.map((shotId, index) => (
-        <button
-          onClick={() => handleSwipeTo(index)}
-          key={shotId}
-          className={`w-7 h-7 bg-white shadow flex items-center justify-center text-xs rounded-full ${
-            currentIndex === index
-              ? 'bg-slate-700 text-white shadow-slate-800/20'
-              : 'bg-white text-slate-400'
-          }`}
+    <div className="flex items-center justify-between w-full space-x-2">
+      <div className="w-full max-w-[1200px] mx-auto  flex-1">
+        <div className="flex space-x-2 items-center bg-gray-100 rounded-full w-max px-2.5 py-2 border border-gray-200">
+          {shotIds.map((shotId, index) => (
+            <button
+              onClick={() => handleSwipeTo(index)}
+              key={shotId}
+              className={`w-7 h-7 bg-white shadow flex items-center justify-center text-xs rounded-full ${
+                currentIndex === index
+                  ? 'bg-gray-700 text-white shadow-gray-800/20'
+                  : 'bg-white text-slate-400'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <Button
+          className="w-full"
+          variant={'neutral.solid'}
+          icon={<Add size={16} color="#ffffff" stroke="2" />}
         >
-          {index + 1}
-        </button>
-      ))}
+          Add New Shot
+        </Button>
+      </div>
     </div>
   );
 };
