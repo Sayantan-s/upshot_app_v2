@@ -11,4 +11,5 @@ export interface IProps extends IShotModified {
 
 export interface IScheduleNotifierProps {
   shotId: string;
+  disabled?: boolean;
 }

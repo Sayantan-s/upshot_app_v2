@@ -29,8 +29,8 @@ export class ShotController {
   ) => {
     const { productId } = req.query;
     const shotCreationStatus = await Redis.client.cache.get(productId);
-    const arePostsSuccessfullyCreated = shotCreationStatus === null;
-    if (arePostsSuccessfullyCreated) {
+    const areShotsSuccessfullyCreated = shotCreationStatus === null;
+    if (areShotsSuccessfullyCreated) {
       const product = await ProductService.fetch({ id: productId }, undefined, {
         shots: true,
       });
@@ -58,13 +58,13 @@ export class ShotController {
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
       const UTCDate = new Date(shotData.launchedAt * 1000);
-      const calculateSecondsInDifference = differenceInSeconds(
+      const calculateDifferenceInSecs = differenceInSeconds(
         UTCDate,
         currentDate
       );
-      if (calculateSecondsInDifference < 1)
+      if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
-      const JWT_EXPIRY = `${calculateSecondsInDifference}s`;
+      const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
 
       // Task 3:: Setup credentials for scheduling
       const scheduleReference = uuid();

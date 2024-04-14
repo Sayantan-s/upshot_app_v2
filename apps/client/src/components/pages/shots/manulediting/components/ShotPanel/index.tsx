@@ -1,9 +1,18 @@
+import { Button } from '@client/components/ui';
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
-import useEmblaCarousel from 'embla-carousel-react';
-import { useState } from 'react';
+import { Add } from 'iconsax-react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import 'swiper/css';
+import {
+  Swiper,
+  SwiperClass,
+  SwiperProps,
+  SwiperSlide,
+  useSwiper,
+} from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
 
 /**
@@ -32,11 +41,7 @@ export const ShotPanel = () => {
     (state) => state.shots.manualEdits.currentlyEditing
   );
   const [isNotEditing, setIsNotEditing] = useState(true);
-  const [carouselRef] = useEmblaCarousel({
-    dragFree: true,
-    align: 'end',
-    skipSnaps: true,
-  });
+  const [gradients, setGradients] = useState({ left: false, right: true });
 
   const handleEdit = (id: string) => {
     dispatch(
@@ -52,24 +57,104 @@ export const ShotPanel = () => {
     setIsNotEditing(true);
   };
 
+  const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {
+    if (swiper.isBeginning)
+      setGradients((prevState) => ({ ...prevState, left: false }));
+    else if (swiper.isEnd)
+      setGradients((prevState) => ({ ...prevState, right: false }));
+    else setGradients({ left: true, right: true });
+  };
+
   return (
-    <div className="flex justify-center items-center h-full">
-      <div className="mx-auto max-w-[1200px] flex justify-center items-start flex-col relative">
-        <div className="overflow-hidden" ref={carouselRef}>
-          <div className="flex items-center space-x-6 flex-nowrap">
-            {shotIds?.map((shotId) => (
-              <EditableShotCard
-                key={data[shotId]?.id}
-                {...data[shotId]!}
-                disabled={
-                  !isNotEditing && currentlyEditing !== data[shotId]?.id
-                }
-                onEdit={handleEdit}
-                onSave={handleSave}
-              />
-            ))}
-          </div>
+    <div className="flex justify-center flex-col h-full">
+      <Swiper
+        allowTouchMove={isNotEditing}
+        spaceBetween={12}
+        slidesPerView={3}
+        onSlideChange={handleSlideChange}
+        direction="horizontal"
+        className="overflow-x-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+      >
+        <div
+          className={`w-16 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0 ${
+            gradients.left ? 'visible' : 'hidden'
+          }`}
+        />
+        {shotIds?.map((shotId) => (
+          <SwiperSlide key={data[shotId]?.id}>
+            <EditableShotCard
+              {...data[shotId]!}
+              disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
+              onEdit={handleEdit}
+              onSave={handleSave}
+            />
+          </SwiperSlide>
+        ))}
+        <div
+          className={`w-16 h-full absolute right-0 z-40 bg-gradient-to-r from-white/0 via-white/50 to-white ${
+            gradients.right ? 'visible' : 'hidden'
+          }`}
+        />
+        <div slot="container-start" className="mb-6 z-50  w-full">
+          <SwiperPagination />
         </div>
+      </Swiper>
+    </div>
+  );
+};
+
+const SwiperPagination = () => {
+  const { ids: shotIds } = useSelector(
+    (state) => state.shots.manualEdits.shots
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const swiper = useSwiper();
+
+  const handleSwipeTo = (index: number) => {
+    if (!swiper.isLocked) {
+      swiper.slideTo(index);
+      setCurrentIndex(index);
+    }
+  };
+
+  useEffect(() => {
+    const handleSwipe = (swipe: SwiperClass) => {
+      const { activeIndex } = swipe;
+      setCurrentIndex(activeIndex);
+    };
+    swiper.on('slideChange', handleSwipe);
+    return () => {
+      swiper.off('slideChange', handleSwipe);
+    };
+  }, [swiper]);
+
+  return (
+    <div className="flex items-center justify-between w-full space-x-2">
+      <div className="w-full max-w-[1200px] mx-auto  flex-1">
+        <div className="flex space-x-2 items-center bg-gray-100 rounded-full w-max px-2.5 py-2 border border-gray-200">
+          {shotIds.map((shotId, index) => (
+            <button
+              onClick={() => handleSwipeTo(index)}
+              key={shotId}
+              className={`w-7 h-7 bg-white shadow flex items-center justify-center text-xs rounded-full ${
+                currentIndex === index
+                  ? 'bg-gray-700 text-white shadow-gray-800/20'
+                  : 'bg-white text-slate-400'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <Button
+          className="w-full"
+          variant={'neutral.solid'}
+          icon={<Add size={16} color="#ffffff" stroke="2" />}
+        >
+          Add New Shot
+        </Button>
       </div>
     </div>
   );

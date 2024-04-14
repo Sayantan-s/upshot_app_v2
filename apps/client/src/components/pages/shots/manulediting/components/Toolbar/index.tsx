@@ -9,7 +9,7 @@ import { IDateFormatter, TimeConvention } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { formatDate } from 'date-fns';
-import { Clock, Calendar as Datepicker } from 'iconsax-react';
+import { CalendarTick, Clock, Calendar as Datepicker } from 'iconsax-react';
 import { ChangeEventHandler, Fragment, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 
@@ -276,6 +276,16 @@ export const Toolbar = () => {
           onClick={handleUpdateShot}
         >
           Save schedule time
+        </Button>
+        <Button
+          size={'md'}
+          className="shadow-md shadow-emerald-700/20 space-x-1.5"
+          disabled={isLoading}
+          isLoading={isLoading}
+          variant={'neutral.solid'}
+        >
+          <CalendarTick size={16} color="#ffffff" variant="Bulk" />
+          <span className="text-white">Schedule All</span>
         </Button>
       </div>
     </nav>
