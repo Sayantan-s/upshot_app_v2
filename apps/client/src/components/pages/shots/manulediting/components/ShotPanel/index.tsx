@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
-import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
+import 'swiper/css';
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
 
 /**
@@ -31,14 +32,8 @@ export const ShotPanel = () => {
   const currentlyEditing = useSelector(
     (state) => state.shots.manualEdits.currentlyEditing
   );
-  const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const [width, setWidth] = useState(0);
   const [isNotEditing, setIsNotEditing] = useState(true);
-
-  useEffect(() => {
-    if (shotIds.length)
-      setWidth(ref.current.scrollWidth - ref.current.offsetWidth);
-  }, [shotIds?.length]);
+  const [gradients, setGradients] = useState({ left: false, right: true });
 
   const handleEdit = (id: string) => {
     dispatch(
@@ -54,36 +49,45 @@ export const ShotPanel = () => {
     setIsNotEditing(true);
   };
 
+  const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {
+    if (swiper.isBeginning)
+      setGradients((prevState) => ({ ...prevState, left: false }));
+    else if (swiper.isEnd)
+      setGradients((prevState) => ({ ...prevState, right: false }));
+    else setGradients({ left: true, right: true });
+  };
+
   return (
     <div className="flex justify-center items-center h-full">
-      <motion.div
+      <Swiper
+        allowTouchMove={isNotEditing}
+        spaceBetween={12}
+        slidesPerView={3}
+        onSlideChange={handleSlideChange}
+        direction="horizontal"
         className="overflow-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
-        ref={ref}
       >
-        <div className="w-16 h-full absolute left-0 z-50 bg-gradient-to-r from-white via-white/50 to-white/0" />
-        <motion.div
-          drag="x"
-          className="flex items-center space-x-6 flex-nowrap"
-          dragConstraints={{ right: 0, left: -width }}
-          dragTransition={{ bounceDamping: 30 }}
-          dragElastic={0.9}
-          dragMomentum
-          dragListener={isNotEditing}
-          onMeasureDragConstraints={(constraints) => console.log(constraints)}
-          onDragStart={(_, info) => console.log(info)}
-        >
-          {shotIds?.map((shotId) => (
+        <div
+          className={`w-16 h-full absolute left-0 z-50 bg-gradient-to-r from-white via-white/50 to-white/0 ${
+            gradients.left ? 'visible' : 'hidden'
+          }`}
+        />
+        {shotIds?.map((shotId) => (
+          <SwiperSlide key={data[shotId]?.id}>
             <EditableShotCard
-              key={data[shotId]?.id}
               {...data[shotId]!}
               disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
               onEdit={handleEdit}
               onSave={handleSave}
             />
-          ))}
-        </motion.div>
-        <div className="w-16 h-full absolute right-0 z-50 bg-gradient-to-r from-white/0 via-white/50 to-white" />
-      </motion.div>
+          </SwiperSlide>
+        ))}
+        <div
+          className={`w-16 h-full absolute right-0 z-50 bg-gradient-to-r from-white/0 via-white/50 to-white ${
+            gradients.right ? 'visible' : 'hidden'
+          }`}
+        />
+      </Swiper>
     </div>
   );
 };

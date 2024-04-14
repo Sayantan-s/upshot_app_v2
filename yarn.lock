@@ -10356,6 +10356,11 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
+i@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/i/-/i-0.3.7.tgz#2a7437a923d59c14b17243dc63a549af24d85799"
+  integrity sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==
+
 iconsax-react@^0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/iconsax-react/-/iconsax-react-0.0.8.tgz#5e992e9bd4bb298da019b2c13f76de5e4bb8e4b4"
@@ -15831,6 +15836,11 @@ swap-case@^2.0.2:
   integrity sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==
   dependencies:
     tslib "^2.0.3"
+
+swiper@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.1.1.tgz#5efaa222d4a47a3ac75090cfc2fda6e53e564982"
+  integrity sha512-jGmEA/fNz1lACIcY4/40ggm1Gcyv+EUivmgV/Jd2WFPsEJhbWXnRAwzZR8OPjkBLtDxmzcoYG/iiAMWfRs0YKQ==
 
 symbol-observable@^4.0.0:
   version "4.0.0"
