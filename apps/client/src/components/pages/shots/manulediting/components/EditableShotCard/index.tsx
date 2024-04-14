@@ -1,6 +1,7 @@
 import { useUser } from '@client/hooks';
 import { ArchiveTick, Edit2, GalleryTick } from 'iconsax-react';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
+import { useSwiper } from 'swiper/react';
 import { ScheduleNotifier } from './ScheduleNotifier';
 import { IProps } from './type';
 
@@ -20,6 +21,7 @@ export const EditableShotCard: FC<IProps> = ({
   });
 
   const [allowEdit, setAllowEdit] = useState(false);
+  const swiper = useSwiper();
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -33,12 +35,16 @@ export const EditableShotCard: FC<IProps> = ({
     eve.stopPropagation();
     setAllowEdit(true);
     onEdit(id);
+    swiper.disable();
+    swiper.isLocked = true;
   };
   const handleSave: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
     eve.stopPropagation();
     setAllowEdit(false);
     onSave(id);
+    swiper.enable();
+    swiper.isLocked = false;
   };
 
   return (
