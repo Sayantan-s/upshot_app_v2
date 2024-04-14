@@ -1,11 +1,14 @@
 import { GenAiController } from '@api/controller/genAi';
 import ErrorHandler from '@api/middlewares/error';
-import express from 'express';
+import { GenAIBodySchema, validate } from '@api/middlewares/zod';
+import express, { NextFunction } from 'express';
 
 const genAiRouter = express.Router();
 
-genAiRouter
-  .route('/onboarding_generation')
-  .post(ErrorHandler.tryCatch(GenAiController.generateProductOnboarding));
+genAiRouter.post(
+  '/onboarding_generation',
+  ErrorHandler.tryCatch((validate(GenAIBodySchema) as NextFunction) || Object),
+  ErrorHandler.tryCatch(GenAiController.generateProductOnboarding)
+);
 
 export default genAiRouter;

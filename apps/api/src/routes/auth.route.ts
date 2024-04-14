@@ -1,15 +1,28 @@
 import { AuthController } from '@api/controller/auth';
 import { AuthMiddleware } from '@api/middlewares/auth';
 import ErrorHandler from '@api/middlewares/error';
-import express from 'express';
+import {
+  LoginReqSchema,
+  RegisterReqSchema,
+  validate,
+} from '@api/middlewares/zod';
+import express, { NextFunction } from 'express';
 
 const authRouter = express.Router();
 
-authRouter
-  .route('/register')
-  .post(ErrorHandler.tryCatch(AuthController.register));
+authRouter.post(
+  '/register',
+  ErrorHandler.tryCatch(
+    (validate(RegisterReqSchema) as NextFunction) || Object
+  ),
+  ErrorHandler.tryCatch(AuthController.register)
+);
 
-authRouter.route('/login').post(ErrorHandler.tryCatch(AuthController.login));
+authRouter.post(
+  '/login',
+  ErrorHandler.tryCatch((validate(LoginReqSchema) as NextFunction) || Object),
+  ErrorHandler.tryCatch(AuthController.login)
+);
 
 authRouter
   .route('/refresh')
