@@ -1,6 +1,7 @@
 import { GenAiController } from '@api/controller/genAi';
 import ErrorHandler from '@api/middlewares/error';
-import { GenAIBodySchema, validate } from '@api/middlewares/zod';
+import { validate } from '@api/middlewares/zod';
+import { GenAIBodySchema } from '@api/validation/genAi/onboard_generate';
 import express, { NextFunction } from 'express';
 
 const genAiRouter = express.Router();

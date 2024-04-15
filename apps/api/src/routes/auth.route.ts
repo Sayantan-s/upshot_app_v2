@@ -1,11 +1,9 @@
 import { AuthController } from '@api/controller/auth';
 import { AuthMiddleware } from '@api/middlewares/auth';
 import ErrorHandler from '@api/middlewares/error';
-import {
-  LoginReqSchema,
-  RegisterReqSchema,
-  validate,
-} from '@api/middlewares/zod';
+import { validate } from '@api/middlewares/zod';
+import { LoginReqSchema } from '@api/validation/auth/login';
+import { RegisterReqSchema } from '@api/validation/auth/register';
 import express, { NextFunction } from 'express';
 
 const authRouter = express.Router();
