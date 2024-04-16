@@ -13,6 +13,7 @@ import { Client } from '@upstash/qstash';
 import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import {
+  INewShotAddHandler,
   IShotsFetchHandler,
   IShotsScheduleExecuterHandler,
   IShotsScheduleRegistrationHandler,
@@ -132,6 +133,35 @@ export class ShotController {
     return H.success(res, {
       statusCode: 200,
       data: 'Success',
+    });
+  };
+  public static addNewShot: INewShotAddHandler = async (req, res) => {
+    // Save to DB
+    // Shots should be added upto a certain limit
+    const { productId } = req.params;
+    if (!productId) throw new ErrorHandler(400, 'No Product Id found!');
+    // const product = await ProductService.fetch({ id: productId }, undefined, {
+    //   shots: true,
+    // });
+    const shotId = uuid();
+    const shot = await ShotService.create({
+      id: shotId,
+      title: '',
+      content: '',
+      productType: 'IDLE',
+      status: 'IDLE',
+      product: {
+        create: undefined,
+        connectOrCreate: {
+          where: undefined,
+          create: undefined,
+        },
+        connect: undefined,
+      },
+    });
+    return H.success(res, {
+      statusCode: 200,
+      data: { shot },
     });
   };
 }
