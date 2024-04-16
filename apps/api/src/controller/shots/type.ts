@@ -26,6 +26,12 @@ export type IShotsScheduleExecuterHandler = RequestHandler<
   IShotExecuterRequest
 >;
 
+export type IShotsScheduleAllRegistrationHandler = RequestHandler<
+  { productId: string },
+  unknown,
+  unknown
+>;
+
 export type INewShotAddHandler = RequestHandler<
   { productId: string },
   unknown,
