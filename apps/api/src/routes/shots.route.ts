@@ -11,7 +11,11 @@ shotRouter
 shotRouter.route('/schedule/webhook').post(ShotController.shotScheduleExecutor);
 
 shotRouter
+  .route('/schedule/:productId/all')
+  .post(ShotController.shotScheduleAllRegistrationHandler);
+
+shotRouter
   .route('/schedule/:shotId')
-  .get(ShotController.shotScheduleRegistrationHandler);
+  .post(ShotController.shotScheduleRegistrationHandler);
 
 export default shotRouter;

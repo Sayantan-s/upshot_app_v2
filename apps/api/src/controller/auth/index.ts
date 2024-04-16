@@ -16,10 +16,17 @@ import {
   IRegistrationRequestHandler,
   IRegistrationResponse,
 } from './types';
+import { LoginReqSchema, RegisterReqSchema } from './reqSchemas';
 export class AuthController {
   // FOR REGISTERING USERS!
   public static register: IRegistrationRequestHandler = async (req, res) => {
     const { userName, pwd, email } = req.body;
+    const validBody = RegisterReqSchema.safeParse({
+      userName,
+      pwd,
+      email,
+    }).success;
+    if (!validBody) throw new ErrorHandler(400, 'Dhur bara ki eshob?');
     if (!userName || !pwd || !email)
       throw new ErrorHandler(400, 'username, email and password is required!');
     const isDuplicateUser = await UserService.userExists({ userName, email });
@@ -60,6 +67,8 @@ export class AuthController {
   // FOR LOGGING IN USERS!
   public static login: ILoginRequestHandler = async (req, res) => {
     const { pwd, identity } = req.body;
+    const validBody = LoginReqSchema.safeParse({ pwd, identity }).success;
+    if (!validBody) throw new ErrorHandler(400, 'Dhur bara ki eshob?');
     if (!identity || !pwd)
       throw new ErrorHandler(400, 'username or password entered is incorrect!');
     // eslint-disable-next-line no-useless-escape

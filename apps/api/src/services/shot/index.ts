@@ -19,6 +19,22 @@ export class ShotService {
     });
   }
 
+  public static async fetchMany(
+    where?: Prisma.ShotWhereUniqueInput,
+    include?: Prisma.ShotInclude<DefaultArgs>,
+    select?: Prisma.ShotSelect<DefaultArgs>
+  ) {
+    if (include)
+      return await prisma.shot.findMany({
+        where,
+        include,
+      });
+    return await prisma.shot.findMany({
+      where,
+      select,
+    });
+  }
+
   public static async createMany(data: Prisma.ShotCreateManyInput[]) {
     return await prisma.shot.createMany({ data });
   }
