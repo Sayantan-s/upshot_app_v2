@@ -4,21 +4,19 @@ import ErrorHandler from '@api/middlewares/error';
 import { validate } from '@api/middlewares/zod';
 import { LoginReqSchema } from '@api/validation/auth/login';
 import { RegisterReqSchema } from '@api/validation/auth/register';
-import express, { NextFunction } from 'express';
+import express from 'express';
 
 const authRouter = express.Router();
 
 authRouter.post(
   '/register',
-  ErrorHandler.tryCatch(
-    (validate(RegisterReqSchema) as NextFunction) || Object
-  ),
+  validate(RegisterReqSchema),
   ErrorHandler.tryCatch(AuthController.register)
 );
 
 authRouter.post(
   '/login',
-  ErrorHandler.tryCatch((validate(LoginReqSchema) as NextFunction) || Object),
+  validate(LoginReqSchema),
   ErrorHandler.tryCatch(AuthController.login)
 );
 

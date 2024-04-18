@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import H from '@api/helpers/ResponseHelper';
+import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, z } from 'zod';
 
 export const validate =
@@ -6,7 +7,7 @@ export const validate =
     schema:
       | AnyZodObject
       | z.ZodEffects<z.ZodEffects<z.ZodAny, unknown, unknown>, unknown, unknown>
-  ): NextFunction | object =>
+  ) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync({
@@ -15,8 +16,13 @@ export const validate =
         params: req.params,
         file: req.file,
       });
-      return next();
+      next();
     } catch (error) {
-      return res.status(400).json(error);
+      H.error(res, {
+        statusCode: 400,
+        data: {
+          message: 'Access denied due to wrong request schema!',
+        },
+      });
     }
   };
