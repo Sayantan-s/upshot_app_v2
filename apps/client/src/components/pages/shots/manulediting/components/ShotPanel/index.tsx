@@ -73,7 +73,7 @@ export const ShotPanel = () => {
         slidesPerView={3}
         onSlideChange={handleSlideChange}
         direction="horizontal"
-        className="overflow-x-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+        className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-16 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0 ${

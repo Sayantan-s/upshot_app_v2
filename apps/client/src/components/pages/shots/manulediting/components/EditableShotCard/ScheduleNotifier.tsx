@@ -1,4 +1,5 @@
 import { useSelector } from '@client/store';
+import { ShotStatus } from '@client/store/types/shot';
 import { format } from 'date-fns';
 import { Calendar } from 'iconsax-react';
 import { FC } from 'react';
@@ -14,15 +15,45 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
 
   return shot?.launchedAt?.selectedDate ? (
     <div
-      className={`mt-4 flex items-center space-x-2 px-4 py-2 bg-emerald-100 w-max rounded-full mx-auto ${
+      className={`mt-4 flex items-center space-x-2 px-4 py-2 ${
+        shot.status === ShotStatus.IDLE
+          ? 'bg-emerald-100'
+          : shot?.status === ShotStatus.SCHEDULED
+          ? 'bg-gray-100'
+          : 'bg-sky-100'
+      } w-max rounded-full mx-auto ${
         disabled
           ? 'filter grayscale disabled:cursor-not-allowed opacity-40'
           : ''
       }`}
     >
       <p className="text-xs flex space-x-1">
-        <Calendar variant="Bulk" size={15} color="#047857" />{' '}
-        <span className="text-emerald-700 text-xs">Schedule time</span>
+        <Calendar
+          variant="Bulk"
+          size={15}
+          color={
+            shot?.status === ShotStatus.IDLE
+              ? '#047857'
+              : shot?.status === ShotStatus.SCHEDULED
+              ? '#374151'
+              : '#0369a1'
+          }
+        />{' '}
+        <span
+          className={`${
+            shot?.status === ShotStatus.IDLE
+              ? 'text-emerald-700'
+              : shot?.status === ShotStatus.SCHEDULED
+              ? 'text-gray-700'
+              : 'text-sky-700'
+          } text-xs`}
+        >
+          {shot?.status === ShotStatus.IDLE
+            ? 'Schedule time'
+            : shot?.status === ShotStatus.SCHEDULED
+            ? 'Scheduled at'
+            : 'Posted time'}
+        </span>
       </p>
       <p className="bg-white px-3 py-1.5 rounded-full text-xs font-bold text-slate-700">
         {format(shot.launchedAt.selectedDate, 'do MMMM yyyy')}{' '}

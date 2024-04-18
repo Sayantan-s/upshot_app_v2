@@ -92,7 +92,7 @@ export class ShotController {
       const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
 
       // Task 5:: Create a schedule
-      const _SERVER_URL = 'https://2807-119-82-104-98.ngrok-free.app';
+      const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
       const { scheduleId } = await client.schedules.create({
         destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
         cron: cronTime,
@@ -174,7 +174,7 @@ export class ShotController {
           const month = format(UTCDate, 'M');
           const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
           // SubTask 4:: Create a schedule
-          const _SERVER_URL = 'https://2807-119-82-104-98.ngrok-free.app';
+          const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
           const { scheduleId } = await client.schedules.create({
             destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
             cron: cronTime,
@@ -208,13 +208,13 @@ export class ShotController {
         )
         .map((shot) => shot.id);
 
-      // // Task 6:: Update shot to SCHEDULED
-      // await ShotService.update(
-      //   { id: shotId },
-      //   {
-      //     status: ShotStatus.SCHEDULED,
-      //   }
-      // );
+      // Task 6:: Update shot to SCHEDULED
+      await ShotService.updateMany(
+        { id: { in: shotSuccessMetaData } },
+        {
+          status: ShotStatus.SCHEDULED,
+        }
+      );
 
       return H.success(res, {
         statusCode: 200,
