@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 export enum AUTH_ENDPOINT {
   REGISTER = '/auth/register',
   LOGIN = '/auth/login',
@@ -17,6 +18,12 @@ export enum PRODUCT_ENDPOINT {
 
 export enum SHOT_ENDPOINT {
   NAME = '/shot',
+}
+
+export namespace SHOT_ENDPOINT {
+  export function SCHEDULE_ALL(_productId: string): string {
+    return `${SHOT_ENDPOINT.NAME}/schedule/${_productId}/all`;
+  }
 }
 
 export enum MEDIA_ENDPOINT {

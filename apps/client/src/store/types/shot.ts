@@ -93,3 +93,9 @@ export interface IDateFormatter {
   mins: string;
   date: Date;
 }
+
+export type IScheduleAllRequest = Pick<IShot, 'productId'>;
+export interface IScheduleAllResponse {
+  success: string[] | null;
+  failed: string[] | null;
+}
