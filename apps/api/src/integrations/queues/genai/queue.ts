@@ -1,5 +1,6 @@
 import { generatePosts } from '@api/apis/serverless/generatePosts';
 import { OnboardingShotCreationStatus } from '@api/enums/shot';
+import { RichText } from '@api/helpers/RichTextEditor';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
@@ -28,6 +29,7 @@ export default class GenaiQueue {
 
       const shotsPayload = data.map((payload) => ({
         ...payload,
+        content: RichText.generate(payload.content),
         status: ShotStatus.IDLE,
         productType: ProductStatus.IDLE,
         creationMethod: CreationMethod.GEN_AI,

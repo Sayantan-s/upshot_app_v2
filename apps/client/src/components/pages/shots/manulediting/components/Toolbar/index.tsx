@@ -10,12 +10,7 @@ import { IDateFormatter, TimeConvention } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { formatDate } from 'date-fns';
-import {
-  CalendarTick,
-  Clock,
-  Calendar as Datepicker,
-  Timer1,
-} from 'iconsax-react';
+import { Clock, Calendar as Datepicker, Share, Timer1 } from 'iconsax-react';
 import { ChangeEventHandler, Fragment, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 import { useParams } from 'react-router-dom';
@@ -302,8 +297,8 @@ export const Toolbar = () => {
           variant={'neutral.solid'}
           onClick={openSaveAll}
         >
-          <CalendarTick size={16} color="#ffffff" variant="Bulk" />
-          <span className="text-white">Schedule All</span>
+          <Share size={16} color="#ffffff" variant="Bulk" />
+          <span className="text-white">Launch All</span>
         </Button>
       </div>
       <Modal show={isSaveAllOpen} onHide={closeSaveAll}>
