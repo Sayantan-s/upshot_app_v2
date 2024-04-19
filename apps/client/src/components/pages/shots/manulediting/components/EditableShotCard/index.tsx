@@ -1,6 +1,15 @@
+import Editor from '@client/components/ui/Editor';
 import { useUser } from '@client/hooks';
+import { Editor as EditorClass } from '@tiptap/react';
 import { ArchiveTick, Edit2, GalleryTick } from 'iconsax-react';
-import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  MouseEventHandler,
+  MutableRefObject,
+  useRef,
+  useState,
+} from 'react';
 import { useSwiper } from 'swiper/react';
 import { ScheduleNotifier } from './ScheduleNotifier';
 import { IProps } from './type';
@@ -22,6 +31,7 @@ export const EditableShotCard: FC<IProps> = ({
 
   const [allowEdit, setAllowEdit] = useState(false);
   const swiper = useSwiper();
+  const editorRef = useRef() as MutableRefObject<EditorClass>;
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -37,6 +47,7 @@ export const EditableShotCard: FC<IProps> = ({
     onEdit(id);
     swiper.disable();
     swiper.isLocked = true;
+    editorRef.current.setEditable(true);
   };
   const handleSave: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
@@ -45,6 +56,7 @@ export const EditableShotCard: FC<IProps> = ({
     onSave(id);
     swiper.enable();
     swiper.isLocked = false;
+    editorRef.current.setEditable(false);
   };
 
   return (
@@ -91,13 +103,12 @@ export const EditableShotCard: FC<IProps> = ({
             name="title"
             onChange={handleChange}
           />
-          <textarea
-            disabled={!allowEdit}
-            value={form.content}
-            className="w-full mt-2 text-sm resize-none focus:outline-none disabled:bg-transparent"
-            rows={5}
-            name="content"
-            onChange={handleChange}
+          <Editor
+            content={form.content}
+            floatingMenu
+            bubbleMenu
+            isEditable={allowEdit}
+            ref={editorRef}
           />
         </form>
         <div id="img" className="flex-1 p-3 overflow-hidden">
