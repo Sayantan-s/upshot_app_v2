@@ -32,7 +32,7 @@ function Calendar({
         day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100 text-xs &:not(.day-selected):text-slate-500',
         day_range_end: 'text-slate-700 day-range-end',
         day_selected:
-          'bg-emerald-500 text-emerald-50 hover:bg-emerald-600 rounded-full font-semibold',
+          'bg-emerald-500 text-emerald-50 hover:bg-emerald-600 rounded-full font-semibold day-selected',
         day_today:
           'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/25 rounded-full',
         day_outside: 'text-slate-300 day-outside',

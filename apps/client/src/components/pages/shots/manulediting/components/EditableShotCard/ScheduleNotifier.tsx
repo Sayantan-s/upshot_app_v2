@@ -21,13 +21,13 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
       }`}
     >
       <p className="text-xs flex space-x-1">
-        <Calendar variant="Bulk" size={15} color="#047857" />{' '}
-        <span className="text-emerald-700 text-xs">Schedule time</span>
+        <Calendar variant="Bulk" size={15} color={'#047857'} />{' '}
+        <span className={`text-emerald-700 text-xs`}>Schedule time</span>
       </p>
       <p className="bg-white px-3 py-1.5 rounded-full text-xs font-bold text-slate-700">
         {format(shot.launchedAt.selectedDate, 'do MMMM yyyy')}{' '}
         <span className="text-xs ml-2">
-          {shot.launchedAt.hours}:{shot.launchedAt.mins}{' '}
+          {shot.launchedAt.hours || 'HH'}:{shot.launchedAt.mins || 'MM'}{' '}
           {shot.launchedAt.timeConvention}
         </span>
       </p>
@@ -40,7 +40,7 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
           Schedule time
         </span>
       </p>
-      <p className="bg-white shadow px-3 py-1.5 rounded-full text-xs font-bold text-slate-700">
+      <p className="bg-gray-200/70 px-3 py-1.5 rounded-full text-xs font-bold text-slate-700">
         Your schedule date
         <span className="text-xs ml-2">AM/PM</span>
       </p>

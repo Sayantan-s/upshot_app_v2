@@ -48,4 +48,14 @@ export class ShotService {
       where,
     });
   }
+
+  public static async updateMany(
+    where: Prisma.ShotWhereInput,
+    data: Prisma.XOR<Prisma.ShotUpdateInput, Prisma.ShotUncheckedUpdateInput>
+  ) {
+    return await prisma.shot.updateMany({
+      data,
+      where,
+    });
+  }
 }

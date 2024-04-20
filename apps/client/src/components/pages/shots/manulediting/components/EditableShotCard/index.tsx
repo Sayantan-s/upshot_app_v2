@@ -1,6 +1,17 @@
+import Editor from '@client/components/ui/Editor';
 import { useUser } from '@client/hooks';
+import { shotsApi } from '@client/store/services/shot';
+import { useDebounceCallback } from '@react-hook/debounce';
+import { Editor as EditorClass } from '@tiptap/react';
 import { ArchiveTick, Edit2, GalleryTick } from 'iconsax-react';
-import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  MouseEventHandler,
+  MutableRefObject,
+  useRef,
+  useState,
+} from 'react';
 import { useSwiper } from 'swiper/react';
 import { ScheduleNotifier } from './ScheduleNotifier';
 import { IProps } from './type';
@@ -22,13 +33,9 @@ export const EditableShotCard: FC<IProps> = ({
 
   const [allowEdit, setAllowEdit] = useState(false);
   const swiper = useSwiper();
-
-  const handleChange: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (eve) => {
-    const { value, name } = eve.target;
-    setForm((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const editorRef = useRef() as MutableRefObject<EditorClass>;
+  const [updateShot] = shotsApi.useUpdateShotMutation();
+  const updateShotAsync = useDebounceCallback(updateShot, 500, false);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
@@ -37,6 +44,7 @@ export const EditableShotCard: FC<IProps> = ({
     onEdit(id);
     swiper.disable();
     swiper.isLocked = true;
+    editorRef.current.setEditable(true);
   };
   const handleSave: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
@@ -45,6 +53,30 @@ export const EditableShotCard: FC<IProps> = ({
     onSave(id);
     swiper.enable();
     swiper.isLocked = false;
+    editorRef.current.setEditable(false);
+  };
+
+  const handleChangeTitle: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = async (eve) => {
+    const { value, name } = eve.target;
+    setForm((prevState) => ({ ...prevState, [name]: value }));
+    await updateShotAsync({
+      shotId: id,
+      shotInput: {
+        title: value,
+      },
+    });
+  };
+
+  const handleChangeShotContent = async (content: string) => {
+    setForm((prevState) => ({ ...prevState, content }));
+    await updateShotAsync({
+      shotId: id,
+      shotInput: {
+        content,
+      },
+    });
   };
 
   return (
@@ -89,15 +121,16 @@ export const EditableShotCard: FC<IProps> = ({
             value={form.title}
             className="block w-full text-lg text-slate-800 disabled:bg-transparent"
             name="title"
-            onChange={handleChange}
+            onChange={handleChangeTitle}
           />
-          <textarea
-            disabled={!allowEdit}
-            value={form.content}
-            className="w-full mt-2 text-sm resize-none focus:outline-none disabled:bg-transparent"
-            rows={5}
-            name="content"
-            onChange={handleChange}
+          <Editor
+            content={form.content}
+            floatingMenu
+            bubbleMenu
+            isEditable={allowEdit}
+            ref={editorRef}
+            onChangeRichTextContent={handleChangeShotContent}
+            className="mt-2"
           />
         </form>
         <div id="img" className="flex-1 p-3 overflow-hidden">

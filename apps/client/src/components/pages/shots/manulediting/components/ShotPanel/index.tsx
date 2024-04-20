@@ -73,7 +73,7 @@ export const ShotPanel = () => {
         slidesPerView={3}
         onSlideChange={handleSlideChange}
         direction="horizontal"
-        className="overflow-x-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+        className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-16 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0 ${
@@ -138,7 +138,7 @@ const SwiperPagination = () => {
               key={shotId}
               className={`w-6 h-6 bg-white shadow flex items-center justify-center text-xs rounded-full ${
                 currentIndex === index
-                  ? 'bg-slate-700 text-white shadow-slate-800/20'
+                  ? 'bg-gray-700 text-white shadow-gray-800/20'
                   : 'bg-white text-slate-400'
               }`}
             >

@@ -6,6 +6,8 @@ import { apolloClient } from '@client/integrations/apollo';
 import {
   IFetchOnboardingShotsParams,
   IPost,
+  IScheduleAllRequest,
+  IScheduleAllResponse,
   IShot,
 } from '@client/store/types/shot';
 import { api } from '.';
@@ -51,6 +53,7 @@ export const shotsApi = api.injectEndpoints({
         params: data,
       }),
     }),
+
     updateShot: builder.mutation<
       unknown,
       { shotId: string; shotInput: ShotInput }
@@ -62,6 +65,16 @@ export const shotsApi = api.injectEndpoints({
         });
         return { data: data.data?.updateShot };
       },
+    }),
+
+    scheduleAll: builder.mutation<
+      Api.SuccessResponse<IScheduleAllResponse>,
+      IScheduleAllRequest
+    >({
+      query: (data) => ({
+        url: SHOT_ENDPOINT.SCHEDULE_ALL(data.productId),
+        method: 'POST',
+      }),
     }),
   }),
 });
