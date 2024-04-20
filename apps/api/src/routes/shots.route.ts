@@ -6,16 +6,16 @@ const shotRouter = express.Router();
 
 shotRouter
   .route('/')
-  .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductPosts));
+  .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductShots));
+
+shotRouter
+  .route('/:shotId/schedule')
+  .post(ShotController.shotScheduleRegistrationHandler);
 
 shotRouter.route('/schedule/webhook').post(ShotController.shotScheduleExecutor);
 
 shotRouter
   .route('/schedule/:productId/all')
   .post(ShotController.shotScheduleAllRegistrationHandler);
-
-shotRouter
-  .route('/schedule/:shotId')
-  .post(ShotController.shotScheduleRegistrationHandler);
 
 export default shotRouter;

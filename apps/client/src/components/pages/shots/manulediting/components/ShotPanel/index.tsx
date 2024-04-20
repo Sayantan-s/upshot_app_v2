@@ -95,7 +95,7 @@ export const ShotPanel = () => {
             gradients.right ? 'visible' : 'hidden'
           }`}
         />
-        <div slot="container-start" className="mb-6 z-50  w-full">
+        <div slot="container-start" className="mb-10 z-50 w-full">
           <SwiperPagination />
         </div>
       </Swiper>

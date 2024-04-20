@@ -71,5 +71,17 @@ export const ManualEditCaseReducers = {
         shotsAdapter.setAll(state.manualEdits.shots, shotData);
       }
     );
+
+    // Delete editing shot
+    builder.addMatcher(
+      shotsApi.endpoints.deleteShot.matchFulfilled,
+      (state, action) => {
+        state.manualEdits.shots.isLoading = false;
+        shotsAdapter.removeOne(
+          state.manualEdits.shots,
+          action.meta.arg.originalArgs.shotId
+        );
+      }
+    );
   },
 };

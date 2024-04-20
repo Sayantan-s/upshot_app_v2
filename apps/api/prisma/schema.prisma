@@ -137,6 +137,7 @@ enum ShotStatus {
   IDLE
   SCHEDULED
   SHOOT
+  DELETED
 }
 
 enum CreationMethod {

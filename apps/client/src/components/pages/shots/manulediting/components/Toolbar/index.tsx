@@ -153,7 +153,7 @@ export const Toolbar = () => {
             </button>
           </Popover.Trigger>
           <Popover.Content
-            className="w-auto rounded-lg border border-slate-200/70 p-4 bg-white shadow-md shadow-slate-800/5"
+            className="w-auto -ml-3 rounded-lg border border-slate-200/70 p-4 bg-white shadow-md shadow-slate-800/5"
             side="bottom"
             sideOffset={5}
             align="start"

@@ -9,6 +9,7 @@ import {
   IScheduleAllRequest,
   IScheduleAllResponse,
   IShot,
+  ShotStatus,
 } from '@client/store/types/shot';
 import { api } from '.';
 
@@ -64,6 +65,16 @@ export const shotsApi = api.injectEndpoints({
           variables: args,
         });
         return { data: data.data?.updateShot };
+      },
+    }),
+
+    deleteShot: builder.mutation<unknown, { shotId: string }>({
+      queryFn: async ({ shotId }) => {
+        await apolloClient.mutate({
+          mutation: UPDATE_SHOT_MUTATION,
+          variables: { shotId, shotInput: { status: ShotStatus.DELETED } },
+        });
+        return { data: 'Success' };
       },
     }),
 

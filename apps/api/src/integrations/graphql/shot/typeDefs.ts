@@ -4,6 +4,7 @@ export class GQLShotTypeDefs {
       IDLE
       SCHEDULED
       SHOOT
+      DELETED
     }
 
     enum CreationMethod {
