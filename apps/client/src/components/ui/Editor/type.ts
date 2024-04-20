@@ -6,6 +6,7 @@ export interface Props {
   content: string;
   isEditable?: boolean;
   onChangeRichTextContent?: (value: string) => void;
+  className?: string;
 }
 
 export interface IEditorBubbleMenuProps {

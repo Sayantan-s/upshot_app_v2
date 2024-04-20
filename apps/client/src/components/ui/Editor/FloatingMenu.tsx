@@ -1,12 +1,12 @@
 import { Check } from '@client/components/icons/Check';
 import { Code } from '@client/components/icons/Code';
-import { BubbleMenu } from '@tiptap/react';
+import { FloatingMenu } from '@tiptap/react';
 import { Icon, TextBold, TextItalic, TextUnderline } from 'iconsax-react';
 import { FC } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { IEditorBubbleMenuProps } from './type';
 
-export const EditorBubbleMenu: FC<IEditorBubbleMenuProps> = ({
+export const EditorFloatingMenu: FC<IEditorBubbleMenuProps> = ({
   editor,
   show,
 }) => {
@@ -32,7 +32,7 @@ export const EditorBubbleMenu: FC<IEditorBubbleMenuProps> = ({
   };
 
   return show ? (
-    <BubbleMenu
+    <FloatingMenu
       editor={editor}
       className="bg-gray-900/95 backdrop-blur-xl shadow-lg space-x-2 flex items-center shadow-gray-900/20 text-gray-50 px-2 py-1.5 rounded-lg"
     >
@@ -110,7 +110,7 @@ export const EditorBubbleMenu: FC<IEditorBubbleMenuProps> = ({
         isActive={editor.isActive('textStyle', { color: '#1f2937' })}
         onClick={() => handleChangeColor('#1f2937')}
       />
-    </BubbleMenu>
+    </FloatingMenu>
   ) : null;
 };
 
