@@ -34,7 +34,7 @@ export const EditorBubbleMenu: FC<IEditorBubbleMenuProps> = ({
   return show ? (
     <BubbleMenu
       editor={editor}
-      className="bg-gray-900/95 backdrop-blur-xl shadow-lg space-x-2 flex items-center shadow-gray-900/20 text-gray-50 px-2 py-1.5 rounded-lg"
+      className="bg-black backdrop-blur-xl shadow-lg space-x-2 flex items-center shadow-gray-900/20 text-gray-50 px-2 py-1.5 rounded-lg"
     >
       <BubbleMenuButton
         icon={TextBold}

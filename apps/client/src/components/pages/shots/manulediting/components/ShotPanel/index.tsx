@@ -138,7 +138,7 @@ const SwiperPagination = () => {
               key={shotId}
               className={`w-6 h-6 bg-white shadow flex items-center justify-center text-xs rounded-full ${
                 currentIndex === index
-                  ? 'bg-slate-700 text-white shadow-slate-800/20'
+                  ? 'bg-gray-700 text-white shadow-gray-800/20'
                   : 'bg-white text-slate-400'
               }`}
             >
