@@ -39,6 +39,10 @@ export class ShotService {
     return await prisma.shot.createMany({ data });
   }
 
+  public static async delete(args: Prisma.ShotDeleteArgs) {
+    return await prisma.shot.delete(args);
+  }
+
   public static async update(
     where: Prisma.ShotWhereUniqueInput,
     data: Prisma.XOR<Prisma.ShotUpdateInput, Prisma.ShotUncheckedUpdateInput>

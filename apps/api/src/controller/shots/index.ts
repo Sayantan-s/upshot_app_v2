@@ -26,7 +26,7 @@ const client = new Client({
     'eyJVc2VySUQiOiJmMDhiYjY0OC05YTQwLTRiY2YtYTRhYS05OGVhYmQyMjE5MzQiLCJQYXNzd29yZCI6ImFjMTk5MjQzOTkyYTQ2NzRhYjIzMGNmZThkNjY2NzYxIn0=',
 });
 export class ShotController {
-  public static fetchTargetProductPosts: IShotsFetchHandler = async (
+  public static fetchTargetProductShots: IShotsFetchHandler = async (
     req,
     res
   ) => {
@@ -35,7 +35,13 @@ export class ShotController {
     const areShotsSuccessfullyCreated = shotCreationStatus === null;
     if (areShotsSuccessfullyCreated) {
       const product = await ProductService.fetch({ id: productId }, undefined, {
-        shots: true,
+        shots: {
+          where: {
+            status: {
+              not: ShotStatus.DELETED,
+            },
+          },
+        },
       });
       return H.success(res, {
         statusCode: 200,

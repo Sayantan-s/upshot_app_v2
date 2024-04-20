@@ -44,6 +44,7 @@ export enum ShotStatus {
   IDLE = 'IDLE',
   SCHEDULED = 'SCHEDULED',
   SHOOT = 'SHOOT',
+  DELETED = 'DELETED',
 }
 
 export interface IShot {

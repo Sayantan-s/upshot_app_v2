@@ -3,7 +3,7 @@ import { useUser } from '@client/hooks';
 import { shotsApi } from '@client/store/services/shot';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { Editor as EditorClass } from '@tiptap/react';
-import { ArchiveTick, Edit2, GalleryTick } from 'iconsax-react';
+import { GalleryTick } from 'iconsax-react';
 import {
   ChangeEventHandler,
   FC,
@@ -14,6 +14,7 @@ import {
 } from 'react';
 import { useSwiper } from 'swiper/react';
 import { ScheduleNotifier } from './ScheduleNotifier';
+import { ShotController } from './ShotController';
 import { IProps } from './type';
 
 export const EditableShotCard: FC<IProps> = ({
@@ -81,6 +82,12 @@ export const EditableShotCard: FC<IProps> = ({
 
   return (
     <div>
+      <ShotController
+        shotId={id}
+        allowEdit={allowEdit}
+        onSave={handleSave}
+        onEdit={handleEdit}
+      />
       <div
         className={`bg-white shadow-md shadow-slate-900/5 aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
           disabled
@@ -101,18 +108,6 @@ export const EditableShotCard: FC<IProps> = ({
               <p className="text-xs text-slate-400/90">{user?.about}</p>
             </div>
           </div>
-          <button onClick={allowEdit ? handleSave : handleEdit}>
-            {allowEdit ? (
-              <ArchiveTick
-                size={16}
-                variant="Bulk"
-                color="#22c55e"
-                className="animate-pulse"
-              />
-            ) : (
-              <Edit2 size={16} variant="Bulk" color="#64748b" />
-            )}
-          </button>
         </header>
         <form id="content" className="px-3 mt-2">
           <input
