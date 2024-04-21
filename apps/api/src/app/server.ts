@@ -31,7 +31,7 @@ export class Server {
     const { app } = Server.instance;
     const dirName = path.resolve(__dirname, '..');
     app.use(express.static(path.join(dirName, 'client')));
-    app.get('*', (_, res) => {
+    app.get('/', (_, res) => {
       res.sendFile(path.join(dirName, 'client', 'index.html'));
     });
   }
