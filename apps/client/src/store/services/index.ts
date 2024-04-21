@@ -14,7 +14,7 @@ export enum ProductTags {
 }
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_SERVER_ORIGIN,
+  baseUrl: '/api/v1',
   credentials: 'include',
   prepareHeaders: (headers, api) => {
     const { auth } = api.getState() as RootState;
