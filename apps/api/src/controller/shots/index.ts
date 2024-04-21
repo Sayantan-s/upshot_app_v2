@@ -4,12 +4,12 @@ import { MESSAGE_SHOOT_SCHEDULED_SHOT } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import ShotQueue from '@api/integrations/queues/shot/queue';
 import { Redis } from '@api/integrations/redis';
+import { Scheduler } from '@api/integrations/scheduler';
 import ErrorHandler from '@api/middlewares/error';
 import { AuthService } from '@api/services/auth';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
 import { Shot, ShotStatus } from '@prisma/client';
-import { Client } from '@upstash/qstash';
 import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
@@ -21,10 +21,6 @@ import {
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
 
-const client = new Client({
-  token:
-    'eyJVc2VySUQiOiJmMDhiYjY0OC05YTQwLTRiY2YtYTRhYS05OGVhYmQyMjE5MzQiLCJQYXNzd29yZCI6ImFjMTk5MjQzOTkyYTQ2NzRhYjIzMGNmZThkNjY2NzYxIn0=',
-});
 export class ShotController {
   public static fetchTargetProductShots: IShotsFetchHandler = async (
     req,
@@ -99,7 +95,7 @@ export class ShotController {
 
       // Task 5:: Create a schedule
       const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
-      const { scheduleId } = await client.schedules.create({
+      const { scheduleId } = await Scheduler.client.schedules.create({
         destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
         cron: cronTime,
         body,
@@ -181,7 +177,7 @@ export class ShotController {
           const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
           // SubTask 4:: Create a schedule
           const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
-          const { scheduleId } = await client.schedules.create({
+          const { scheduleId } = await Scheduler.client.schedules.create({
             destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
             cron: cronTime,
             body,
@@ -237,7 +233,7 @@ export class ShotController {
   ) => {
     const { scheduleReference, shotId } = req.body;
     const scheduleId = await Redis.client.cache.get(scheduleReference);
-    await client.schedules.delete(scheduleId);
+    await Scheduler.client.schedules.delete(scheduleId);
     const targetShot = await ShotService.update(
       { id: shotId },
       {

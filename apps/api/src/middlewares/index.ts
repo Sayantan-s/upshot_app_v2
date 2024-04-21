@@ -1,4 +1,4 @@
-import { CLIENT_ORIGIN, NODE_ENV } from '@api/config';
+import { CLIENT_ORIGIN } from '@api/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Express } from 'express';
@@ -11,7 +11,7 @@ import swagger from './swagger';
 
 export default class Middlewares {
   static commonMiddlewares(app: Express) {
-    if (NODE_ENV !== 'production') app.use(morgan('dev'));
+    app.use(morgan('dev'));
     app.use(express.json());
   }
 
