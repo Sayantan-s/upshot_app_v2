@@ -24,6 +24,7 @@ const {
   SERVERLESS_FN,
   GEN_POSTS_DEV_TEST_API_KEY,
   SERVERLESS_API_KEY,
+  QSTASH_API_KEY,
 } = process.env;
 
 export {
@@ -40,6 +41,7 @@ export {
   OPENAI_API_KEY,
   ORIGIN,
   PORT,
+  QSTASH_API_KEY,
   REDIS_HOST,
   REDIS_PASSWORD,
   REDIS_PORT,

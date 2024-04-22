@@ -1,7 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: 'development' | 'production';
+      NODE_ENV: 'development' | 'production' | 'local';
       PORT?: string;
       PWD: string;
       ORIGIN: string;
@@ -21,6 +21,7 @@ declare global {
       SERVERLESS_FN: string;
       GEN_POSTS_DEV_TEST_API_KEY: string;
       SERVERLESS_API_KEY: string;
+      QSTASH_API_KEY: string;
     }
 
     interface Global {}

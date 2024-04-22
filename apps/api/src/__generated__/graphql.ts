@@ -180,6 +180,7 @@ export type ShotInput = {
 };
 
 export enum ShotStatus {
+  Deleted = 'DELETED',
   Idle = 'IDLE',
   Scheduled = 'SCHEDULED',
   Shoot = 'SHOOT',

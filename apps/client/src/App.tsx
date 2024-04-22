@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Apollo } from './integrations/apollo';
 
 function App() {
+  console.log(import.meta.env);
   return (
     <Provider store={store}>
       <Apollo>

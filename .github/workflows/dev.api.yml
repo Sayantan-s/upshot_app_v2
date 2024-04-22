@@ -23,5 +23,5 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Build Api (Project)
-        run: yarn build:api:prod
+      - name: Build
+        run: yarn build

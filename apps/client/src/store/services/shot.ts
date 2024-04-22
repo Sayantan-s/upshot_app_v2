@@ -6,7 +6,10 @@ import { apolloClient } from '@client/integrations/apollo';
 import {
   IFetchOnboardingShotsParams,
   IPost,
+  IScheduleAllRequest,
+  IScheduleAllResponse,
   IShot,
+  ShotStatus,
 } from '@client/store/types/shot';
 import { api } from '.';
 
@@ -51,6 +54,7 @@ export const shotsApi = api.injectEndpoints({
         params: data,
       }),
     }),
+
     updateShot: builder.mutation<
       unknown,
       { shotId: string; shotInput: ShotInput }
@@ -62,6 +66,26 @@ export const shotsApi = api.injectEndpoints({
         });
         return { data: data.data?.updateShot };
       },
+    }),
+
+    deleteShot: builder.mutation<unknown, { shotId: string }>({
+      queryFn: async ({ shotId }) => {
+        await apolloClient.mutate({
+          mutation: UPDATE_SHOT_MUTATION,
+          variables: { shotId, shotInput: { status: ShotStatus.DELETED } },
+        });
+        return { data: 'Success' };
+      },
+    }),
+
+    scheduleAll: builder.mutation<
+      Api.SuccessResponse<IScheduleAllResponse>,
+      IScheduleAllRequest
+    >({
+      query: (data) => ({
+        url: SHOT_ENDPOINT.SCHEDULE_ALL(data.productId),
+        method: 'POST',
+      }),
     }),
   }),
 });

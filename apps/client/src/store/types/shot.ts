@@ -44,6 +44,7 @@ export enum ShotStatus {
   IDLE = 'IDLE',
   SCHEDULED = 'SCHEDULED',
   SHOOT = 'SHOOT',
+  DELETED = 'DELETED',
 }
 
 export interface IShot {
@@ -92,4 +93,10 @@ export interface IDateFormatter {
   hours: string;
   mins: string;
   date: Date;
+}
+
+export type IScheduleAllRequest = Pick<IShot, 'productId'>;
+export interface IScheduleAllResponse {
+  success: string[] | null;
+  failed: string[] | null;
 }

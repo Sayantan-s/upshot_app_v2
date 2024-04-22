@@ -13,6 +13,7 @@ module.exports = {
   theme: {
     fontFamily: {
       display: ['Manrope', 'sans-serif'],
+      code: ['Source Code Pro', 'monospace'],
     },
     extend: {},
   },

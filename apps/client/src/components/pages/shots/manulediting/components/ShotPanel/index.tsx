@@ -73,7 +73,7 @@ export const ShotPanel = () => {
         slidesPerView={3}
         onSlideChange={handleSlideChange}
         direction="horizontal"
-        className="overflow-x-hidden cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+        className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-16 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0 ${
@@ -95,7 +95,7 @@ export const ShotPanel = () => {
             gradients.right ? 'visible' : 'hidden'
           }`}
         />
-        <div slot="container-start" className="mb-6 z-50  w-full">
+        <div slot="container-start" className="mb-10 z-50 w-full">
           <SwiperPagination />
         </div>
       </Swiper>
@@ -129,14 +129,14 @@ const SwiperPagination = () => {
   }, [swiper]);
 
   return (
-    <div className="flex items-center justify-between w-full space-x-2">
-      <div className="w-full max-w-[1200px] mx-auto  flex-1">
-        <div className="flex space-x-2 items-center bg-gray-100 rounded-full w-max px-2.5 py-2 border border-gray-200">
+    <div className="flex items-center w-full">
+      <div className="w-full max-w-[1200px] mx-auto flex items-center justify-end flex-1 space-x-2.5">
+        <div className="flex space-x-2 items-center bg-gray-100 rounded-full w-max px-2.5 py-1.5 border border-gray-200">
           {shotIds.map((shotId, index) => (
             <button
               onClick={() => handleSwipeTo(index)}
               key={shotId}
-              className={`w-7 h-7 bg-white shadow flex items-center justify-center text-xs rounded-full ${
+              className={`w-6 h-6 bg-white shadow flex items-center justify-center text-xs rounded-full ${
                 currentIndex === index
                   ? 'bg-gray-700 text-white shadow-gray-800/20'
                   : 'bg-white text-slate-400'
@@ -146,10 +146,7 @@ const SwiperPagination = () => {
             </button>
           ))}
         </div>
-      </div>
-      <div>
         <Button
-          className="w-full"
           variant={'neutral.solid'}
           icon={<Add size={16} color="#ffffff" stroke="2" />}
         >
