@@ -8,6 +8,7 @@ export interface IProps extends IShotModified {
   onEdit: (id: string) => void;
   onSave: (id: string) => void;
   disabled: boolean;
+  isActive: boolean;
 }
 
 export interface IScheduleNotifierProps {
@@ -20,4 +21,5 @@ export interface IShotControllerProps {
   onEdit: MouseEventHandler<HTMLButtonElement>;
   allowEdit: boolean;
   shotId: string;
+  isActive?: boolean;
 }

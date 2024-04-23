@@ -25,6 +25,7 @@ import { EditableShotCard } from '../EditableShotCard';
 
 export const ShotPanel = () => {
   const location = useParams();
+  const [activeSlideIndex, setActiveSlideIndex] = useState(1);
   shotsApi.useFetchOnboardingShotsQuery(
     {
       productId: location.productId!,
@@ -56,30 +57,33 @@ export const ShotPanel = () => {
     setIsNotEditing(true);
   };
 
-  const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {};
+  const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {
+    !Number.isNaN(swiper.realIndex) && setActiveSlideIndex(swiper.realIndex);
+  };
 
   return (
     <div className="flex justify-center flex-col h-full">
       <Swiper
-        effect="slide"
-        mousewheel
         loop
+        mousewheel
+        centeredSlides
         modules={[Mousewheel]}
         allowTouchMove={isNotEditing}
         spaceBetween={12}
         slidesPerView={3}
-        onSlideChange={handleSlideChange}
+        onRealIndexChange={handleSlideChange}
         direction="horizontal"
         className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-1/4 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0`}
         />
-        {shotIds?.map((shotId) => (
+        {shotIds?.map((shotId, index) => (
           <SwiperSlide key={data[shotId]?.id}>
             <EditableShotCard
               {...data[shotId]!}
               disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
+              isActive={activeSlideIndex === index}
               onEdit={handleEdit}
               onSave={handleSave}
             />
@@ -100,7 +104,7 @@ const SwiperPagination = () => {
   const { ids: shotIds } = useSelector(
     (state) => state.shots.manualEdits.shots
   );
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
   const swiper = useSwiper();
 
   const handleSwipeTo = (index: number) => {
@@ -112,12 +116,13 @@ const SwiperPagination = () => {
 
   useEffect(() => {
     const handleSwipe = (swipe: SwiperClass) => {
-      const { activeIndex } = swipe;
-      setCurrentIndex(activeIndex);
+      if (Number.isNaN(swiper.realIndex)) return;
+      const { realIndex } = swipe;
+      setCurrentIndex(realIndex);
     };
-    swiper.on('slideChange', handleSwipe);
+    swiper.on('realIndexChange', handleSwipe);
     return () => {
-      swiper.off('slideChange', handleSwipe);
+      swiper.off('realIndexChange', handleSwipe);
     };
   }, [swiper]);
 
@@ -131,8 +136,8 @@ const SwiperPagination = () => {
               key={shotId}
               className={`w-6 h-6 bg-white shadow flex items-center justify-center text-xs rounded-full ${
                 currentIndex === index
-                  ? 'bg-gray-700 text-white shadow-gray-800/20'
-                  : 'bg-white text-slate-400'
+                  ? 'bg-gray-800 text-white shadow-gray-800/20'
+                  : 'bg-white text-gray-400'
               }`}
             >
               {index + 1}

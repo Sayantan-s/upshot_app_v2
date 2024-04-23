@@ -24,6 +24,7 @@ export const EditableShotCard: FC<IProps> = ({
   onSave,
   disabled,
   id,
+  isActive,
 }) => {
   const user = useUser();
 
@@ -83,6 +84,7 @@ export const EditableShotCard: FC<IProps> = ({
   return (
     <div>
       <ShotController
+        isActive={isActive}
         shotId={id}
         allowEdit={allowEdit}
         onSave={handleSave}
