@@ -12,6 +12,7 @@ export const ShotController: FC<IShotControllerProps> = ({
   shotId,
   onSave,
   onEdit,
+  isActive,
 }) => {
   const [deleteShot, { isLoading }] = shotsApi.useDeleteShotMutation();
   const [isOpenDeleteShot, { on, off }] = useToggle();
@@ -25,8 +26,9 @@ export const ShotController: FC<IShotControllerProps> = ({
     <Fragment>
       <div className="flex justify-end my-2 space-x-2">
         <button
+          disabled={!isActive}
           onClick={allowEdit ? onSave : onEdit}
-          className="bg-white border border-gray-500/20 w-8 h-8 rounded-full flex items-center justify-center"
+          className="disabled:grayscale bg-white border border-gray-500/20 w-8 h-8 rounded-full flex items-center justify-center"
         >
           {allowEdit ? (
             <ArchiveTick
@@ -39,11 +41,15 @@ export const ShotController: FC<IShotControllerProps> = ({
             <Edit2 size={16} variant="Bulk" color="#64748b" />
           )}
         </button>
-        <motion.button className="bg-white border border-emerald-500/20 w-8 h-8 rounded-full flex items-center justify-center">
+        <motion.button
+          disabled={!isActive}
+          className="disabled:grayscale bg-white border border-emerald-500/20 w-8 h-8 rounded-full flex items-center justify-center"
+        >
           <Share size={16} color="#10b981" variant="Bulk" />
         </motion.button>
         <button
-          className="bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center"
+          disabled={!isActive}
+          className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center"
           onClick={on}
         >
           <Bag size={16} color="#f43f5d" variant="Bulk" />
