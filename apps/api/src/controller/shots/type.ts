@@ -31,3 +31,9 @@ export type IShotsScheduleAllRegistrationHandler = RequestHandler<
   unknown,
   unknown
 >;
+
+export type INewShotAddHandler = RequestHandler<
+  { productId: string },
+  unknown,
+  unknown
+>;

@@ -14,6 +14,7 @@ import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
 import {
+  INewShotAddHandler,
   IShotsFetchHandler,
   IShotsScheduleAllRegistrationHandler,
   IShotsScheduleExecuterHandler,
@@ -245,6 +246,35 @@ export class ShotController {
     return H.success(res, {
       statusCode: 200,
       data: 'Success',
+    });
+  };
+
+  public static addNewShot: INewShotAddHandler = async (req, res) => {
+    // Save to DB
+    // Shots should be added upto a certain limit
+    const { productId } = req.params;
+    if (!productId) throw new ErrorHandler(400, 'No Product Id found!');
+    // const product = await ProductService.fetch({ id: productId }, undefined, {
+    //   shots: true,
+    // });
+    const shot = await ShotService.create({
+      id: uuid(),
+      title: '',
+      content: '',
+      productType: 'IDLE',
+      status: 'IDLE',
+      product: {
+        create: undefined,
+        connectOrCreate: {
+          where: undefined,
+          create: undefined,
+        },
+        connect: undefined,
+      },
+    });
+    return H.success(res, {
+      statusCode: 200,
+      data: { shot },
     });
   };
 }
