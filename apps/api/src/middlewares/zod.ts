@@ -43,9 +43,8 @@ export const validate =
       next();
     } catch (error) {
       let err = error;
-      if (err instanceof z.ZodError) {
+      if (err instanceof z.ZodError)
         err = err.issues.map((e) => ({ path: e.path[0], message: e.message }));
-      }
       H.error(res, {
         statusCode: 400,
         data: {

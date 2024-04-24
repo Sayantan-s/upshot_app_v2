@@ -2,7 +2,6 @@ import { ShotController } from '@api/controller/shots';
 import ErrorHandler from '@api/middlewares/error';
 import { validate } from '@api/middlewares/zod';
 import {
-  fetchTrgtProdShtSchema,
   shotRegHndlerSchema,
   shotSchdlExecSchema,
 } from '@api/validation/shots/shots';
@@ -12,7 +11,7 @@ const shotRouter = express.Router();
 
 shotRouter.get(
   '/',
-  validate(fetchTrgtProdShtSchema),
+  // validate(fetchTrgtProdShtSchema),
   ErrorHandler.tryCatch(ShotController.fetchTargetProductShots)
 );
 

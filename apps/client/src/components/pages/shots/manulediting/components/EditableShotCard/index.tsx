@@ -92,7 +92,7 @@ export const EditableShotCard: FC<IProps> = ({
       />
       <div
         className={`bg-white shadow-md shadow-slate-900/5 aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
-          disabled
+          disabled || !isActive
             ? 'filter grayscale disabled:cursor-not-allowed opacity-40'
             : ''
         }`}
