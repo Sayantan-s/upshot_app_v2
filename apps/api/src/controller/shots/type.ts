@@ -33,7 +33,7 @@ export type IShotsScheduleAllRegistrationHandler = RequestHandler<
 >;
 
 export type INewShotAddHandler = RequestHandler<
-  { productId: string },
   unknown,
-  unknown
+  unknown,
+  { productId: string }
 >;

@@ -2,6 +2,7 @@ import { API_KEY } from '@api/config';
 import { CacheKey } from '@api/enums/cache';
 import { MESSAGE_SHOOT_SCHEDULED_SHOT } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
+import { RichText } from '@api/helpers/RichTextEditor';
 import ShotQueue from '@api/integrations/queues/shot/queue';
 import { Redis } from '@api/integrations/redis';
 import { Scheduler } from '@api/integrations/scheduler';
@@ -9,7 +10,12 @@ import ErrorHandler from '@api/middlewares/error';
 import { AuthService } from '@api/services/auth';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
-import { Shot, ShotStatus } from '@prisma/client';
+import {
+  CreationMethod,
+  ProductStatus,
+  Shot,
+  ShotStatus,
+} from '@prisma/client';
 import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
@@ -250,31 +256,21 @@ export class ShotController {
   };
 
   public static addNewShot: INewShotAddHandler = async (req, res) => {
-    // Save to DB
-    // Shots should be added upto a certain limit
-    const { productId } = req.params;
+    const { productId } = req.body;
     if (!productId) throw new ErrorHandler(400, 'No Product Id found!');
-    // const product = await ProductService.fetch({ id: productId }, undefined, {
-    //   shots: true,
-    // });
     const shot = await ShotService.create({
-      id: uuid(),
-      title: '',
-      content: '',
-      productType: 'IDLE',
-      status: 'IDLE',
-      product: {
-        create: undefined,
-        connectOrCreate: {
-          where: undefined,
-          create: undefined,
-        },
-        connect: undefined,
+      data: {
+        title: '',
+        content: RichText.generate(''),
+        productType: ProductStatus.IDLE,
+        status: ProductStatus.IDLE,
+        creationMethod: CreationMethod.GEN_AI,
+        productId,
       },
     });
     return H.success(res, {
-      statusCode: 200,
-      data: { shot },
+      statusCode: 201,
+      data: { shotId: shot.id },
     });
   };
 }

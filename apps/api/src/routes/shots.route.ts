@@ -6,7 +6,8 @@ const shotRouter = express.Router();
 
 shotRouter
   .route('/')
-  .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductShots));
+  .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductShots))
+  .post(ErrorHandler.tryCatch(ShotController.addNewShot));
 
 shotRouter
   .route('/:shotId/schedule')

@@ -4,6 +4,8 @@ import { SHOT_ENDPOINT } from '@client/constants/rest_endpoints';
 import { sseStream } from '@client/helpers/httpClient';
 import { apolloClient } from '@client/integrations/apollo';
 import {
+  ICreateShotRequest,
+  ICreateShotResponse,
   IFetchOnboardingShotsParams,
   IPost,
   IScheduleAllRequest,
@@ -76,6 +78,17 @@ export const shotsApi = api.injectEndpoints({
         });
         return { data: 'Success' };
       },
+    }),
+
+    createShot: builder.mutation<
+      Api.SuccessResponse<ICreateShotResponse>,
+      ICreateShotRequest
+    >({
+      query: (body) => ({
+        url: SHOT_ENDPOINT.NAME,
+        method: 'POST',
+        body,
+      }),
     }),
 
     scheduleAll: builder.mutation<

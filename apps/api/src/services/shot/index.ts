@@ -35,8 +35,8 @@ export class ShotService {
     });
   }
 
-  public static async create(data: Prisma.ShotCreateInput) {
-    return await prisma.shot.create({ data });
+  public static async create(data: Prisma.ShotCreateArgs) {
+    return await prisma.shot.create({ ...data });
   }
   public static async createMany(data: Prisma.ShotCreateManyInput[]) {
     return await prisma.shot.createMany({ data });
