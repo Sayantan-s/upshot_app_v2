@@ -2,6 +2,7 @@ import { AuthController } from '@api/controller/auth';
 import { AuthMiddleware } from '@api/middlewares/auth';
 import ErrorHandler from '@api/middlewares/error';
 import { validate } from '@api/middlewares/zod';
+import { easyBodySchema } from '@api/validation/auth/easy';
 import { LoginReqSchema } from '@api/validation/auth/login';
 import { RegisterReqSchema } from '@api/validation/auth/register';
 import express from 'express';
@@ -24,9 +25,11 @@ authRouter
   .route('/refresh')
   .get(ErrorHandler.tryCatch(AuthController.handleRefreshToken));
 
-authRouter
-  .route('/easy')
-  .post(ErrorHandler.tryCatch(AuthController.easyAccess));
+authRouter.post(
+  '/easy',
+  validate(easyBodySchema),
+  ErrorHandler.tryCatch(AuthController.easyAccess)
+);
 
 authRouter.route('/logout').post(ErrorHandler.tryCatch(AuthController.logout));
 

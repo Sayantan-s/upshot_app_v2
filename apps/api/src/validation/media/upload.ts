@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { ZodAny, ZodEffects, z } from 'zod';
 const MAX_FILE_SIZE = 2000000;
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
@@ -7,11 +7,7 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/webp',
 ];
 
-export const MediaFileSchema: z.ZodEffects<
-  z.ZodEffects<z.ZodAny, unknown, unknown>,
-  unknown,
-  unknown
-> = z
+export const MediaFileSchema: ZodEffects<ZodEffects<ZodAny>> = z
   .any()
   .refine((file: File) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)
   .refine(
