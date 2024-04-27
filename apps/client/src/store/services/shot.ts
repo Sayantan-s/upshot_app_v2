@@ -11,7 +11,7 @@ import {
   IShot,
   ShotStatus,
 } from '@client/store/types/shot';
-import { api } from '.';
+import { Tags, api } from '.';
 
 const UPDATE_SHOT_MUTATION = gql(/* GraphQL */ `
   mutation UpdateShot($shotId: ID!, $shotInput: ShotInput!) {
@@ -53,6 +53,40 @@ export const shotsApi = api.injectEndpoints({
         method: 'GET',
         params: data,
       }),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              {
+                type: Tags.SHOT as const,
+                id: 'LIST',
+              },
+              ...result.data.map(({ id }) => ({
+                type: Tags.SHOT as const,
+                id,
+              })),
+              Tags.SHOT,
+            ]
+          : [Tags.SHOT],
+    }),
+
+    fetchShot: builder.query<IShot, { shotId: string }>({
+      query: ({ shotId }) => ({
+        url: SHOT_ENDPOINT.GET(shotId),
+        method: 'GET',
+      }),
+      providesTags: (result, _) => [{ type: Tags.SHOT, id: result?.id }],
+    }),
+
+    createShot: builder.mutation<
+      Api.SuccessResponse<ICreateShotResponse>,
+      ICreateShotRequest
+    >({
+      query: (body) => ({
+        url: SHOT_ENDPOINT.NAME,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: () => [{ type: Tags.SHOT, id: 'LIST' }],
     }),
 
     updateShot: builder.mutation<
