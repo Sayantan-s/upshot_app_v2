@@ -20,6 +20,7 @@ import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
 import {
+  IFetchShotHandler,
   INewShotAddHandler,
   IShotsFetchHandler,
   IShotsScheduleAllRegistrationHandler,
@@ -29,6 +30,7 @@ import {
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
 
 export class ShotController {
+  // CRUD
   public static fetchTargetProductShots: IShotsFetchHandler = async (
     req,
     res
@@ -57,6 +59,44 @@ export class ShotController {
     });
   };
 
+  public static addNewShot: INewShotAddHandler = async (req, res) => {
+    const { productId } = req.body;
+    if (!productId) throw new ErrorHandler(400, 'No Product Id found!');
+    const shot = await ShotService.create({
+      data: {
+        title: 'Your Shot Placeholder Title!',
+        content: RichText.generate(
+          `Excited to announce our new product launch 🚀 Stay tuned for updates!.
+          What's everyone's favorite weekend activity?
+          🌞 Breaking news: Latest smartphone leaks reveal stunning features!
+          Just finished a great workout 💪 Feeling energized! #FitnessGoals #WorkoutWednesday`
+        ),
+        productType: ProductStatus.IDLE,
+        status: ProductStatus.IDLE,
+        creationMethod: CreationMethod.GEN_AI,
+        productId,
+      },
+    });
+    return H.success(res, {
+      statusCode: 201,
+      data: { shotId: shot.id },
+    });
+  };
+
+  public static fetchShot: IFetchShotHandler = async (req, res) => {
+    const { shotId } = req.params;
+    if (!shotId) throw new ErrorHandler(400, 'No Product Id found!');
+    const shot = await ShotService.fetch({
+      where: { id: shotId },
+      include: { product: true },
+    });
+    return H.success(res, {
+      statusCode: 200,
+      data: { shot: shot },
+    });
+  };
+
+  //AUTOMATIONS
   public static shotScheduleRegistrationHandler: IShotsScheduleRegistrationHandler =
     async (req, res) => {
       const { shotId } = req.params;
@@ -65,7 +105,7 @@ export class ShotController {
       const cacheKey = `${CacheKey.SHOT_UPDATE}_${shotId}`;
       let shotData: string | Shot = await Redis.client.cache.get(cacheKey);
       if (shotData !== null) shotData = JSON.parse(shotData) as Shot;
-      else shotData = await ShotService.fetch({ id: shotId });
+      else shotData = await ShotService.fetch({ where: { id: shotId } });
 
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
@@ -252,25 +292,6 @@ export class ShotController {
     return H.success(res, {
       statusCode: 200,
       data: 'Success',
-    });
-  };
-
-  public static addNewShot: INewShotAddHandler = async (req, res) => {
-    const { productId } = req.body;
-    if (!productId) throw new ErrorHandler(400, 'No Product Id found!');
-    const shot = await ShotService.create({
-      data: {
-        title: '',
-        content: RichText.generate(''),
-        productType: ProductStatus.IDLE,
-        status: ProductStatus.IDLE,
-        creationMethod: CreationMethod.GEN_AI,
-        productId,
-      },
-    });
-    return H.success(res, {
-      statusCode: 201,
-      data: { shotId: shot.id },
     });
   };
 }

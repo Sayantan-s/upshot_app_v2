@@ -9,6 +9,8 @@ shotRouter
   .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductShots))
   .post(ErrorHandler.tryCatch(ShotController.addNewShot));
 
+shotRouter.route('/:shotId').get(ShotController.fetchShot);
+
 shotRouter
   .route('/:shotId/schedule')
   .post(ShotController.shotScheduleRegistrationHandler);

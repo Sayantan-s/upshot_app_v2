@@ -24,6 +24,10 @@ export namespace SHOT_ENDPOINT {
   export function SCHEDULE_ALL(_productId: string): string {
     return `${SHOT_ENDPOINT.NAME}/schedule/${_productId}/all`;
   }
+
+  export function GET(_shotId: string): string {
+    return `${SHOT_ENDPOINT.NAME}/${_shotId}`;
+  }
 }
 
 export enum MEDIA_ENDPOINT {

@@ -37,3 +37,9 @@ export type INewShotAddHandler = RequestHandler<
   unknown,
   { productId: string }
 >;
+
+export type IFetchShotHandler = RequestHandler<
+  { shotId: string },
+  unknown,
+  unknown
+>;

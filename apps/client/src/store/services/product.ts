@@ -3,7 +3,7 @@ import {
   AI_ENDPOINT,
   PRODUCT_ENDPOINT,
 } from '@client/constants/rest_endpoints';
-import { ProductTags, api } from '.';
+import { Tags, api } from '.';
 import {
   ICreateProduct,
   IFetchProduct,
@@ -32,7 +32,7 @@ export const productApi = api.injectEndpoints({
       }),
       providesTags: (...args) => {
         const { id } = args[2];
-        return [{ type: ProductTags.PRODUCT, id }];
+        return [{ type: Tags.PRODUCT, id }];
       },
     }),
     create: builder.mutation<Api.SuccessResponse<string>, ICreateProduct>({
