@@ -59,11 +59,11 @@ export const shotsApi = api.injectEndpoints({
         result?.data
           ? [
               {
-                type: Tags.SHOT as const,
+                type: Tags.SHOT,
                 id: 'LIST',
               },
               ...result.data.map(({ id }) => ({
-                type: Tags.SHOT as const,
+                type: Tags.SHOT,
                 id,
               })),
               Tags.SHOT,
@@ -76,7 +76,7 @@ export const shotsApi = api.injectEndpoints({
         url: SHOT_ENDPOINT.GET(shotId),
         method: 'GET',
       }),
-      providesTags: (result, _) => [{ type: Tags.SHOT, id: result?.id }],
+      providesTags: (result) => [{ type: Tags.SHOT, id: result?.id }],
     }),
 
     createShot: builder.mutation<

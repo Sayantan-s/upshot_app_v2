@@ -73,7 +73,7 @@ export class ShotController {
         ),
         productType: ProductStatus.IDLE,
         status: ProductStatus.IDLE,
-        creationMethod: CreationMethod.GEN_AI,
+        creationMethod: CreationMethod.MANUAL,
         productId,
       },
     });
