@@ -2,6 +2,7 @@ import { API_KEY } from '@api/config';
 import { CacheKey } from '@api/enums/cache';
 import { MESSAGE_SHOOT_SCHEDULED_SHOT } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
+import { RichText } from '@api/helpers/RichTextEditor';
 import ShotQueue from '@api/integrations/queues/shot/queue';
 import { Redis } from '@api/integrations/redis';
 import { Scheduler } from '@api/integrations/scheduler';
@@ -9,7 +10,12 @@ import ErrorHandler from '@api/middlewares/error';
 import { AuthService } from '@api/services/auth';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
-import { Shot, ShotStatus } from '@prisma/client';
+import {
+  CreationMethod,
+  ProductStatus,
+  Shot,
+  ShotStatus,
+} from '@prisma/client';
 import { differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';

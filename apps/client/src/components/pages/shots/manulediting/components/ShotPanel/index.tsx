@@ -106,6 +106,10 @@ const SwiperPagination = () => {
   );
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiper = useSwiper();
+  const location = useParams();
+
+  const [createShot, { isLoading: isCreating }] =
+    shotsApi.useCreateShotMutation();
 
   const handleSwipeTo = (index: number) => {
     if (!swiper.isLocked) {
@@ -126,6 +130,10 @@ const SwiperPagination = () => {
     };
   }, [swiper]);
 
+  const handleCreateShot = async () => {
+    await createShot({ productId: location.productId! }).unwrap();
+  };
+
   return (
     <div className="flex items-center w-full">
       <div className="w-full max-w-[1200px] mx-auto flex items-center justify-end flex-1 space-x-2.5">
@@ -145,8 +153,10 @@ const SwiperPagination = () => {
           ))}
         </div>
         <Button
+          isLoading={isCreating}
           variant={'neutral.solid'}
           icon={<Add size={16} color="#ffffff" stroke="2" />}
+          onClick={handleCreateShot}
         >
           Add New Shot
         </Button>

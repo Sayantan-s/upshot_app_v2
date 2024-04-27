@@ -4,6 +4,8 @@ import { SHOT_ENDPOINT } from '@client/constants/rest_endpoints';
 import { sseStream } from '@client/helpers/httpClient';
 import { apolloClient } from '@client/integrations/apollo';
 import {
+  ICreateShotRequest,
+  ICreateShotResponse,
   IFetchOnboardingShotsParams,
   IPost,
   IScheduleAllRequest,

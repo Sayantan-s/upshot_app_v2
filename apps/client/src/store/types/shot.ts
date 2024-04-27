@@ -100,3 +100,8 @@ export interface IScheduleAllResponse {
   success: string[] | null;
   failed: string[] | null;
 }
+
+export type ICreateShotRequest = Pick<IShot, 'productId'>;
+export interface ICreateShotResponse {
+  shotId: string;
+}

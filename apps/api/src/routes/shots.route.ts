@@ -6,11 +6,10 @@ import express from 'express';
 
 const shotRouter = express.Router();
 
-shotRouter.get(
-  '/',
-  // validate(fetchTrgtProdShtSchema),
-  ErrorHandler.tryCatch(ShotController.fetchTargetProductShots)
-);
+shotRouter
+  .route('/')
+  .get(ErrorHandler.tryCatch(ShotController.fetchTargetProductShots))
+  .post(ErrorHandler.tryCatch(ShotController.addNewShot));
 
 shotRouter.route('/:shotId').get(ShotController.fetchShot);
 
