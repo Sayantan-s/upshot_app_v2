@@ -46,6 +46,9 @@ export class ShotController {
               not: ShotStatus.DELETED,
             },
           },
+          orderBy: {
+            createdAt: 'asc',
+          },
         },
       });
       return H.success(res, {
