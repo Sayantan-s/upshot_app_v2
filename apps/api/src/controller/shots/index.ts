@@ -72,7 +72,7 @@ export class ShotController {
           Just finished a great workout 💪 Feeling energized! #FitnessGoals #WorkoutWednesday`
         ),
         productType: ProductStatus.IDLE,
-        status: ProductStatus.IDLE,
+        status: ShotStatus.IDLE,
         creationMethod: CreationMethod.MANUAL,
         productId,
       },

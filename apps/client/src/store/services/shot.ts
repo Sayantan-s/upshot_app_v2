@@ -10,6 +10,8 @@ import {
   IPost,
   IScheduleAllRequest,
   IScheduleAllResponse,
+  IScheduleOneRequest,
+  IScheduleOneResponse,
   IShot,
   ShotStatus,
 } from '@client/store/types/shot';
@@ -120,6 +122,15 @@ export const shotsApi = api.injectEndpoints({
     >({
       query: (data) => ({
         url: SHOT_ENDPOINT.SCHEDULE_ALL(data.productId),
+        method: 'POST',
+      }),
+    }),
+    scheduleOne: builder.mutation<
+      Api.SuccessResponse<IScheduleOneResponse>,
+      IScheduleOneRequest
+    >({
+      query: (data) => ({
+        url: SHOT_ENDPOINT.SCHEDULE_ONE(data.id),
         method: 'POST',
       }),
     }),

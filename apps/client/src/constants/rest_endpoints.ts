@@ -25,6 +25,10 @@ export namespace SHOT_ENDPOINT {
     return `${SHOT_ENDPOINT.NAME}/schedule/${_productId}/all`;
   }
 
+  export function SCHEDULE_ONE(_shotId: string): string {
+    return `${_shotId}/schedule`;
+  }
+
   export function GET(_shotId: string): string {
     return `${SHOT_ENDPOINT.NAME}/${_shotId}`;
   }

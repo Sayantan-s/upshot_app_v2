@@ -95,6 +95,12 @@ export interface IDateFormatter {
   date: Date;
 }
 
+export type IScheduleOneRequest = Pick<IShot, 'id'>;
+export interface IScheduleOneResponse {
+  success: string | null;
+  failed: string | null;
+}
+
 export type IScheduleAllRequest = Pick<IShot, 'productId'>;
 export interface IScheduleAllResponse {
   success: string[] | null;
