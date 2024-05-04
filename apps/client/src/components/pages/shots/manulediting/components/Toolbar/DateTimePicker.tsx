@@ -1,12 +1,22 @@
 import { Button } from '@client/components/ui';
 import { Calendar } from '@client/components/ui/Calendar';
+import { convertDateToEpoch, convertEpochToDate } from '@client/helpers/date';
 import { useToggle } from '@client/hooks';
 import { useSelector } from '@client/store';
+import { shotsApi } from '@client/store/services/shot';
+import { shotActions } from '@client/store/slices/shots';
 import * as Popover from '@radix-ui/react-popover';
-import { addHours, addMinutes, formatDate } from 'date-fns';
+import {
+  addHours,
+  addMinutes,
+  formatDate,
+  setHours,
+  setMinutes,
+} from 'date-fns';
 import { Calendar as Datepicker, Timer1 } from 'iconsax-react';
 import { ChangeEventHandler, FC, Fragment, useEffect, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
+import { useDispatch } from 'react-redux';
 
 interface IState {
   selectedDate?: Date;
@@ -14,16 +24,12 @@ interface IState {
   mins: string;
 }
 
-interface IProps {
-  disabled: boolean;
-  onApplyDateTime: (date: Date) => void;
-}
-
-export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
+export const DateTimePicker: FC = () => {
   const { shots, currentlyEditing } = useSelector(
     (state) => state.shots.manualEdits
   );
   const currentShot = shots.entities[currentlyEditing];
+  const [updateShot, { isLoading }] = shotsApi.useUpdateShotMutation();
 
   const [dateTime, setDate] = useState<IState>({
     selectedDate: undefined,
@@ -31,9 +37,15 @@ export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
     mins: '',
   });
 
+  const [currentAction, setCurrentAction] = useState<'CLEAR' | 'UPDATE' | null>(
+    null
+  );
+
   const { selectedDate, hours, mins } = dateTime;
 
   const [finalDate, setFinalDate] = useState<Date | null>(null);
+
+  const dispatch = useDispatch();
 
   const [isOpen, { off, setState }] = useToggle();
 
@@ -49,18 +61,17 @@ export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
     let date = structuredClone(selectedDate!);
     if (key === 'selectedDate') {
       const currentdate = value as Date;
-      date = addHours(currentdate, Number(hours));
-      date = addMinutes(currentdate, Number(mins));
+      const newDateWHours = addHours(currentdate, Number(hours));
+      date = addMinutes(newDateWHours, Number(mins));
     }
-    if (key === 'hours') date = addHours(date, Number(value));
-    if (key === 'mins') date = addMinutes(date, Number(value));
+    if (key === 'hours') date = setHours(finalDate!, Number(value));
+    if (key === 'mins') date = setMinutes(finalDate!, Number(value));
     setFinalDate(date);
   };
 
   const handleChangeTime: ChangeEventHandler<HTMLInputElement> = (eve) => {
     const { name, value } = eve.target;
     const integerValue = Number(value);
-    console.log(integerValue);
     if (name === 'hours' && integerValue >= 0 && integerValue <= 23) {
       setDate((prevState) => ({ ...prevState, hours: value }));
       handleChangeFinalTime('hours', integerValue);
@@ -71,16 +82,39 @@ export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
     }
   };
 
-  const handleApplyDateTime = () => {
+  const handleApplyDateTime = async () => {
+    setCurrentAction('UPDATE');
+    const epoch = convertDateToEpoch(finalDate!);
+    const { selectedDate, ...rest } = convertEpochToDate(epoch);
+    await updateShot({
+      shotId: currentShot!.id,
+      shotInput: {
+        launchedAt: epoch,
+      },
+    });
+    dispatch(shotActions.updateLaunchDate({ date: selectedDate!, ...rest }));
     off();
-    onApplyDateTime?.(finalDate!);
+  };
+
+  const handleClear = async () => {
+    setCurrentAction('CLEAR');
+    await updateShot({
+      shotId: currentShot!.id,
+      shotInput: {
+        launchedAt: null,
+      },
+    });
+    dispatch(shotActions.updateLaunchDate({ date: null, hours: '', mins: '' }));
   };
 
   useEffect(() => {
-    console.log('render');
     if (currentShot) {
       setDate(currentShot.launchedAt!);
-      setFinalDate(new Date(currentShot.launchedAt!.selectedDate!));
+      setFinalDate(
+        currentShot.launchedAt?.selectedDate
+          ? new Date(currentShot.launchedAt.selectedDate)
+          : null
+      );
     }
   }, [currentShot]);
 
@@ -89,7 +123,7 @@ export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
       <Popover.Trigger asChild>
         <button
           className="disabled:opacity-50 flex rounded-md stroke-slate-500 items-center justify-between border shadow-sm w-72 py-2.5 px-3"
-          disabled={disabled}
+          disabled={!currentShot}
         >
           <span className={finalDate ? 'text-gray-600' : ''}>
             {finalDate ? (
@@ -148,34 +182,52 @@ export const DateTimePicker: FC<IProps> = ({ disabled, onApplyDateTime }) => {
               </div>
               <div className="space-x-3">
                 <input
-                  disabled={!selectedDate}
+                  disabled={!selectedDate || isLoading}
                   type="number"
                   placeholder="00"
                   className="disabled:opacity-60 w-[4.4rem] aspect-square text-2xl text-center text-emerald-500 placeholder:text-emerald-500/50 bg-emerald-50 focus:outline-none border border-emerald-200 rounded-lg"
                   value={hours}
                   name="hours"
                   onChange={handleChangeTime}
+                  min={'00'}
+                  max="23"
                 />
                 <input
-                  disabled={!selectedDate}
+                  disabled={!selectedDate || isLoading}
                   type="number"
                   placeholder="00"
                   className="disabled:opacity-60 w-[4.4rem] aspect-square text-2xl text-center text-slate-600 focus:outline-none border border-slate-200 rounded-lg"
                   value={mins}
                   name="mins"
                   onChange={handleChangeTime}
+                  min={'00'}
+                  max="59"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="p-2.5 border-t broder-gray-50 space-x-2 flex justify-end rounded-md">
-          <Button variant={'neutral.outline'} size={'sm'} onClick={off}>
-            Cancel
+        <div className="p-2.5 border-t broder-gray-100 bg-gray-200/40 space-x-2 flex justify-end rounded-md">
+          <Button
+            disabled={isLoading && currentAction === 'UPDATE'}
+            isLoading={isLoading && currentAction === 'CLEAR'}
+            variant={'neutral.outline'}
+            className="bg-white border border-gray-300/50"
+            size={'sm'}
+            loaderVersion="v1"
+            onClick={handleClear}
+          >
+            Clear
           </Button>
-          <Button size={'sm'} onClick={handleApplyDateTime}>
-            Save Schedule Time
+          <Button
+            size={'sm'}
+            disabled={isLoading && currentAction === 'CLEAR'}
+            isLoading={isLoading && currentAction === 'UPDATE'}
+            loaderVersion="v1"
+            onClick={handleApplyDateTime}
+          >
+            Save
           </Button>
         </div>
       </Popover.Content>
