@@ -5,10 +5,10 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import chalk from 'chalk';
-import { Express } from 'express';
 import { PubSub } from 'graphql-subscriptions';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { createServer } from 'http';
+
+import { Server } from '@api/app/server';
 import { WebSocketServer } from 'ws';
 import { Product } from './product';
 import { Shot } from './shot';
@@ -44,8 +44,8 @@ export class GQLService {
     },
   };
 
-  public static async init(app: Express) {
-    const httpServer = createServer(app);
+  public static async init() {
+    const httpServer = Server.instance.server;
     const schema = makeExecutableSchema({
       typeDefs: GQLService.schema.typeDefs,
       resolvers: GQLService.schema.resolvers,
