@@ -16,6 +16,8 @@ export const ShotController: FC<IShotControllerProps> = ({
   isActive,
 }) => {
   const [deleteShot, { isLoading }] = shotsApi.useDeleteShotMutation();
+  const [scheduleOne, { isLoading: isScheduling }] =
+    shotsApi.useScheduleOneMutation();
   const [isOpenLaunch, { off: closeLaunch, setState }] = useToggle();
   const deletShotModal = useModal({ isLoading });
 
@@ -31,6 +33,10 @@ export const ShotController: FC<IShotControllerProps> = ({
                   shot before it is finalized.`,
       onConfirm: handleDeleteShot,
     });
+
+  const handleLaunch = async () => {
+    await scheduleOne({ id: shotId }).unwrap();
+  };
 
   return (
     <div className="flex justify-end my-2 space-x-2">
@@ -77,8 +83,15 @@ export const ShotController: FC<IShotControllerProps> = ({
                 it is finalized.
               </p>
               <div className="flex justify-end mt-4">
-                <Button size={'sm'}>Launch</Button>
                 <Button
+                  size={'sm'}
+                  onClick={handleLaunch}
+                  isLoading={isScheduling}
+                >
+                  Launch
+                </Button>
+                <Button
+                  disabled={isScheduling}
                   size={'sm'}
                   variant={'neutral.ghost'}
                   onClick={closeLaunch}

@@ -1,4 +1,4 @@
-import { convertEpochToDate } from '@client/helpers/date';
+import { convertUTCEpochToDate } from '@client/helpers/date';
 import { shotsApi } from '@client/store/services/shot';
 import { IChooseToEdit, IDateFormatter, IShot } from '@client/store/types/shot';
 import {
@@ -53,7 +53,7 @@ export const ManualEditCaseReducers = {
         const shotData = action.payload.data.map((shot) => ({
           ...shot,
           launchedAt: shot.launchedAt
-            ? convertEpochToDate(shot.launchedAt)
+            ? convertUTCEpochToDate(shot.launchedAt)
             : {
                 selectedDate: undefined,
                 hours: '',

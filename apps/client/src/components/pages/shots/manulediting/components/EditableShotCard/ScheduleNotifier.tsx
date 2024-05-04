@@ -12,6 +12,10 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
     (state) => state.shots.manualEdits.shots.entities[shotId]
   );
 
+  const hours = parseInt(shot!.launchedAt!.hours);
+
+  console.log(shot?.launchedAt);
+
   return shot?.launchedAt?.selectedDate ? (
     <div
       className={`mt-4 flex items-center space-x-2 px-4 py-2 bg-emerald-100 w-max rounded-full mx-auto ${
@@ -27,8 +31,8 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
       <p className="bg-white px-3 py-1.5 rounded-full text-xs font-bold text-slate-700">
         {format(shot.launchedAt.selectedDate, 'do MMMM yyyy')}{' '}
         <span className="text-xs ml-2">
-          {shot.launchedAt.hours || 'HH'}:{shot.launchedAt.mins || 'MM'}{' '}
-          {shot.launchedAt.timeConvention}
+          {(hours > 12 ? hours - 12 : hours) || 'HH'}:
+          {shot.launchedAt.mins || 'MM'} {hours > 12 ? 'PM' : 'AM'}
         </span>
       </p>
     </div>

@@ -26,7 +26,7 @@ export namespace SHOT_ENDPOINT {
   }
 
   export function SCHEDULE_ONE(_shotId: string): string {
-    return `${_shotId}/schedule`;
+    return `${SHOT_ENDPOINT.NAME}/${_shotId}/schedule`;
   }
 
   export function GET(_shotId: string): string {

@@ -125,6 +125,7 @@ export const shotsApi = api.injectEndpoints({
         method: 'POST',
       }),
     }),
+
     scheduleOne: builder.mutation<
       Api.SuccessResponse<IScheduleOneResponse>,
       IScheduleOneRequest

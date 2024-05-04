@@ -16,7 +16,7 @@ import {
   Shot,
   ShotStatus,
 } from '@prisma/client';
-import { differenceInSeconds, format } from 'date-fns';
+import { addMinutes, differenceInSeconds, format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
 import {
@@ -28,6 +28,7 @@ import {
   IShotsScheduleRegistrationHandler,
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
+const _SERVER_URL = 'https://5cc2-119-82-104-98.ngrok-free.app';
 
 export class ShotController {
   // CRUD
@@ -113,9 +114,11 @@ export class ShotController {
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
       const UTCDate = new Date(shotData.launchedAt * 1000);
+      const offsetMinutes = UTCDate.getTimezoneOffset();
+      const dateAccordingToOffsetTime = addMinutes(UTCDate, offsetMinutes);
       const calculateDifferenceInSecs = differenceInSeconds(
-        UTCDate,
-        currentDate
+        currentDate,
+        dateAccordingToOffsetTime
       );
       if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
@@ -137,14 +140,13 @@ export class ShotController {
       };
 
       // Task 4:: Setup Cron Time
-      const minute = format(UTCDate, 'm');
-      const hour = format(UTCDate, 'H');
-      const dayOfMonth = format(UTCDate, 'd');
-      const month = format(UTCDate, 'M');
+      const minute = format(dateAccordingToOffsetTime, 'm');
+      const hour = format(dateAccordingToOffsetTime, 'H');
+      const dayOfMonth = format(dateAccordingToOffsetTime, 'd');
+      const month = format(dateAccordingToOffsetTime, 'M');
       const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
 
       // Task 5:: Create a schedule
-      const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
       const { scheduleId } = await Scheduler.client.schedules.create({
         destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
         cron: cronTime,
@@ -225,8 +227,8 @@ export class ShotController {
           const dayOfMonth = format(UTCDate, 'd');
           const month = format(UTCDate, 'M');
           const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
+
           // SubTask 4:: Create a schedule
-          const _SERVER_URL = 'https://21df-119-82-104-98.ngrok-free.app';
           const { scheduleId } = await Scheduler.client.schedules.create({
             destination: `${_SERVER_URL}/api/v1/shot/schedule/webhook`,
             cron: cronTime,

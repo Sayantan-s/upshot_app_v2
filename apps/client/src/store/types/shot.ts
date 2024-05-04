@@ -90,7 +90,7 @@ export enum TimeConvention {
 export interface IDateFormatter {
   hours: string;
   mins: string;
-  date: Date | null;
+  date: Date | undefined;
 }
 
 export type IScheduleOneRequest = Pick<IShot, 'id'>;

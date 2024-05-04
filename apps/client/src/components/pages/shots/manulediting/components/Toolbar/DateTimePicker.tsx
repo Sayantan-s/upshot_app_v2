@@ -104,7 +104,9 @@ export const DateTimePicker: FC = () => {
         launchedAt: null,
       },
     });
-    dispatch(shotActions.updateLaunchDate({ date: null, hours: '', mins: '' }));
+    dispatch(
+      shotActions.updateLaunchDate({ date: undefined, hours: '', mins: '' })
+    );
   };
 
   useEffect(() => {
