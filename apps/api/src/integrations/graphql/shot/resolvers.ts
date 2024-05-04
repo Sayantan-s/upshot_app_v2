@@ -7,6 +7,8 @@ import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
 import { Shot } from '.';
+import { GQLService } from '..';
+import { SUBSCRIPTION } from './subscriptions';
 
 const queries = {
   getShots: async (...args) => {
@@ -30,7 +32,15 @@ const mutations = {
   },
 };
 
+const subscriptions = {
+  lauchShot: {
+    subscribe: () =>
+      GQLService.pubSub.asyncIterator([SUBSCRIPTION.LAUNCH_SHOT]),
+  },
+};
+
 export class GQLShotResolver {
   static queries = queries;
   static mutations = mutations;
+  static subcriptions = subscriptions;
 }

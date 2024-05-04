@@ -1,3 +1,5 @@
+import { GQLService } from '@api/integrations/graphql';
+import { SUBSCRIPTION } from '@api/integrations/graphql/shot/subscriptions';
 import { MessageQueue } from '..';
 import { JobFn } from '../type';
 import { MessageQueueInput } from './type';
@@ -8,9 +10,12 @@ export default class ShotQueue {
   private static workerFunction: JobFn = async (job) => {
     try {
       const shot: MessageQueueInput = job.data;
-      console.log('TO BE PUT INSIDE FEED', shot);
+      GQLService.pubSub.publish(SUBSCRIPTION.LAUNCH_SHOT, {
+        lauchShot: shot,
+      });
+      console.log('SUBSCRIPTION SUCCESSFULL');
     } catch (error) {
-      console.log(error);
+      console.trace('ERROR', error);
     }
   };
   static get client() {

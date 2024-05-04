@@ -21,7 +21,7 @@ export default class Controllers {
   }
 
   static async GraphqlControllers(app: Express) {
-    const [apollo, yoga] = await GQLService.init();
+    const apollo = await GQLService.init(app);
     app.use(
       '/api/v1/gql',
       cors({
@@ -30,6 +30,5 @@ export default class Controllers {
       }),
       apollo
     );
-    app.use('/api/v1/gql/yoga', yoga);
   }
 }

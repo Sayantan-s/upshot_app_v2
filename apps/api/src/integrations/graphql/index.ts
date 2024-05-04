@@ -2,12 +2,19 @@ import { withContext } from '@api/middlewares/gql-authorization';
 import { ApolloServer } from '@apollo/server';
 
 import { expressMiddleware } from '@apollo/server/express4';
-import { RequestHandler } from 'express';
-import { YogaServerInstance, createSchema, createYoga } from 'graphql-yoga';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import chalk from 'chalk';
+import { Express } from 'express';
+import { PubSub } from 'graphql-subscriptions';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { createServer } from 'http';
+import { WebSocketServer } from 'ws';
 import { Product } from './product';
 import { Shot } from './shot';
-
 export class GQLService {
+  public static pubSub = new PubSub();
+
   private static schema = {
     typeDefs: `
         type Query{
@@ -16,6 +23,9 @@ export class GQLService {
         }
         type Mutation{
           ${Shot.mutations}
+        }
+        type Subscription {
+          ${Shot.subscriptions}
         }
         ${Product.typeDefs}
         ${Shot.typeDefs}
@@ -28,22 +38,58 @@ export class GQLService {
       Mutation: {
         ...Shot.resolvers.mutations,
       },
+      Subscription: {
+        ...Shot.resolvers.subcriptions,
+      },
     },
   };
 
-  public static async init(): Promise<
-    [RequestHandler, YogaServerInstance<object, object>]
-  > {
-    const server = new ApolloServer(GQLService.schema);
-    const yoga = createYoga({
-      schema: createSchema(GQLService.schema),
+  public static async init(app: Express) {
+    const httpServer = createServer(app);
+    const schema = makeExecutableSchema({
+      typeDefs: GQLService.schema.typeDefs,
+      resolvers: GQLService.schema.resolvers,
+    });
+    const wsServer = new WebSocketServer({
+      server: httpServer,
+      path: '/api/v1/gql',
+    });
+    const serverCleanup = useServer(
+      {
+        schema,
+        context: async () => {
+          return '';
+        },
+        onConnect: () => {
+          console.log(
+            chalk.magenta.bold('Connected to ws://localhost:8080/api/v1/gql')
+          );
+        },
+        onDisconnect() {
+          chalk.green.bold('Disconnected to ws://localhost:8080/api/v1/gql');
+        },
+      },
+      wsServer
+    );
+
+    const server = new ApolloServer({
+      schema,
+      plugins: [
+        ApolloServerPluginDrainHttpServer({ httpServer }),
+        {
+          async serverWillStart() {
+            return {
+              async drainServer() {
+                await serverCleanup.dispose();
+              },
+            };
+          },
+        },
+      ],
     });
     await server.start();
-    return [
-      expressMiddleware(server, {
-        context: withContext,
-      }),
-      yoga,
-    ];
+    return expressMiddleware(server, {
+      context: withContext,
+    });
   }
 }

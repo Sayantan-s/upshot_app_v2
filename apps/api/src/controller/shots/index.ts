@@ -28,7 +28,7 @@ import {
   IShotsScheduleRegistrationHandler,
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
-const _SERVER_URL = 'https://5cc2-119-82-104-98.ngrok-free.app';
+const _SERVER_URL = 'https://7abd-119-82-104-98.ngrok-free.app';
 
 export class ShotController {
   // CRUD

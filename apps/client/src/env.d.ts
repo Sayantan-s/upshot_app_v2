@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_FREE_ACCESS_EMAIL: string;
   readonly VITE_UPSTASH_REDIS_REST_URL: string;
   readonly VITE_UPSTASH_REDIS_REST_TOKEN: string;
+  readonly VITE_WS_ORIGIN: string;
 }
 
 interface ImportMeta {
