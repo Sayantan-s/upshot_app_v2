@@ -46,7 +46,7 @@ export const Modal: FC<PropsWithChildren<Props>> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="z-50"
+            className="z-[100]"
             ref={ref}
           >
             {children}

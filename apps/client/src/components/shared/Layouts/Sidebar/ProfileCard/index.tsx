@@ -28,7 +28,7 @@ export const ProfileCard = () => {
           alt="cover"
         />
       </div>
-      <div className="w-24 h-24 bg-red-100 transform -translate-y-1/2 -mb-[18%] border-4 z-40 border-white rounded-full overflow-hidden relative  mx-auto">
+      <div className="w-24 h-24 bg-red-100 transform -translate-y-1/2 -mb-[18%] border-4 z-10 border-white rounded-full overflow-hidden relative mx-auto">
         <img
           className="absolute w-full h-full object-cover"
           alt={`avatar`}
