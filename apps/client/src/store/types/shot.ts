@@ -75,7 +75,6 @@ export interface ILaunchedAtClientState {
   selectedDate: Date | undefined;
   hours: string;
   mins: string;
-  timeConvention: TimeConvention;
 }
 
 // ManualEditReducers:: Type
@@ -89,10 +88,9 @@ export enum TimeConvention {
   PM = 'PM',
 }
 export interface IDateFormatter {
-  timeConvention: TimeConvention;
   hours: string;
   mins: string;
-  date: Date;
+  date: Date | null;
 }
 
 export type IScheduleOneRequest = Pick<IShot, 'id'>;
