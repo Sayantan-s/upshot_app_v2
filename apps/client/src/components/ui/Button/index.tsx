@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         {!icon ? (
           isLoading ? (
             <Loader
-              variant={variant}
+              variant={variant === 'unstyled' ? 'neutral.solid' : variant}
               size={size}
               version={loaderVersion || 'v2'}
             />
@@ -64,7 +64,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
             >
               {isLoading ? (
                 <Loader
-                  variant={variant}
+                  variant={variant === 'unstyled' ? 'neutral.solid' : variant}
                   size={size || 'sm'}
                   version={loaderVersion || 'v2'}
                 />

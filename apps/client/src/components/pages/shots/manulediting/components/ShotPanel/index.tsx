@@ -142,10 +142,10 @@ const SwiperPagination = () => {
             <button
               onClick={() => handleSwipeTo(index)}
               key={shotId}
-              className={`w-6 h-6 bg-white shadow flex items-center justify-center text-xs rounded-full ${
+              className={`w-6 h-6 shadow flex items-center justify-center text-xs rounded-full ${
                 currentIndex === index
-                  ? 'bg-gray-800 text-white shadow-gray-800/20'
-                  : 'bg-white text-gray-400'
+                  ? 'bg-gray-700 text-white shadow'
+                  : 'bg-white text-gray-400 shadow'
               }`}
             >
               {index + 1}

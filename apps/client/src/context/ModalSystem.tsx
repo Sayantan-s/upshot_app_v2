@@ -32,6 +32,7 @@ interface IVariantStyles {
   color: string;
   confBtnColor: string;
   iconBg: string;
+  gradient: string;
 }
 
 const ModalContext = createContext<IContextProps>({} as IContextProps);
@@ -40,14 +41,16 @@ const styles: Record<IHandle['variant'], IVariantStyles> = {
   danger: {
     color: '#f43f5e',
     confBtnColor: 'bg-rose-600 ',
-    iconBg: 'bg-rose-50',
-    icon: <BagCross color="#f43f5e" />,
+    iconBg: 'bg-rose-500',
+    icon: <BagCross color="white" size={24} />,
+    gradient: 'bg-gradient-to-b from-rose-200 via-white to-white',
   },
   info: {
     color: '#10b981',
-    confBtnColor: '',
-    iconBg: 'bg-emerald-50',
-    icon: <InfoCircle color="#10b981" />,
+    confBtnColor: 'bg-emerald-600',
+    iconBg: 'bg-emerald-500',
+    icon: <InfoCircle color="white" size={24} />,
+    gradient: 'bg-gradient-to-b from-emerald-200 via-white to-white',
   },
 };
 
@@ -100,18 +103,25 @@ export const ModalSystem: FC<PropsWithChildren> = ({ children }) => {
     <ModalContext.Provider value={{ create, setIsLoading }}>
       {children}
       <Modal show={isOpen} onHide={off}>
-        <div className="w-[350px] flex flex-col justify-between aspect-video bg-white p-5 rounded-lg">
+        <div
+          className={`w-[350px] ${
+            variant !== '' ? styles[variant].gradient : ''
+          } border-4 border-white  flex flex-col justify-between aspect-video p-5 rounded-2xl`}
+        >
           <div>
             <header className="flex justify-between items-start">
               <div
                 className={`aspect-square ${
                   variant !== '' ? styles[variant].iconBg : ''
-                } p-2 w-14 flex items-center justify-center rounded-md`}
+                } p-2 w-14 flex items-center justify-center rounded-full`}
               >
                 {variant !== '' ? styles[variant].icon : ''}
               </div>
-              <button onClick={cleanUp}>
-                <Close size={14} className="stroke-gray-400" />
+              <button
+                onClick={cleanUp}
+                className="bg-white aspect-square p-1 rounded-full"
+              >
+                <Close size={14} className="stroke-gray-500" />
               </button>
             </header>
             <main className="mt-6">
@@ -126,6 +136,7 @@ export const ModalSystem: FC<PropsWithChildren> = ({ children }) => {
           </div>
           <footer className="flex mt-6 space-x-2">
             <Button
+              variant={'unstyled'}
               disabled={isLoading}
               className="flex-1 bg-white rounded-md shadow font-bold border border-gray-100 text-gray-500 h-10"
               onClick={handleCancel}
@@ -134,6 +145,7 @@ export const ModalSystem: FC<PropsWithChildren> = ({ children }) => {
               Cancel
             </Button>
             <Button
+              variant={'unstyled'}
               isLoading={isLoading}
               loaderVersion="v2"
               size={'md'}
