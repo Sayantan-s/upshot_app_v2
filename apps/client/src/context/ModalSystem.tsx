@@ -166,8 +166,11 @@ export const ModalSystem: FC<PropsWithChildren> = ({ children }) => {
 export const useModal = ({ isLoading }: { isLoading: boolean }) => {
   const context = useContext(ModalContext);
 
+  console.log(isLoading, 'LOADING');
+
   useEffect(() => {
-    if (isLoading) context?.setIsLoading(isLoading);
+    if (isLoading) context?.setIsLoading(true);
+    else context?.setIsLoading(false);
   }, [isLoading, context]);
 
   return context;

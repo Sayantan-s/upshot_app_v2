@@ -27,7 +27,6 @@ export const EditorBubbleMenu: FC<IEditorBubbleMenuProps> = ({
   };
 
   const handleChangeColor = (hex: string) => {
-    console.log(hex);
     editor.chain().focus().setColor(hex).run();
   };
 

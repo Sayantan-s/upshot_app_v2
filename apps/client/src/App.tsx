@@ -1,4 +1,5 @@
 import { ModalSystem } from '@client/context/ModalSystem';
+import { ToastSystem } from '@client/context/ToastSystem';
 import { Apollo } from '@client/integrations/apollo';
 import { AppRoutes } from '@client/pages/AppRoutes';
 import { store } from '@client/store';
@@ -10,7 +11,9 @@ function App() {
     <Provider store={store}>
       <Apollo>
         <ModalSystem>
-          <AppRoutes />
+          <ToastSystem>
+            <AppRoutes />
+          </ToastSystem>
         </ModalSystem>
       </Apollo>
     </Provider>

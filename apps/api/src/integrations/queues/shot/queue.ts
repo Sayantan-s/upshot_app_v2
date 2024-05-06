@@ -1,9 +1,9 @@
 import { GQLService } from '@api/integrations/graphql';
 import { SUBSCRIPTION } from '@api/integrations/graphql/shot/subscriptions';
+import chalk from 'chalk';
 import { MessageQueue } from '..';
 import { JobFn } from '../type';
 import { MessageQueueInput } from './type';
-
 export default class ShotQueue {
   private static instance: MessageQueue<MessageQueueInput> = null;
   static messageName = 'shot';
@@ -13,7 +13,7 @@ export default class ShotQueue {
       GQLService.pubSub.publish(SUBSCRIPTION.LAUNCH_SHOT, {
         lauchShot: shot,
       });
-      console.log('SUBSCRIPTION SUCCESSFULL');
+      console.log(chalk.magenta('Subscription is created!'));
     } catch (error) {
       console.trace('ERROR', error);
     }

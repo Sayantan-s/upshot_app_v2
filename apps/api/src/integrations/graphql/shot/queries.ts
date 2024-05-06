@@ -1,3 +1,4 @@
 export const queries = `#graphql
-    getShots(productId:String): [Shot!]!
+    getShotsByProductId(productId:String): [Shot!]!
+    getShots: [Shot!]!
 `;

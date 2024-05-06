@@ -137,9 +137,10 @@ export type Query = {
   __typename?: 'Query';
   getProducts: Array<Product>;
   getShots: Array<Shot>;
+  getShotsByProductId: Array<Shot>;
 };
 
-export type QueryGetShotsArgs = {
+export type QueryGetShotsByProductIdArgs = {
   productId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -186,6 +187,11 @@ export enum ShotStatus {
   Shoot = 'SHOOT',
 }
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  lauchShot: Shot;
+};
+
 export type GetAllProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllProductsQuery = {
@@ -215,6 +221,38 @@ export type UpdateShotMutationVariables = Exact<{
 export type UpdateShotMutation = {
   __typename?: 'Mutation';
   updateShot: string;
+};
+
+export type GetShotsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetShotsQuery = {
+  __typename?: 'Query';
+  getShots: Array<{
+    __typename?: 'Shot';
+    id?: string | null;
+    launchedAt?: number | null;
+    media?: Array<string | null> | null;
+    productType?: ProductStatus | null;
+    votes?: number | null;
+    content?: string | null;
+    title?: string | null;
+  }>;
+};
+
+export type SubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type SubscriptionSubscription = {
+  __typename?: 'Subscription';
+  lauchShot: {
+    __typename?: 'Shot';
+    id?: string | null;
+    launchedAt?: number | null;
+    media?: Array<string | null> | null;
+    productType?: ProductStatus | null;
+    votes?: number | null;
+    content?: string | null;
+    title?: string | null;
+  };
 };
 
 export const GetAllProductsDocument = {
@@ -332,3 +370,68 @@ export const UpdateShotDocument = {
     },
   ],
 } as unknown as DocumentNode<UpdateShotMutation, UpdateShotMutationVariables>;
+export const GetShotsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetShots' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getShots' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'media' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'productType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'votes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetShotsQuery, GetShotsQueryVariables>;
+export const SubscriptionDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'subscription',
+      name: { kind: 'Name', value: 'Subscription' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'lauchShot' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'media' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'productType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'votes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SubscriptionSubscription,
+  SubscriptionSubscriptionVariables
+>;

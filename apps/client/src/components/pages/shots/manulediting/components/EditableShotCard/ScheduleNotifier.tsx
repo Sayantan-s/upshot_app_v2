@@ -14,8 +14,6 @@ export const ScheduleNotifier: FC<IScheduleNotifierProps> = ({
 
   const hours = parseInt(shot!.launchedAt!.hours);
 
-  console.log(shot?.launchedAt);
-
   return shot?.launchedAt?.selectedDate ? (
     <div
       className={`mt-4 flex items-center space-x-2 px-4 py-2 bg-emerald-100 w-max rounded-full mx-auto ${

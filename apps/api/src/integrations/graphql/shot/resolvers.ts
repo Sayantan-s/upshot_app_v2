@@ -1,6 +1,6 @@
 import {
   MutationUpdateShotArgs,
-  QueryGetShotsArgs,
+  QueryGetShotsByProductIdArgs,
 } from '@api/__generated__/graphql';
 import { CacheKey } from '@api/enums/cache';
 import { Redis } from '@api/integrations/redis';
@@ -11,11 +11,16 @@ import { GQLService } from '..';
 import { SUBSCRIPTION } from './subscriptions';
 
 const queries = {
-  getShots: async (...args) => {
+  getShotsByProductId: async (...args) => {
     // id -> userId
-    const { productId }: QueryGetShotsArgs = args[1];
+    const { productId }: QueryGetShotsByProductIdArgs = args[1];
     const data = await ProductService.fetch({ id: productId }, { shots: true });
     return data.shots;
+  },
+
+  getShots: async () => {
+    const data = await ShotService.fetchMany();
+    return data;
   },
 };
 

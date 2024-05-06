@@ -1,12 +1,14 @@
+import { useSubscription } from '@apollo/client';
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
 import { FloatingActionButton } from '@client/components/ui/FloatingActionButton';
 import { useWindowScroll } from '@client/hooks';
-import { IPost } from '@client/store/types/shot';
+import { SUBSCRIBE_TO_NEW_SHOT_SUBSCRIPTION } from '@client/integrations/gql/shots/subscriptions';
+import { shotsApi } from '@client/store/services/shot';
 import { motion } from 'framer-motion';
 import { ChemicalGlass, Drop, ElementPlus } from 'iconsax-react';
 import { Fragment, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import Post from './Post';
 import PostFallbackLoading from './Post/Fallback';
 import { PostTool } from './PostTool';
 
@@ -16,14 +18,15 @@ enum FEED_ACTION_TYPES {
 }
 
 export const Feed = () => {
-  const { isLoading, isSuccess, data } = {
-    isLoading: true,
-    isSuccess: false,
-    data: { data: [] },
-  };
+  // const { isLoading, isSuccess, data } = {
+  //   isLoading: true,
+  //   isSuccess: false,
+  //   data: { data: [] },
+  // };
 
   const [showAdditionalStyles, setShowAdditionalStyles] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useWindowScroll(feedRef, (target) => {
     setShowAdditionalStyles(target.scrollTop > 100);
@@ -40,6 +43,22 @@ export const Feed = () => {
       navigate('/product/onboard');
   };
 
+  const {
+    data: shots,
+    isLoading,
+    isSuccess,
+  } = shotsApi.useFetchFeedShotsQuery();
+
+  useSubscription(SUBSCRIBE_TO_NEW_SHOT_SUBSCRIPTION, {
+    onData: (st) => {
+      dispatch(
+        shotsApi.util.updateQueryData('fetchFeedShots', undefined, (draft) => {
+          draft.unshift(st.data.data?.lauchShot);
+        })
+      );
+    },
+  });
+
   return (
     <div>
       <header
@@ -55,9 +74,7 @@ export const Feed = () => {
           <PostFallbackLoading value={3} />
         ) : isSuccess ? (
           <Fragment>
-            {data.data.map((post: IPost) => (
-              <Post {...post} />
-            ))}
+            {JSON.stringify(shots)}
             {/* <FloatingActionButton /> */}
           </Fragment>
         ) : null}

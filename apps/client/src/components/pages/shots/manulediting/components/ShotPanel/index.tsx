@@ -132,6 +132,8 @@ const SwiperPagination = () => {
 
   const handleCreateShot = async () => {
     await createShot({ productId: location.productId! }).unwrap();
+    swiper.slideTo(shotIds.length);
+    setCurrentIndex(shotIds.length);
   };
 
   return (
