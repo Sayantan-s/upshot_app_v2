@@ -1,14 +1,13 @@
 import { GetShotsQuery, ShotInput } from '@client/__generated__/graphql';
 import { SHOT_ENDPOINT } from '@client/constants/rest_endpoints';
-import { sseStream } from '@client/helpers/httpClient';
 import { apolloClient } from '@client/integrations/apollo';
 import { UPDATE_SHOT_MUTATION } from '@client/integrations/gql/shots/mutations';
 import { FETCH_SHOTS_FEED_QUERY } from '@client/integrations/gql/shots/queries';
+import { SUBSCRIBE_TO_NEW_SHOT_SUBSCRIPTION } from '@client/integrations/gql/shots/subscriptions';
 import {
   ICreateShotRequest,
   ICreateShotResponse,
   IFetchOnboardingShotsParams,
-  IPost,
   IScheduleAllRequest,
   IScheduleAllResponse,
   IScheduleOneRequest,
@@ -20,36 +19,32 @@ import { Tags, api } from '.';
 
 export const shotsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    posts: builder.query<Api.SuccessResponse<IPost[]>, void>({
-      query: () => '/',
-      async onCacheEntryAdded(
-        _,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
-      ) {
-        let postSSEStream: ReturnType<typeof sseStream> | null = null;
-        try {
-          await cacheDataLoaded;
-          postSSEStream = sseStream('posts', {
-            onSuccess: (eve) => {
-              updateCachedData((draft) => {
-                draft.data.unshift(JSON.parse(eve.data));
-              });
-            },
-          });
-        } catch {
-          await cacheEntryRemoved;
-        }
-        await cacheEntryRemoved;
-        postSSEStream?.close();
-      },
-    }),
-
     fetchFeedShots: builder.query<GetShotsQuery['getShots'], void>({
       queryFn: async () => {
         const data = await apolloClient.query({
           query: FETCH_SHOTS_FEED_QUERY,
         });
         return { data: data.data.getShots };
+      },
+      async onCacheEntryAdded(
+        _,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        try {
+          await cacheDataLoaded;
+          apolloClient
+            .subscribe({ query: SUBSCRIBE_TO_NEW_SHOT_SUBSCRIPTION })
+            .subscribe({
+              next: (data) => {
+                updateCachedData((draft) => {
+                  draft.unshift(data.data!.lauchShot!);
+                });
+              },
+            });
+        } catch {
+          await cacheEntryRemoved;
+        }
+        await cacheEntryRemoved;
       },
     }),
     fetchOnboardingShots: builder.query<

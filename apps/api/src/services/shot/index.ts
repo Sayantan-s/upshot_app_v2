@@ -1,26 +1,13 @@
 import prisma from '@api/integrations/prisma';
 import { Prisma } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export class ShotService {
   public static async fetch(args: Prisma.ShotFindUniqueArgs) {
     return await prisma.shot.findUnique(args);
   }
 
-  public static async fetchMany(
-    where?: Prisma.ShotWhereUniqueInput,
-    include?: Prisma.ShotInclude<DefaultArgs>,
-    select?: Prisma.ShotSelect<DefaultArgs>
-  ) {
-    if (include)
-      return await prisma.shot.findMany({
-        where,
-        include,
-      });
-    return await prisma.shot.findMany({
-      where,
-      select,
-    });
+  public static async fetchMany(args: Prisma.ShotFindManyArgs) {
+    return await prisma.shot.findMany(args);
   }
 
   public static async create(data: Prisma.ShotCreateArgs) {

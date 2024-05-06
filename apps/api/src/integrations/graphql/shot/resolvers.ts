@@ -6,6 +6,7 @@ import { CacheKey } from '@api/enums/cache';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
+import { ShotStatus } from '@prisma/client';
 import { Shot } from '.';
 import { GQLService } from '..';
 import { SUBSCRIPTION } from './subscriptions';
@@ -19,7 +20,14 @@ const queries = {
   },
 
   getShots: async () => {
-    const data = await ShotService.fetchMany();
+    const data = await ShotService.fetchMany({
+      where: {
+        status: ShotStatus.SHOOT,
+      },
+      include: {
+        product: true,
+      },
+    });
     return data;
   },
 };
