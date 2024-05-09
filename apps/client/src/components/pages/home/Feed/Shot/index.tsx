@@ -11,7 +11,7 @@ export const Shot: FC<GetShotsQuery['getShots'][number]> = ({
       <h1 className="block w-full text-lg text-slate-800 disabled:bg-transparent">
         {title}
       </h1>
-      <Editor content={content!} className="mt-2" />
+      <Editor content={content!} className="mt-2" isEditable={false} />
     </motion.div>
   );
 };
