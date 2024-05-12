@@ -11,7 +11,7 @@ export class JWTService {
     expiresIn,
   }: ISignAccessTokenParams<TMetaData>) {
     return jwt.sign(payload, ACCESS_TOKEN_SECRET!, {
-      expiresIn: expiresIn || '300s',
+      expiresIn: expiresIn || '10s',
     });
   }
 
