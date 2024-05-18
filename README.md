@@ -22,6 +22,6 @@
 
 ### 🛣️ Major flows
 
-**Shot Scheduling Design** <br />
+> **Shot Scheduling**
 
-![App Screenshot](./assets/System Design_ShotScheduling.png)
+<img src="./assets/System Design_ShotScheduling.png">
