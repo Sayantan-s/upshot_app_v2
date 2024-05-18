@@ -70,7 +70,7 @@ export const ShotPanel = () => {
         modules={[Mousewheel]}
         allowTouchMove={isNotEditing}
         spaceBetween={12}
-        slidesPerView={3}
+        slidesPerView={2.65}
         onRealIndexChange={handleSlideChange}
         direction="horizontal"
         className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"

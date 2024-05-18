@@ -158,6 +158,7 @@ export type Shot = {
   productType?: Maybe<ProductStatus>;
   status?: Maybe<ShotStatus>;
   title?: Maybe<Scalars['String']['output']>;
+  tweet?: Maybe<Scalars['Boolean']['output']>;
   updatedAt?: Maybe<Scalars['String']['output']>;
   updatedBy?: Maybe<Scalars['String']['output']>;
   votes?: Maybe<Scalars['Int']['output']>;
@@ -190,27 +191,6 @@ export enum ShotStatus {
 export type Subscription = {
   __typename?: 'Subscription';
   lauchShot: Shot;
-};
-
-export type GetAllProductsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetAllProductsQuery = {
-  __typename?: 'Query';
-  getProducts: Array<{
-    __typename?: 'Product';
-    productName?: string | null;
-    launchedAt?: string | null;
-    createdAt?: string | null;
-    createdBy?: string | null;
-    tags?: Array<InterestsType | null> | null;
-    id?: string | null;
-    price?: {
-      __typename?: 'ProductPrice';
-      amount?: number | null;
-      currency?: ProductPriceCurrency | null;
-      soldAt?: number | null;
-    } | null;
-  }>;
 };
 
 export type UpdateShotMutationVariables = Exact<{
@@ -255,57 +235,27 @@ export type SubscriptionSubscription = {
   };
 };
 
-export const GetAllProductsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetAllProducts' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getProducts' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'productName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdBy' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'price' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'amount' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'currency' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'soldAt' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetAllProductsQuery, GetAllProductsQueryVariables>;
+export type GetAllProductsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllProductsQuery = {
+  __typename?: 'Query';
+  getProducts: Array<{
+    __typename?: 'Product';
+    productName?: string | null;
+    launchedAt?: string | null;
+    createdAt?: string | null;
+    createdBy?: string | null;
+    tags?: Array<InterestsType | null> | null;
+    id?: string | null;
+    price?: {
+      __typename?: 'ProductPrice';
+      amount?: number | null;
+      currency?: ProductPriceCurrency | null;
+      soldAt?: number | null;
+    } | null;
+  }>;
+};
+
 export const UpdateShotDocument = {
   kind: 'Document',
   definitions: [
@@ -435,3 +385,54 @@ export const SubscriptionDocument = {
   SubscriptionSubscription,
   SubscriptionSubscriptionVariables
 >;
+export const GetAllProductsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllProducts' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProducts' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'productName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdBy' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'price' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'amount' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currency' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'soldAt' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllProductsQuery, GetAllProductsQueryVariables>;

@@ -159,6 +159,7 @@ model Shot {
   updatedAt      DateTime        @default(now()) @updatedAt
   createdBy      String          @default("system")
   updatedBy      String          @default("system")
+  tweet          Boolean         @default(false)
 
   // Relation::
 

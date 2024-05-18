@@ -31,6 +31,7 @@ export class GQLShotTypeDefs {
         updatedBy:String
         productId:String
         product:Product
+        tweet:Boolean
       }
 
       input ShotInput{

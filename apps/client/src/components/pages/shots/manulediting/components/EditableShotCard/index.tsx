@@ -3,7 +3,6 @@ import { useUser } from '@client/hooks';
 import { shotsApi } from '@client/store/services/shot';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { Editor as EditorClass } from '@tiptap/react';
-import { GalleryTick } from 'iconsax-react';
 import {
   ChangeEventHandler,
   FC,
@@ -15,6 +14,7 @@ import {
 import { useSwiper } from 'swiper/react';
 import { ScheduleNotifier } from './ScheduleNotifier';
 import { ShotController } from './ShotController';
+import { ShotImage } from './ShotImage';
 import { IProps } from './type';
 
 export const EditableShotCard: FC<IProps> = ({
@@ -38,6 +38,7 @@ export const EditableShotCard: FC<IProps> = ({
   const editorRef = useRef() as MutableRefObject<EditorClass>;
   const [updateShot] = shotsApi.useUpdateShotMutation();
   const updateShotAsync = useDebounceCallback(updateShot, 500, false);
+  const [charCount, setCharCount] = useState([0, 0]);
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (eve) => {
     eve.preventDefault();
@@ -81,6 +82,11 @@ export const EditableShotCard: FC<IProps> = ({
     });
   };
 
+  const handleSetCharacterCount = (...args: number[]) => {
+    const [chars, , limit] = args;
+    setCharCount([chars, limit]);
+  };
+
   return (
     <div>
       <ShotController
@@ -89,6 +95,7 @@ export const EditableShotCard: FC<IProps> = ({
         allowEdit={allowEdit}
         onSave={handleSave}
         onEdit={handleEdit}
+        characterCount={charCount}
       />
       <div
         className={`bg-white shadow-md shadow-slate-900/5 aspect-square border rounded-lg rouned-lg whitespace-nowrap flex flex-col ${
@@ -127,13 +134,12 @@ export const EditableShotCard: FC<IProps> = ({
             isEditable={allowEdit}
             ref={editorRef}
             onChangeRichTextContent={handleChangeShotContent}
-            className="mt-2"
+            className="mt-2 h-36 overflow-y-scroll"
+            characterCounter={handleSetCharacterCount}
           />
         </form>
-        <div id="img" className="flex-1 p-3 overflow-hidden">
-          <div className="w-full h-full filter blur-md bg-gray-50 rounded-md flex items-center justify-center">
-            <GalleryTick variant="Bulk" size={64} color="#0f172a80" />
-          </div>
+        <div className="p-3">
+          <ShotImage />
         </div>
       </div>
       <ScheduleNotifier shotId={id} disabled={disabled} />

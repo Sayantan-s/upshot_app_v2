@@ -22,4 +22,5 @@ export interface IShotControllerProps {
   allowEdit: boolean;
   shotId: string;
   isActive?: boolean;
+  characterCount?: number[];
 }
