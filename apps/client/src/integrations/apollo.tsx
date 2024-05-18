@@ -1,9 +1,11 @@
 import {
   ApolloClient,
+  ApolloLink,
   ApolloProvider,
   InMemoryCache,
+  NextLink,
+  Operation,
   createHttpLink,
-  from,
   fromPromise,
   split,
 } from '@apollo/client';
@@ -11,10 +13,28 @@ import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { getRefreshToken } from '@client/apis/refreshtoken';
 import { store } from '@client/store';
-import { authApi } from '@client/store/services/auth';
+import { saveCredentials } from '@client/store/slices/auth';
+import { IRegisterResponse } from '@client/store/types/auth';
 import { createClient } from 'graphql-ws';
 import { FC, PropsWithChildren } from 'react';
+
+function refreshAndResolvePendingRequests(
+  res: void | Api.SuccessResponse<IRegisterResponse>,
+  operation: Operation,
+  forward: NextLink
+) {
+  const oldHeaders = operation.getContext().headers;
+  operation.setContext({
+    headers: {
+      ...oldHeaders,
+      authorization: `Bearer ${res?.data.accessToken}`,
+    },
+  });
+  store.dispatch(saveCredentials(res!));
+  return forward(operation);
+}
 
 const authLink = setContext((_, { headers }) => {
   const token = store.getState().auth.accessToken;
@@ -31,23 +51,16 @@ const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        if (err.extensions.code === 401 && store) {
-          fromPromise(
-            store
-              .dispatch(
-                authApi.endpoints.refresh.initiate({ resetOnFailure: false })
-              )
-              .then(() => {
-                const oldHeaders = operation.getContext().headers;
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    authorization: store.getState().auth.accessToken,
-                  },
-                });
-                return forward(operation);
-              })
-          );
+        if (err.extensions.code === 401) {
+          return fromPromise(
+            getRefreshToken().catch(() => {
+              return;
+            })
+          )
+            .filter((value) => Boolean(value))
+            .flatMap((data) =>
+              refreshAndResolvePendingRequests(data, operation, forward)
+            );
         }
       }
     }
@@ -74,7 +87,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  from([authLink, errorLink, httpLink])
+  ApolloLink.from([errorLink, authLink, httpLink])
 );
 
 export const apolloClient = new ApolloClient({
