@@ -16,7 +16,11 @@ export class Redis {
   constructor() {
     const r = new RedisDB(this.URL);
     this.cache = global.redis || r;
-    if (process.env.NODE_ENV === 'development') global.redis = this.cache;
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.NODE_ENV === 'local'
+    )
+      global.redis = this.cache;
     this.cache.on('connect', () => {
       console.log(chalk.blue.bgGreenBright.bold('Connected to Redis...'));
     });

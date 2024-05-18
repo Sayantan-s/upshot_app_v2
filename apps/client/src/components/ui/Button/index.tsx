@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import { ReactNode, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
-import { Loader } from "../Loader";
-import { styles } from "./styles";
-import { Props } from "./types";
+import { motion } from 'framer-motion';
+import { ReactNode, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { Loader } from '../Loader';
+import { styles } from './styles';
+import { Props } from './types';
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
   (
@@ -18,7 +18,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       children,
       icon,
       iconPlacement,
-      loaderVersion = "v2",
+      loaderVersion = 'v2',
       ...rest
     },
     ref
@@ -34,7 +34,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           fullWidth,
           rounded,
           className: twMerge(
-            iconPlacement ? "justify-between" : "justify-center",
+            iconPlacement ? 'justify-between' : 'justify-center',
             className
           ),
         })}
@@ -44,9 +44,9 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         {!icon ? (
           isLoading ? (
             <Loader
-              variant={variant}
+              variant={variant === 'unstyled' ? 'neutral.solid' : variant}
               size={size}
-              version={loaderVersion || "v2"}
+              version={loaderVersion || 'v2'}
             />
           ) : (
             (children as ReactNode)
@@ -55,18 +55,18 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
           <>
             <span
               className={`${
-                iconPlacement === "right"
-                  ? "order-1 ml-1"
-                  : iconPlacement === "left"
-                  ? "order-0 mr-1"
-                  : ""
+                iconPlacement === 'right'
+                  ? 'order-1 ml-1'
+                  : iconPlacement === 'left'
+                  ? 'order-0 mr-1'
+                  : ''
               } inline-block`}
             >
               {isLoading ? (
                 <Loader
-                  variant={variant}
-                  size={size || "sm"}
-                  version={loaderVersion || "v2"}
+                  variant={variant === 'unstyled' ? 'neutral.solid' : variant}
+                  size={size || 'sm'}
+                  version={loaderVersion || 'v2'}
                 />
               ) : (
                 icon

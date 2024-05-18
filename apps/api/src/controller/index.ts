@@ -21,14 +21,14 @@ export default class Controllers {
   }
 
   static async GraphqlControllers(app: Express) {
-    const gql = await GQLService.init();
+    const apollo = await GQLService.init();
     app.use(
       '/api/v1/gql',
       cors({
         origin: CLIENT_ORIGIN,
         credentials: true,
       }),
-      gql
+      apollo
     );
   }
 }

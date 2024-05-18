@@ -13,6 +13,7 @@ const prisma =
     log: ['info'],
   });
 
-if (process.env.NODE_ENV === 'development') global.prisma = prisma;
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local')
+  global.prisma = prisma;
 
 export default prisma;

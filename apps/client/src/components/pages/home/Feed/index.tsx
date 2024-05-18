@@ -1,14 +1,13 @@
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
 import { FloatingActionButton } from '@client/components/ui/FloatingActionButton';
 import { useWindowScroll } from '@client/hooks';
-import { IPost } from '@client/store/types/shot';
+import { shotsApi } from '@client/store/services/shot';
 import { motion } from 'framer-motion';
 import { ChemicalGlass, Drop, ElementPlus } from 'iconsax-react';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import Post from './Post';
 import PostFallbackLoading from './Post/Fallback';
-import { PostTool } from './PostTool';
+import { Shot } from './Shot';
 
 enum FEED_ACTION_TYPES {
   PRODUCT_ONBOARD = 'PRODUCT_ONBOARD',
@@ -16,14 +15,15 @@ enum FEED_ACTION_TYPES {
 }
 
 export const Feed = () => {
-  const { isLoading, isSuccess, data } = {
-    isLoading: true,
-    isSuccess: false,
-    data: { data: [] },
-  };
+  // const { isLoading, isSuccess, data } = {
+  //   isLoading: true,
+  //   isSuccess: false,
+  //   data: { data: [] },
+  // };
 
   const [showAdditionalStyles, setShowAdditionalStyles] = useState(false);
   const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
   useWindowScroll(feedRef, (target) => {
     setShowAdditionalStyles(target.scrollTop > 100);
@@ -40,6 +40,12 @@ export const Feed = () => {
       navigate('/product/onboard');
   };
 
+  const {
+    data: shots,
+    isLoading,
+    isSuccess,
+  } = shotsApi.useFetchFeedShotsQuery();
+
   return (
     <div>
       <header
@@ -49,17 +55,11 @@ export const Feed = () => {
           Hey, <span className="text-xl text-slate-300">Sayantan</span>{' '}
         </h1>
       </header>
-      <PostTool />
       <motion.div className="mt-4 space-y-3 pl-4 relative">
         {isLoading ? (
           <PostFallbackLoading value={3} />
         ) : isSuccess ? (
-          <Fragment>
-            {data.data.map((post: IPost) => (
-              <Post {...post} />
-            ))}
-            {/* <FloatingActionButton /> */}
-          </Fragment>
+          shots.map((shot) => <Shot {...shot} key={shot.id} />)
         ) : null}
         <FloatingActionButton
           onSelect={handleSelectWhatAction}

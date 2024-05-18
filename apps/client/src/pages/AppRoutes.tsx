@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
             </Route>
           </Route>
           <Route path="product/onboard" element={<ProductUpload />} />
-          <Route path="product/edit/:productId" element={<ManualEdits />} />
+          <Route path="product/:productId/edit" element={<ManualEdits />} />
         </Route>
       </Route>
       <Route path="*" element={<ErrorPage />} />

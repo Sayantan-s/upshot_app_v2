@@ -10,11 +10,11 @@ import { serverless } from '.';
 export const generatePosts = async (
   data: Pick<Product, 'productName' | 'productMoto'>
 ) => {
-  const isDevelopment = NODE_ENV === 'development';
+  const isLocal = NODE_ENV === 'local';
   const res = await serverless.post<IGenaiPost[]>('/posts/generate', data, {
     headers: {
       'x-api-key': SERVERLESS_API_KEY,
-      ...(isDevelopment ? { 'x-test-key': GEN_POSTS_DEV_TEST_API_KEY } : {}),
+      ...(isLocal ? { 'x-test-key': GEN_POSTS_DEV_TEST_API_KEY } : {}),
     },
   });
   return res.data;

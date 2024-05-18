@@ -20,11 +20,11 @@ export default class ValidationSchema {
           message: 'Should contain letters and numbers!',
         }),
       email: z
-        .string()
+        .string({ required_error: 'Email is required!' })
         .nonempty('Email is required!')
         .email('Email format is not valid!'),
       pwd: z
-        .string()
+        .string({ required_error: 'Password is required!' })
         .nonempty('Password is required!')
         .min(8, { message: 'Password should be more than 7 characters!' })
         .max(20, { message: 'Password should be less than 21 characters!' }),
@@ -66,7 +66,7 @@ export default class ValidationSchema {
         message: 'Product description cannot exceed 300 characters.',
       }),
     productPrice: z.coerce
-      .number()
+      .number({ required_error: 'Product Price Required!' })
       .positive({ message: 'You cannot add a negative amount' })
       .min(99, {
         message: 'Minimum price should 99',
@@ -93,7 +93,9 @@ export default class ValidationSchema {
   });
 
   public static productMedia = z.object({
-    productLogo: z.string().nonempty({ message: 'Product Logo is required!' }),
+    productLogo: z
+      .string({ required_error: 'Product Logo required!' })
+      .nonempty({ message: 'Product Logo is required!' }),
     productCover: z
       .string()
       .nonempty({ message: 'Product Cover is required!' }),

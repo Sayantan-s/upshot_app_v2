@@ -8,13 +8,13 @@ import {
 import { saveCredentials } from '../slices/auth';
 import { IRefreshResponse } from '../types/auth';
 
-export enum ProductTags {
+export enum Tags {
   PRODUCT = 'PRODUCT',
-  PRODUCTS = 'PRODUCTS',
+  SHOT = 'SHOT',
 }
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_SERVER_ORIGIN,
+  baseUrl: '/api/v1',
   credentials: 'include',
   prepareHeaders: (headers, api) => {
     const { auth } = api.getState() as RootState;
@@ -44,6 +44,6 @@ export const baseQueryWithReAuth: BaseQueryFn = async (
 
 export const api = createApi({
   baseQuery: baseQueryWithReAuth,
-  endpoints: (builder) => ({}),
-  tagTypes: [ProductTags.PRODUCT, ProductTags.PRODUCTS],
+  endpoints: () => ({}),
+  tagTypes: [Tags.PRODUCT, Tags.SHOT],
 });

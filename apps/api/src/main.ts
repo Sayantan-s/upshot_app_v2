@@ -19,6 +19,8 @@ declare module 'node:http' {
 async function main() {
   const { app } = Server.init();
 
+  Server.serveFrontend();
+
   // Middlewares [:: Common]
   Middlewares.commonMiddlewares(app);
 

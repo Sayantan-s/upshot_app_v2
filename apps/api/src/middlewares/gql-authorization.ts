@@ -32,7 +32,7 @@ const withAuthorization = async (req: Request) => {
     const userMetaData = await AuthService.jwt.verifyAccessToken(access_token);
     return userMetaData;
   } catch (error) {
-    throw new GraphQLError('you are not logged in', {
+    throw new GraphQLError('Unauthorized', {
       extensions: {
         code: 401,
         message: 'Unauthorized',

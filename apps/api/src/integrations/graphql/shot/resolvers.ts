@@ -1,19 +1,34 @@
 import {
   MutationUpdateShotArgs,
-  QueryGetShotsArgs,
+  QueryGetShotsByProductIdArgs,
 } from '@api/__generated__/graphql';
 import { CacheKey } from '@api/enums/cache';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
+import { ShotStatus } from '@prisma/client';
 import { Shot } from '.';
+import { GQLService } from '..';
+import { SUBSCRIPTION } from './subscriptions';
 
 const queries = {
-  getShots: async (...args) => {
+  getShotsByProductId: async (...args) => {
     // id -> userId
-    const { productId }: QueryGetShotsArgs = args[1];
+    const { productId }: QueryGetShotsByProductIdArgs = args[1];
     const data = await ProductService.fetch({ id: productId }, { shots: true });
     return data.shots;
+  },
+
+  getShots: async () => {
+    const data = await ShotService.fetchMany({
+      where: {
+        status: ShotStatus.SHOOT,
+      },
+      include: {
+        product: true,
+      },
+    });
+    return data;
   },
 };
 
@@ -30,7 +45,15 @@ const mutations = {
   },
 };
 
+const subscriptions = {
+  lauchShot: {
+    subscribe: () =>
+      GQLService.pubSub.asyncIterator([SUBSCRIPTION.LAUNCH_SHOT]),
+  },
+};
+
 export class GQLShotResolver {
   static queries = queries;
   static mutations = mutations;
+  static subcriptions = subscriptions;
 }

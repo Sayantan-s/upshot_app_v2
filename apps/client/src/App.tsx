@@ -1,13 +1,20 @@
+import { ModalSystem } from '@client/context/ModalSystem';
+import { ToastSystem } from '@client/context/ToastSystem';
+import { Apollo } from '@client/integrations/apollo';
 import { AppRoutes } from '@client/pages/AppRoutes';
 import { store } from '@client/store';
 import { Provider } from 'react-redux';
-import { Apollo } from './integrations/apollo';
 
 function App() {
+  console.log(import.meta.env);
   return (
     <Provider store={store}>
       <Apollo>
-        <AppRoutes />
+        <ModalSystem>
+          <ToastSystem>
+            <AppRoutes />
+          </ToastSystem>
+        </ModalSystem>
       </Apollo>
     </Provider>
   );

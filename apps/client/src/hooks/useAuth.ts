@@ -10,7 +10,7 @@ export type TokenPayload = Pick<User, 'newUser' | 'userName' | 'email' | 'id'>;
 
 type JWTMetaData = TokenPayload & JwtPayload;
 
-const parseJWTToken = (accessToken: string): JWTMetaData =>
+export const parseJWTToken = (accessToken: string): JWTMetaData =>
   JSON.parse(atob(accessToken.split('.')[1]));
 
 export const useAuth = () => {

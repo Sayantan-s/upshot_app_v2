@@ -1,11 +1,6 @@
-import { convertEpochToDate } from '@client/helpers/date';
+import { convertUTCEpochToDate } from '@client/helpers/date';
 import { shotsApi } from '@client/store/services/shot';
-import {
-  IChooseToEdit,
-  IDateFormatter,
-  IShot,
-  TimeConvention,
-} from '@client/store/types/shot';
+import { IChooseToEdit, IDateFormatter, IShot } from '@client/store/types/shot';
 import {
   ActionReducerMapBuilder,
   Draft,
@@ -34,8 +29,6 @@ export const ManualEditCaseReducers = {
         action.payload.hours;
       state.manualEdits.shots.entities[shotId]!.launchedAt!.mins =
         action.payload.mins;
-      state.manualEdits.shots.entities[shotId]!.launchedAt!.timeConvention =
-        action.payload.timeConvention;
     },
 
     flushCurrentlyEditing: (state: Draft<ShotState>) => {
@@ -60,15 +53,26 @@ export const ManualEditCaseReducers = {
         const shotData = action.payload.data.map((shot) => ({
           ...shot,
           launchedAt: shot.launchedAt
-            ? convertEpochToDate(shot.launchedAt)
+            ? convertUTCEpochToDate(shot.launchedAt)
             : {
                 selectedDate: undefined,
-                timeConvention: TimeConvention.AM,
                 hours: '',
                 mins: '',
               },
         }));
         shotsAdapter.setAll(state.manualEdits.shots, shotData);
+      }
+    );
+
+    // Delete editing shot
+    builder.addMatcher(
+      shotsApi.endpoints.deleteShot.matchFulfilled,
+      (state, action) => {
+        state.manualEdits.shots.isLoading = false;
+        shotsAdapter.removeOne(
+          state.manualEdits.shots,
+          action.meta.arg.originalArgs.shotId
+        );
       }
     );
   },

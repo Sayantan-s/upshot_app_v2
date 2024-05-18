@@ -44,6 +44,7 @@ export enum ShotStatus {
   IDLE = 'IDLE',
   SCHEDULED = 'SCHEDULED',
   SHOOT = 'SHOOT',
+  DELETED = 'DELETED',
 }
 
 export interface IShot {
@@ -74,7 +75,6 @@ export interface ILaunchedAtClientState {
   selectedDate: Date | undefined;
   hours: string;
   mins: string;
-  timeConvention: TimeConvention;
 }
 
 // ManualEditReducers:: Type
@@ -88,8 +88,24 @@ export enum TimeConvention {
   PM = 'PM',
 }
 export interface IDateFormatter {
-  timeConvention: TimeConvention;
   hours: string;
   mins: string;
-  date: Date;
+  date: Date | undefined;
+}
+
+export type IScheduleOneRequest = Pick<IShot, 'id'>;
+export interface IScheduleOneResponse {
+  success: string | null;
+  failed: string | null;
+}
+
+export type IScheduleAllRequest = Pick<IShot, 'productId'>;
+export interface IScheduleAllResponse {
+  success: string[] | null;
+  failed: string[] | null;
+}
+
+export type ICreateShotRequest = Pick<IShot, 'productId'>;
+export interface ICreateShotResponse {
+  shotId: string;
 }

@@ -48,7 +48,7 @@ const Component: FC = () => {
   const [finaliseProduct, { isLoading }] = productApi.useFinaliseMutation();
   const handleFinalise = async () => {
     await finaliseProduct({ id: state.productId });
-    navigate(`/product/edit/${state.productId}`);
+    navigate(`/product/${state.productId}/edit`);
   };
 
   const inOnboardingMode = useMemo(

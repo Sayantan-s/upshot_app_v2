@@ -52,3 +52,8 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+.editor-content span[style*='color'] strong {
+  font-weight: bold !important;
+  color: inherit;
+}

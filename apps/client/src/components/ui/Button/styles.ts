@@ -3,6 +3,7 @@ import { cva } from 'class-variance-authority';
 export const styles = cva('font-semibold flex items-center cursor-pointer', {
   variants: {
     variant: {
+      unstyled: '',
       'primary.solid':
         'bg-emerald-500 text-emerald-50 hover:bg-emerald-600/90 border border-emerald-400',
       'secondary.solid':
