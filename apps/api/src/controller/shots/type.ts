@@ -1,13 +1,14 @@
-import { ArchiveStatus } from '@prisma/client';
 import { RequestHandler } from 'express';
 
 // Product Fetch
+
+type IBooleanParams = 'true' | 'false';
 
 export type IShotsFetchHandler = RequestHandler<
   unknown,
   unknown,
   unknown,
-  { productId: string; archiveStatus: ArchiveStatus }
+  { productId: string; isArchived: IBooleanParams }
 >;
 
 export type IShotsScheduleRegistrationHandler = RequestHandler<

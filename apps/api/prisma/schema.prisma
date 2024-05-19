@@ -165,7 +165,7 @@ model Shot {
   createdBy      String          @default("system")
   updatedBy      String          @default("system")
   tweet          Boolean         @default(false)
-  archiveStatus  ArchiveStatus   @default(UNARCHIVE)
+  isArchived     Boolean         @default(false)
 
   // Relation::
 
