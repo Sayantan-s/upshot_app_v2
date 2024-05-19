@@ -2,6 +2,7 @@ import { Button } from '@client/components/ui';
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
+import { ArchiveStatus } from '@client/store/types/shot';
 import { Add } from 'iconsax-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -16,6 +17,7 @@ import {
 } from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
 import { Skeleton } from '../EditableShotCard/Skeleton';
+import { ArchiveToggler } from './ArchiveToggler';
 
 /**
  * Once one post is edit clicked
@@ -37,9 +39,13 @@ export const ShotPanel = () => {
   );
   const {
     entities: data,
-    ids: shotIds,
     isLoading,
+    archived,
+    unArchived,
   } = useSelector((state) => state.shots.manualEdits.shots);
+  const { archived: archiveStatus } = useSelector(
+    (state) => state.shots.manualEdits
+  );
   const dispatch = useDispatch();
 
   const currentlyEditing = useSelector(
@@ -63,6 +69,9 @@ export const ShotPanel = () => {
   const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {
     !Number.isNaN(swiper.realIndex) && setActiveSlideIndex(swiper.realIndex);
   };
+
+  const shotIds =
+    archiveStatus === ArchiveStatus.ARCHIVED ? archived : unArchived;
 
   return (
     <div className="flex justify-center flex-col h-full">
@@ -103,7 +112,11 @@ export const ShotPanel = () => {
         <div
           className={`w-1/4 h-full absolute right-0 z-40 bg-gradient-to-r from-white/0 via-white/50 to-white`}
         />
-        <div slot="container-start" className="mb-10 z-50 w-full">
+        <div
+          slot="container-start"
+          className="mb-10 flex items-center z-50 w-full"
+        >
+          <ArchiveToggler />
           <SwiperPagination />
         </div>
       </Swiper>

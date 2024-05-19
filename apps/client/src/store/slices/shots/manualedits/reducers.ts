@@ -1,6 +1,11 @@
 import { convertUTCEpochToDate } from '@client/helpers/date';
 import { shotsApi } from '@client/store/services/shot';
-import { IChooseToEdit, IDateFormatter, IShot } from '@client/store/types/shot';
+import {
+  ArchiveStatus,
+  IChooseToEdit,
+  IDateFormatter,
+  IShot,
+} from '@client/store/types/shot';
 import {
   ActionReducerMapBuilder,
   Draft,
@@ -17,6 +22,12 @@ export const ManualEditCaseReducers = {
     ) => {
       const { chosenEditingShotId } = action.payload;
       state.manualEdits.currentlyEditing = chosenEditingShotId;
+    },
+    setArchivedStatus: (
+      state: Draft<ShotState>,
+      action: PayloadAction<ArchiveStatus>
+    ) => {
+      state.manualEdits.archived = action.payload;
     },
     updateLaunchDate: (
       state: Draft<ShotState>,
@@ -61,6 +72,10 @@ export const ManualEditCaseReducers = {
               },
         }));
         shotsAdapter.setAll(state.manualEdits.shots, shotData);
+        shotData.forEach((shot) => {
+          if (shot.isArchived) state.manualEdits.shots.archived.push(shot.id);
+          else state.manualEdits.shots.unArchived.push(shot.id);
+        });
       }
     );
 
