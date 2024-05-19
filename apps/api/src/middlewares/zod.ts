@@ -18,6 +18,7 @@ export const validate =
         statusCode: 400,
         data: {
           message: 'Invalid Request Schema',
+          error,
         },
       });
     }

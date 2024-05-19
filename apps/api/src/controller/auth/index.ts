@@ -71,7 +71,10 @@ export class AuthController {
       email: true,
       userName: true,
       newUser: true,
+      id: true,
     });
+    console.log(user);
+
     if (!user) throw new ErrorHandler(401, 'user is not registered!');
     const isMatched = await AuthService.pwd.match(pwd, user.pwd); // Hash password using bcrypt
     if (isMatched) {

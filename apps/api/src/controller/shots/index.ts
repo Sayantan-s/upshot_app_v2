@@ -300,4 +300,17 @@ export class ShotController {
       data: 'Success',
     });
   };
+  public static updateAll = async (_, res) => {
+    await ShotService.updateMany(
+      {},
+      {
+        isArchived: false,
+        tweet: false,
+      }
+    );
+    return H.success(res, {
+      statusCode: 200,
+      data: 'Updated All Collections',
+    });
+  };
 }

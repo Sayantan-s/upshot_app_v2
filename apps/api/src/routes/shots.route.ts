@@ -27,4 +27,8 @@ shotRouter
   .route('/schedule/:productId/all')
   .post(ShotController.shotScheduleAllRegistrationHandler);
 
+// shotRouter
+//   .route('/update-all')
+//   .patch(ShotController.updateAll)
+
 export default shotRouter;

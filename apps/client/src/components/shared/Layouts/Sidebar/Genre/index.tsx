@@ -23,13 +23,18 @@ export const Genre = () => {
           renderTemplate={({ displayValue, value, active }) => (
             <button
               key={value}
-              className={`flex space-x-1 items-center border px-4 py-2 rounded-full group ${
-                active ? 'bg-slate-900' : 'bg-white'
-              } hover:bg-slate-900 hover:text-slate-50`}
+              className={`flex space-x-1 items-center border border-green-200 px-6 py-2.5 rounded-full group ${
+                active
+                  ? 'bg-[rgb(16,185,129)] hover:bg-[rgb(16,185,129)]'
+                  : 'bg-white'
+              } hover:bg-green-300 hover:text-white`}
             >
-              <Hashtag size={14} />
+              <Hashtag
+                size={14}
+                color={`${active ? 'white ' : 'rgb(16,185,129)'}`}
+              />
               <span
-                className={`group-hover:text-slate-50 ${
+                className={`group-hover:text-white ${
                   active ? 'text-slate-50' : ''
                 }`}
               >
