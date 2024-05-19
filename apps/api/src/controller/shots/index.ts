@@ -11,6 +11,7 @@ import { AuthService } from '@api/services/auth';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
 import {
+  ArchiveStatus,
   CreationMethod,
   ProductStatus,
   Shot,
@@ -36,7 +37,7 @@ export class ShotController {
     req,
     res
   ) => {
-    const { productId } = req.query;
+    const { productId, archiveStatus = ArchiveStatus.UNARCHIVE } = req.query;
     const shotCreationStatus = await Redis.client.cache.get(productId);
     const areShotsSuccessfullyCreated = shotCreationStatus === null;
     if (areShotsSuccessfullyCreated) {
@@ -46,6 +47,7 @@ export class ShotController {
             status: {
               not: ShotStatus.DELETED,
             },
+            archiveStatus,
           },
           orderBy: {
             createdAt: 'asc',

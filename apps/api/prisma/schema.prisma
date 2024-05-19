@@ -145,6 +145,11 @@ enum CreationMethod {
   MANUAL
 }
 
+enum ArchiveStatus {
+  ARCHIVE
+  UNARCHIVE
+}
+
 model Shot {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
   title          String
@@ -160,6 +165,7 @@ model Shot {
   createdBy      String          @default("system")
   updatedBy      String          @default("system")
   tweet          Boolean         @default(false)
+  archiveStatus  ArchiveStatus   @default(UNARCHIVE)
 
   // Relation::
 

@@ -29,6 +29,11 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
+export enum ArchiveStatus {
+  Archive = 'ARCHIVE',
+  Unarchive = 'UNARCHIVE',
+}
+
 export type Config = {
   __typename?: 'Config';
   area?: Maybe<MediaCropArea>;
@@ -146,6 +151,7 @@ export type QueryGetShotsByProductIdArgs = {
 
 export type Shot = {
   __typename?: 'Shot';
+  archiveStatus?: Maybe<ArchiveStatus>;
   content?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['String']['output']>;
   createdBy?: Maybe<Scalars['String']['output']>;

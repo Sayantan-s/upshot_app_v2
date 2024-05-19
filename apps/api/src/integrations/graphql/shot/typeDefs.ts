@@ -12,6 +12,11 @@ export class GQLShotTypeDefs {
       MANUAL
     }
 
+    enum ArchiveStatus {
+      ARCHIVE
+      UNARCHIVE
+    }
+
     `;
   public static types = `#graphql
       # scalar Date
@@ -32,6 +37,7 @@ export class GQLShotTypeDefs {
         productId:String
         product:Product
         tweet:Boolean
+        archiveStatus:ArchiveStatus
       }
 
       input ShotInput{

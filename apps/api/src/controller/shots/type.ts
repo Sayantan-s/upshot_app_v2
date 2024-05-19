@@ -1,3 +1,4 @@
+import { ArchiveStatus } from '@prisma/client';
 import { RequestHandler } from 'express';
 
 // Product Fetch
@@ -6,7 +7,7 @@ export type IShotsFetchHandler = RequestHandler<
   unknown,
   unknown,
   unknown,
-  { productId: string }
+  { productId: string; archiveStatus: ArchiveStatus }
 >;
 
 export type IShotsScheduleRegistrationHandler = RequestHandler<

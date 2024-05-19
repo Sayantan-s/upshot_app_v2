@@ -15,6 +15,7 @@ import {
   useSwiper,
 } from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
+import { Skeleton } from '../EditableShotCard/Skeleton';
 
 /**
  * Once one post is edit clicked
@@ -34,9 +35,11 @@ export const ShotPanel = () => {
       skip: !location.productId,
     }
   );
-  const { entities: data, ids: shotIds } = useSelector(
-    (state) => state.shots.manualEdits.shots
-  );
+  const {
+    entities: data,
+    ids: shotIds,
+    isLoading,
+  } = useSelector((state) => state.shots.manualEdits.shots);
   const dispatch = useDispatch();
 
   const currentlyEditing = useSelector(
@@ -78,17 +81,25 @@ export const ShotPanel = () => {
         <div
           className={`w-1/4 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0`}
         />
-        {shotIds?.map((shotId, index) => (
-          <SwiperSlide key={data[shotId]?.id}>
-            <EditableShotCard
-              {...data[shotId]!}
-              disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
-              isActive={activeSlideIndex === index}
-              onEdit={handleEdit}
-              onSave={handleSave}
-            />
-          </SwiperSlide>
-        ))}
+        {isLoading
+          ? new Array(4).fill(true).map((_, index) => (
+              <SwiperSlide key={index}>
+                <Skeleton />
+              </SwiperSlide>
+            ))
+          : shotIds?.map((shotId, index) => (
+              <SwiperSlide key={data[shotId]?.id}>
+                <EditableShotCard
+                  {...data[shotId]!}
+                  disabled={
+                    !isNotEditing && currentlyEditing !== data[shotId]?.id
+                  }
+                  isActive={activeSlideIndex === index}
+                  onEdit={handleEdit}
+                  onSave={handleSave}
+                />
+              </SwiperSlide>
+            ))}
         <div
           className={`w-1/4 h-full absolute right-0 z-40 bg-gradient-to-r from-white/0 via-white/50 to-white`}
         />
