@@ -22,6 +22,4 @@
 
 ### 🛣️ Major flows
 
-> **Shot Scheduling**
-
 <img src="./assets/System Design_ShotScheduling.png">
