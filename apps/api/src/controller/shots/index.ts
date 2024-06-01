@@ -3,6 +3,7 @@ import { CacheKey } from '@api/enums/cache';
 import { MESSAGE_SHOOT_SCHEDULED_SHOT } from '@api/enums/pubsub';
 import H from '@api/helpers/ResponseHelper';
 import { RichText } from '@api/helpers/RichTextEditor';
+import prisma from '@api/integrations/prisma';
 import ShotQueue from '@api/integrations/queues/shot/queue';
 import { Redis } from '@api/integrations/redis';
 import { Scheduler } from '@api/integrations/scheduler';
@@ -36,31 +37,46 @@ export class ShotController {
     req,
     res
   ) => {
-    const { productId, isArchived = 'false' } = req.query;
-    const shotCreationStatus = await Redis.client.cache.get(productId);
-    const areShotsSuccessfullyCreated = shotCreationStatus === null;
-    if (areShotsSuccessfullyCreated) {
-      const product = await ProductService.fetch({ id: productId }, undefined, {
+    const { productId, isArchived = 'false', search = '' } = req.query;
+
+    const product = await prisma.product.findFirst({
+      where: { id: productId },
+      select: {
         shots: {
           where: {
             status: {
               not: ShotStatus.DELETED,
             },
             isArchived: JSON.parse(isArchived),
+            ...(search.trim() !== ''
+              ? {
+                  OR: [
+                    {
+                      content: {
+                        contains: search,
+                        mode: 'insensitive',
+                      },
+                    },
+                    {
+                      title: {
+                        contains: search,
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
+                }
+              : {}),
           },
           orderBy: {
             createdAt: 'asc',
           },
         },
-      });
-      return H.success(res, {
-        statusCode: 200,
-        data: product.shots,
-      });
-    }
+      },
+    });
+
     return H.success(res, {
       statusCode: 200,
-      data: { status: shotCreationStatus },
+      data: product.shots,
     });
   };
 

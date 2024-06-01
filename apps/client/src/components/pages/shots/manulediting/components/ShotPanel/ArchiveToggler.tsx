@@ -17,26 +17,26 @@ export const ArchiveToggler = () => {
 
   return (
     <ToggleGroup.Root
-      className="flex bg-gray-100 p-2 space-x-2 border rounded-md"
+      className="flex bg-gray-100 p-1.5 rounded-full space-x-2 border"
       type="single"
       value={archived}
       onValueChange={handleOnValueChange}
     >
       <ToggleGroup.Item
-        className="px-2 py-1.5 w-28 rounded-md space-x-2 flex items-center justify-center data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.UNARCHIVED}
       >
-        <span>All</span>{' '}
-        <span className="bg-gray-800 text-gray-50 w-5 h-5 text-[9px] flex items-center justify-center rounded-full">
+        <span className="text-xs">All</span>{' '}
+        <span className="bg-gray-800 text-gray-50 w-4 h-4 text-[8px] flex items-center justify-center rounded-full">
           {shots.unArchived.length}
         </span>
       </ToggleGroup.Item>
       <ToggleGroup.Item
-        className="px-2 py-1.5 w-28 rounded-md space-x-2 flex items-center justify-center data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.ARCHIVED}
       >
-        <span>Archived</span>{' '}
-        <span className="bg-gray-800 text-gray-50 w-5 h-5 text-[9px] flex items-center justify-center rounded-full">
+        <span className="text-xs">Archived</span>{' '}
+        <span className="bg-gray-800 text-gray-50 w-4 h-4 text-[8px] flex items-center justify-center rounded-full">
           {shots.archived.length}
         </span>
       </ToggleGroup.Item>

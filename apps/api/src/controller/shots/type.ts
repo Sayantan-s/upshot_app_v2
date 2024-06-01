@@ -8,7 +8,7 @@ export type IShotsFetchHandler = RequestHandler<
   unknown,
   unknown,
   unknown,
-  { productId: string; isArchived: IBooleanParams }
+  { productId: string; isArchived: IBooleanParams; search?: string }
 >;
 
 export type IShotsScheduleRegistrationHandler = RequestHandler<

@@ -6,6 +6,7 @@ import { ArchiveStatus } from '@client/store/types/shot';
 import { Add } from 'iconsax-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import 'swiper/css';
 import { Mousewheel } from 'swiper/modules';
 import {
@@ -18,6 +19,7 @@ import {
 import { EditableShotCard } from '../EditableShotCard';
 import { Skeleton } from '../EditableShotCard/Skeleton';
 import { ArchiveToggler } from './ArchiveToggler';
+import { ShotSearch } from './ShotSearch';
 
 /**
  * Once one post is edit clicked
@@ -27,11 +29,16 @@ import { ArchiveToggler } from './ArchiveToggler';
  */
 
 export const ShotPanel = () => {
-  const location = useParams();
   const [activeSlideIndex, setActiveSlideIndex] = useState(1);
+
+  const location = useParams();
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get('search') || '';
+
   shotsApi.useFetchOnboardingShotsQuery(
     {
       productId: location.productId!,
+      search,
     },
     {
       skip: !location.productId,
@@ -72,6 +79,8 @@ export const ShotPanel = () => {
 
   const shotIds =
     archiveStatus === ArchiveStatus.ARCHIVED ? archived : unArchived;
+
+  console.log(shotIds);
 
   return (
     <div className="flex justify-center flex-col h-full">
@@ -116,7 +125,10 @@ export const ShotPanel = () => {
           slot="container-start"
           className="mb-10 flex items-center z-50 w-full"
         >
-          <ArchiveToggler />
+          <div className="flex items-stretch space-x-3">
+            <ArchiveToggler />
+            <ShotSearch />
+          </div>
           <SwiperPagination />
         </div>
       </Swiper>

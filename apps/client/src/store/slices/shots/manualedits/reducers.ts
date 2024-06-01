@@ -4,6 +4,7 @@ import {
   ArchiveStatus,
   IChooseToEdit,
   IDateFormatter,
+  IManualEdit,
   IShot,
 } from '@client/store/types/shot';
 import {
@@ -61,21 +62,40 @@ export const ManualEditCaseReducers = {
       shotsApi.endpoints.fetchOnboardingShots.matchFulfilled,
       (state, action: PayloadAction<Api.SuccessResponse<IShot[]>>) => {
         state.manualEdits.shots.isLoading = false;
-        const shotData = action.payload.data.map((shot) => ({
-          ...shot,
-          launchedAt: shot.launchedAt
-            ? convertUTCEpochToDate(shot.launchedAt)
-            : {
-                selectedDate: undefined,
-                hours: '',
-                mins: '',
-              },
-        }));
-        shotsAdapter.setAll(state.manualEdits.shots, shotData);
-        shotData.forEach((shot) => {
-          if (shot.isArchived) state.manualEdits.shots.archived.push(shot.id);
-          else state.manualEdits.shots.unArchived.push(shot.id);
-        });
+
+        if (action.payload.data.length) {
+          const shotData = action.payload.data.map((shot) => ({
+            ...shot,
+            launchedAt: shot.launchedAt
+              ? convertUTCEpochToDate(shot.launchedAt)
+              : {
+                  selectedDate: undefined,
+                  hours: '',
+                  mins: '',
+                },
+          }));
+
+          shotsAdapter.setAll(state.manualEdits.shots, shotData);
+
+          const archiveStore = shotData.reduce(
+            (acc, shot) => {
+              if (shot.isArchived) acc.archived.push(shot.id);
+              if (!shot.isArchived) acc.unArchived.push(shot.id);
+              return acc;
+            },
+            {
+              archived: [],
+              unArchived: [],
+            } as Pick<IManualEdit['shots'], 'archived' | 'unArchived'>
+          );
+
+          state.manualEdits.shots.archived = archiveStore.archived;
+          state.manualEdits.shots.unArchived = archiveStore.unArchived;
+        } else {
+          shotsAdapter.removeAll(state.manualEdits.shots);
+          state.manualEdits.shots.archived = [];
+          state.manualEdits.shots.unArchived = [];
+        }
       }
     );
 

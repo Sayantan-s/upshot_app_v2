@@ -33,6 +33,7 @@ export type TCreatePost = {
 
 export interface IFetchOnboardingShotsParams {
   productId: string;
+  search?: string;
 }
 
 export enum CreationMethod {
