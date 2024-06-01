@@ -1,5 +1,5 @@
-import { cloneElement, useState } from "react";
-import { Props } from "./types";
+import { cloneElement, useState } from 'react';
+import { Props } from './types';
 
 export const TagsList = <
   TData extends { value: string; displayValue: string }
@@ -16,9 +16,12 @@ export const TagsList = <
   );
 
   const handleSelect = (itemValue: string) => {
-    if (tags.includes(itemValue)) return;
+    if (tags.includes(itemValue)) {
+      setTags(tags.filter((item) => item !== itemValue));
+      return;
+    }
     setTags((prevTags) => [...prevTags, itemValue]);
-    onSelect?.([...tags, itemValue]);
+    //onSelect!([...tags, itemValue]);
   };
 
   return (

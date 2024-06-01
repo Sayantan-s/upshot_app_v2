@@ -1,29 +1,13 @@
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
-import { FloatingActionButton } from '@client/components/ui/FloatingActionButton';
 import { useWindowScroll } from '@client/hooks';
 import { shotsApi } from '@client/store/services/shot';
 import { motion } from 'framer-motion';
-import { ChemicalGlass, Drop, ElementPlus } from 'iconsax-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import PostFallbackLoading from './Post/Fallback';
 import { Shot } from './Shot';
 
-enum FEED_ACTION_TYPES {
-  PRODUCT_ONBOARD = 'PRODUCT_ONBOARD',
-  CREATE_A_SHOT = 'CREATE_A_SHOT',
-}
-
 export const Feed = () => {
-  // const { isLoading, isSuccess, data } = {
-  //   isLoading: true,
-  //   isSuccess: false,
-  //   data: { data: [] },
-  // };
-
   const [showAdditionalStyles, setShowAdditionalStyles] = useState(false);
-  const navigate = useNavigate();
-  // const dispatch = useDispatch();
 
   useWindowScroll(feedRef, (target) => {
     setShowAdditionalStyles(target.scrollTop > 100);
@@ -35,11 +19,6 @@ export const Feed = () => {
 
   // handlers
 
-  const handleSelectWhatAction = (value: string) => {
-    if (value === FEED_ACTION_TYPES.PRODUCT_ONBOARD)
-      navigate('/product/onboard');
-  };
-
   const {
     data: shots,
     isLoading,
@@ -47,7 +26,7 @@ export const Feed = () => {
   } = shotsApi.useFetchFeedShotsQuery();
 
   return (
-    <div>
+    <div className="h-full">
       <header
         className={`overflow-hidden after:content-[''] after:h-[1px] after:bg-slate-100 after:absolute after:bottom-0 sticky top-0 z-10 after:transition-transform after:w-full after:transform ${additionalStyles}`}
       >
@@ -55,13 +34,13 @@ export const Feed = () => {
           Hey, <span className="text-xl text-slate-300">Sayantan</span>{' '}
         </h1>
       </header>
-      <motion.div className="mt-4 space-y-3 pl-4 relative">
+      <motion.div className="mt-4 space-y-3 pl-4">
         {isLoading ? (
           <PostFallbackLoading value={3} />
         ) : isSuccess ? (
           shots.map((shot) => <Shot {...shot} key={shot.id} />)
         ) : null}
-        <FloatingActionButton
+        {/* <FloatingActionButton
           onSelect={handleSelectWhatAction}
           className="bg-emerald-500 p-4 rounded-full shadow-md shadow-sky-500/30"
           actionButtonIcon={
@@ -82,7 +61,7 @@ export const Feed = () => {
           >
             <ChemicalGlass size="24" variant="Bulk" />
           </FloatingActionButton.Option>
-        </FloatingActionButton>
+        </FloatingActionButton> */}
       </motion.div>
     </div>
   );

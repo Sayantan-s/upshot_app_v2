@@ -2,9 +2,11 @@ import { Button } from '@client/components/ui';
 import { useDispatch, useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
+import { ArchiveStatus } from '@client/store/types/shot';
 import { Add } from 'iconsax-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import 'swiper/css';
 import { Mousewheel } from 'swiper/modules';
 import {
@@ -15,6 +17,9 @@ import {
   useSwiper,
 } from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
+import { Skeleton } from '../EditableShotCard/Skeleton';
+import { ArchiveToggler } from './ArchiveToggler';
+import { ShotSearch } from './ShotSearch';
 
 /**
  * Once one post is edit clicked
@@ -24,18 +29,29 @@ import { EditableShotCard } from '../EditableShotCard';
  */
 
 export const ShotPanel = () => {
-  const location = useParams();
   const [activeSlideIndex, setActiveSlideIndex] = useState(1);
+
+  const location = useParams();
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get('search') || '';
+
   shotsApi.useFetchOnboardingShotsQuery(
     {
       productId: location.productId!,
+      search,
     },
     {
       skip: !location.productId,
     }
   );
-  const { entities: data, ids: shotIds } = useSelector(
-    (state) => state.shots.manualEdits.shots
+  const {
+    entities: data,
+    isLoading,
+    archived,
+    unArchived,
+  } = useSelector((state) => state.shots.manualEdits.shots);
+  const { archived: archiveStatus } = useSelector(
+    (state) => state.shots.manualEdits
   );
   const dispatch = useDispatch();
 
@@ -61,6 +77,11 @@ export const ShotPanel = () => {
     !Number.isNaN(swiper.realIndex) && setActiveSlideIndex(swiper.realIndex);
   };
 
+  const shotIds =
+    archiveStatus === ArchiveStatus.ARCHIVED ? archived : unArchived;
+
+  console.log(shotIds);
+
   return (
     <div className="flex justify-center flex-col h-full">
       <Swiper
@@ -70,7 +91,7 @@ export const ShotPanel = () => {
         modules={[Mousewheel]}
         allowTouchMove={isNotEditing}
         spaceBetween={12}
-        slidesPerView={3}
+        slidesPerView={2.65}
         onRealIndexChange={handleSlideChange}
         direction="horizontal"
         className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
@@ -78,21 +99,36 @@ export const ShotPanel = () => {
         <div
           className={`w-1/4 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0`}
         />
-        {shotIds?.map((shotId, index) => (
-          <SwiperSlide key={data[shotId]?.id}>
-            <EditableShotCard
-              {...data[shotId]!}
-              disabled={!isNotEditing && currentlyEditing !== data[shotId]?.id}
-              isActive={activeSlideIndex === index}
-              onEdit={handleEdit}
-              onSave={handleSave}
-            />
-          </SwiperSlide>
-        ))}
+        {isLoading
+          ? new Array(4).fill(true).map((_, index) => (
+              <SwiperSlide key={index}>
+                <Skeleton />
+              </SwiperSlide>
+            ))
+          : shotIds?.map((shotId, index) => (
+              <SwiperSlide key={data[shotId]?.id}>
+                <EditableShotCard
+                  {...data[shotId]!}
+                  disabled={
+                    !isNotEditing && currentlyEditing !== data[shotId]?.id
+                  }
+                  isActive={activeSlideIndex === index}
+                  onEdit={handleEdit}
+                  onSave={handleSave}
+                />
+              </SwiperSlide>
+            ))}
         <div
           className={`w-1/4 h-full absolute right-0 z-40 bg-gradient-to-r from-white/0 via-white/50 to-white`}
         />
-        <div slot="container-start" className="mb-10 z-50 w-full">
+        <div
+          slot="container-start"
+          className="mb-10 flex items-center z-50 w-full"
+        >
+          <div className="flex items-stretch space-x-3">
+            <ArchiveToggler />
+            <ShotSearch />
+          </div>
           <SwiperPagination />
         </div>
       </Swiper>

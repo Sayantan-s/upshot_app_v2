@@ -2,6 +2,7 @@ import Bold from '@tiptap/extension-bold';
 import BubbleMenu from '@tiptap/extension-bubble-menu';
 import FloatingMenu from '@tiptap/extension-floating-menu';
 
+import CharacterCount from '@tiptap/extension-character-count';
 import CodeBlock from '@tiptap/extension-code';
 import Color from '@tiptap/extension-color';
 import Document from '@tiptap/extension-document';
@@ -18,7 +19,7 @@ import { EditorBubbleMenu } from './EditorBubbleMenu';
 import { EditorFloatingMenu } from './FloatingMenu';
 import { Props } from './type';
 
-const extensions = [
+const extensions = (limit: number) => [
   Document,
   Text,
   Paragraph,
@@ -41,6 +42,9 @@ const extensions = [
       offset: [10, 10],
     },
   }),
+  CharacterCount.configure({
+    limit,
+  }),
 ];
 
 const Editor = forwardRef<EditorClass, Props>(
@@ -51,16 +55,30 @@ const Editor = forwardRef<EditorClass, Props>(
       content,
       isEditable = true,
       className,
+      limit = 330,
       onChangeRichTextContent,
+      characterCounter,
     },
     ref
   ) => {
     const editor = useEditor({
-      extensions,
+      extensions: extensions(limit),
       content: JSON.parse(content), // only accept object strings
       editable: isEditable,
+      onCreate: (data) => {
+        characterCounter?.(
+          data.editor.storage.characterCount.characters(),
+          data.editor.storage.characterCount.words(),
+          limit
+        );
+      },
       onUpdate: (data) => {
         onChangeRichTextContent?.(JSON.stringify(data.editor.getJSON()));
+        characterCounter?.(
+          data.editor.storage.characterCount.characters(),
+          data.editor.storage.characterCount.words(),
+          limit
+        );
       },
     });
 

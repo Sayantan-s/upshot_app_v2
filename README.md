@@ -18,9 +18,8 @@
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/nx.svg" width="48">
 
-<b>☁️ Cloud Functions: </b>https://github.com/Sayantan-s/serverless-fns-upshot_v2
+**☁️ Cloud Functions:** https://github.com/Sayantan-s/serverless-fns-upshot_v2
 
-### 🛠️ Major flows
+### 🛣️ Major flows
 
-<b><u>Shot Scheduling</u></b> <br /> <br />
 <img src="./assets/System Design_ShotScheduling.png">

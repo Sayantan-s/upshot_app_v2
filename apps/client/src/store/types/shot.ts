@@ -33,6 +33,7 @@ export type TCreatePost = {
 
 export interface IFetchOnboardingShotsParams {
   productId: string;
+  search?: string;
 }
 
 export enum CreationMethod {
@@ -62,13 +63,26 @@ export interface IShot {
   createdBy: string;
   updatedBy: string;
   productId: string;
+  tweet: boolean;
+  isArchived: boolean;
+}
+
+export enum ArchiveStatus {
+  ARCHIVED = 'ARCHIVED',
+  UNARCHIVED = 'UNARCHIVED',
 }
 
 export interface IManualEdit {
   shots: EntityState<
     Omit<IShot, 'launchedAt'> & { launchedAt?: ILaunchedAtClientState }
-  > & { isLoading: boolean; error: string };
+  > & {
+    isLoading: boolean;
+    error: string;
+    archived: string[];
+    unArchived: string[];
+  };
   currentlyEditing: string;
+  archived: ArchiveStatus;
 }
 
 export interface ILaunchedAtClientState {

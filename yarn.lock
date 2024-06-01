@@ -4531,7 +4531,7 @@
     "@radix-ui/react-toggle" "1.0.3"
     "@radix-ui/react-use-controllable-state" "1.0.1"
 
-"@radix-ui/react-toggle@1.0.3":
+"@radix-ui/react-toggle@1.0.3", "@radix-ui/react-toggle@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-toggle/-/react-toggle-1.0.3.tgz#aecb2945630d1dc5c512997556c57aba894e539e"
   integrity sha512-Pkqg3+Bc98ftZGsl60CLANXQBBQ4W3mTFS9EJvNxKMZ7magklKV69/id1mlAlOFDDfHvlCms0fx8fA4CMKDJHg==
@@ -4952,6 +4952,11 @@
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bullet-list/-/extension-bullet-list-2.3.0.tgz#14400e19b87e7e9b1cf9c6d3900e7243461abc8d"
   integrity sha512-4nU4vJ5FjRDLqHm085vYAkuo68UK84Wl6CDSjm7sPVcu0FvQX02Okqt65azoSYQeS1SSSd5qq9YZuGWcYdp4Cw==
+
+"@tiptap/extension-character-count@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-character-count/-/extension-character-count-2.4.0.tgz#6b3b76de2ad48998f41f34b3b666a71aec77723c"
+  integrity sha512-IA3Fubvag5N/7m2xS/T8D1nH26UyebBL9CtZ3/4de4faKgvDQLlILsSI2Hefi7j7rUCYCYzgF2S0Gny+Z76ulw==
 
 "@tiptap/extension-code-block@^2.3.0":
   version "2.3.0"

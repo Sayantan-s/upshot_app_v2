@@ -2,11 +2,13 @@ import { RequestHandler } from 'express';
 
 // Product Fetch
 
+type IBooleanParams = 'true' | 'false';
+
 export type IShotsFetchHandler = RequestHandler<
   unknown,
   unknown,
   unknown,
-  { productId: string }
+  { productId: string; isArchived: IBooleanParams; search?: string }
 >;
 
 export type IShotsScheduleRegistrationHandler = RequestHandler<
