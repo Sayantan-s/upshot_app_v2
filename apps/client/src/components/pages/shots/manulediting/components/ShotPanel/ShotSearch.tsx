@@ -3,24 +3,27 @@ import { shotsApi } from '@client/store/services/shot';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { SearchNormal1 } from 'iconsax-react';
 import { ChangeEventHandler } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 export const ShotSearch = () => {
   const location = useParams();
   const [searchShots, { isLoading }] =
     shotsApi.useLazyFetchOnboardingShotsQuery();
   const searchShotDebounced = useDebounceCallback(searchShots, 500, false);
+  const [searchParams] = useSearchParams();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = async (eve) => {
     const { value } = eve.target;
+    searchParams.append('search', value);
     if (value.trim().length > 2)
       await searchShotDebounced({
         productId: location.productId!,
         search: value,
       });
     else
-      await searchShots({
+      await searchShotDebounced({
         productId: location.productId!,
+        search: value,
       });
   };
 

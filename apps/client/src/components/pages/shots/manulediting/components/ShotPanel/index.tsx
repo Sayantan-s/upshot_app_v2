@@ -80,12 +80,12 @@ export const ShotPanel = () => {
   const shotIds =
     archiveStatus === ArchiveStatus.ARCHIVED ? archived : unArchived;
 
-  console.log(shotIds);
+  const configBlocker = shotIds.length > 2;
 
   return (
     <div className="flex justify-center flex-col h-full">
       <Swiper
-        loop
+        loop={configBlocker}
         mousewheel
         centeredSlides
         modules={[Mousewheel]}
