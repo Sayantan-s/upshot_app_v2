@@ -171,12 +171,14 @@ export type ShotInput = {
   createdBy?: InputMaybe<Scalars['String']['input']>;
   creationMethod?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   launchedAt?: InputMaybe<Scalars['Int']['input']>;
   media?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   productId?: InputMaybe<Scalars['String']['input']>;
   productType?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+  tweet?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['String']['input']>;
   updatedBy?: InputMaybe<Scalars['String']['input']>;
   votes?: InputMaybe<Scalars['Int']['input']>;

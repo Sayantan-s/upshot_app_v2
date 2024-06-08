@@ -83,7 +83,7 @@ export const ShotPanel = () => {
   const configBlocker = shotIds.length > 2;
 
   return (
-    <div className="flex justify-center flex-col h-full">
+    <div className="flex justify-center h-screen flex-col">
       <Swiper
         loop={configBlocker}
         mousewheel
@@ -94,7 +94,7 @@ export const ShotPanel = () => {
         slidesPerView={2.65}
         onRealIndexChange={handleSlideChange}
         direction="horizontal"
-        className="overflow-x-hidden py-2 cursor-grab w-[1200px] mx-auto flex justify-center items-start flex-col relative"
+        className="overflow-x-hidden py-2 cursor-grab w-[1200px] h-[700px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-1/4 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0`}
