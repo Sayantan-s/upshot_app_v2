@@ -23,6 +23,7 @@ const queries = {
     const data = await ShotService.fetchMany({
       where: {
         status: ShotStatus.SHOOT,
+        isArchived: false,
       },
       include: {
         product: true,
