@@ -77,6 +77,23 @@ export const ShotController: FC<IShotControllerProps> = ({
     );
   };
 
+  const handleUnArchive = async () => {
+    await archiveShot({
+      shotId,
+      shotInput: {
+        isArchived: false,
+      },
+    }).unwrap();
+    dispatch(
+      shotsApi.util.invalidateTags([
+        {
+          id: 'LIST',
+          type: Tags.SHOT,
+        },
+      ])
+    );
+  };
+
   return (
     <div className="flex justify-between my-2">
       {characterCount ? (
@@ -163,7 +180,7 @@ export const ShotController: FC<IShotControllerProps> = ({
             </motion.button>
           </Popover.Trigger>
           <Popover.Portal>
-            {isArchived ? null : (
+            {isArchived ? (
               <Popover.Content
                 className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-xl"
                 sticky="always"
@@ -190,6 +207,43 @@ export const ShotController: FC<IShotControllerProps> = ({
                       variant={'neutral.solid'}
                     >
                       Archive
+                    </Button>
+                    <Button
+                      disabled={isArchiving}
+                      size={'sm'}
+                      variant={'neutral.ghost'}
+                      onClick={closeArchive}
+                      className="shadow border border-slate-400/10"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </Popover.Content>
+            ) : (
+              <Popover.Content
+                className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-xl"
+                sticky="always"
+                sideOffset={5}
+              >
+                <div className="p-4">
+                  <h1 className="text-gray-900 text-base font-semibold">
+                    Are you sure you want to archive this shot?
+                  </h1>
+                  <p className="text-sm mt-2">
+                    This shot will be un-archived and subsequently added to the
+                    global feed. Please review the content and take any
+                    necessary actions before it is added to the feed again.
+                  </p>
+                  <div className="flex justify-end mt-4 space-x-2">
+                    <Button
+                      size={'sm'}
+                      onClick={handleUnArchive}
+                      isLoading={isArchiving}
+                      className="shadow"
+                      variant={'neutral.solid'}
+                    >
+                      Unarchive
                     </Button>
                     <Button
                       disabled={isArchiving}

@@ -2,18 +2,13 @@ import { useDispatch, useSelector } from '@client/store';
 import { shotActions } from '@client/store/slices/shots';
 import { ArchiveStatus } from '@client/store/types/shot';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { useSearchParams } from 'react-router-dom';
 
 export const ArchiveToggler = () => {
-  const [, setSearchParams] = useSearchParams();
-
   const dispatch = useDispatch();
   const { archived, shots } = useSelector((state) => state.shots.manualEdits);
 
-  const handleOnValueChange = (value: ArchiveStatus) => {
+  const handleOnValueChange = (value: ArchiveStatus) =>
     dispatch(shotActions.setArchivedStatus(value));
-    setSearchParams({ archived: String(value === ArchiveStatus.ARCHIVED) });
-  };
 
   return (
     <ToggleGroup.Root
