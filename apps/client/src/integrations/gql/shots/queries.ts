@@ -10,6 +10,18 @@ export const FETCH_SHOTS_FEED_QUERY = gql(/* GraphQL */ `
       votes
       content
       title
+      product {
+        user {
+          firstName
+          lastName
+          about
+          coverPic
+          userName
+          profilePic
+          location
+          id
+        }
+      }
     }
   }
 `);

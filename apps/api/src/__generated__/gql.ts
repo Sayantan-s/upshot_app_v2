@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  mutation UpdateShot($shotId: ID!, $shotInput: ShotInput!) {\n    updateShot(shotId: $shotId, shotInput: $shotInput)\n  }\n':
     types.UpdateShotDocument,
-  '\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n    }\n  }\n':
+  '\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n      product {\n        user {\n          firstName\n          lastName\n          about\n          coverPic\n          userName\n          profilePic\n          location\n          id\n        }\n      }\n    }\n  }\n':
     types.GetShotsDocument,
   '\n  subscription Subscription {\n    lauchShot {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n    }\n  }\n':
     types.SubscriptionDocument,
@@ -47,8 +47,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n    }\n  }\n'
-): (typeof documents)['\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n    }\n  }\n'];
+  source: '\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n      product {\n        user {\n          firstName\n          lastName\n          about\n          coverPic\n          userName\n          profilePic\n          location\n          id\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetShots {\n    getShots {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n      product {\n        user {\n          firstName\n          lastName\n          about\n          coverPic\n          userName\n          profilePic\n          location\n          id\n        }\n      }\n    }\n  }\n'];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

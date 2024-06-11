@@ -18,7 +18,7 @@ export const ArchiveToggler = () => {
       onValueChange={handleOnValueChange}
     >
       <ToggleGroup.Item
-        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:shadow-gray-900/15 data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.UNARCHIVED}
       >
         <span className="text-xs">All</span>{' '}
@@ -27,7 +27,7 @@ export const ArchiveToggler = () => {
         </span>
       </ToggleGroup.Item>
       <ToggleGroup.Item
-        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:shadow-gray-900/15 data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.ARCHIVED}
       >
         <span className="text-xs">Archived</span>{' '}

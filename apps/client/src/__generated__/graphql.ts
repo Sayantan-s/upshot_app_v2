@@ -101,10 +101,12 @@ export type Product = {
   productDescription?: Maybe<Scalars['String']['output']>;
   productMoto?: Maybe<Scalars['String']['output']>;
   productName?: Maybe<Scalars['String']['output']>;
+  shots?: Maybe<Array<Maybe<Shot>>>;
   status?: Maybe<ProductStatus>;
   tags?: Maybe<Array<Maybe<InterestsType>>>;
   updatedAt?: Maybe<Scalars['String']['output']>;
   updatedBy?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
   userId?: Maybe<Scalars['String']['output']>;
 };
 
@@ -138,6 +140,7 @@ export type Query = {
   getProducts: Array<Product>;
   getShots: Array<Shot>;
   getShotsByProductId: Array<Shot>;
+  getUsers: Array<User>;
 };
 
 export type QueryGetShotsByProductIdArgs = {
@@ -196,6 +199,28 @@ export type Subscription = {
   lauchShot: Shot;
 };
 
+export type User = {
+  __typename?: 'User';
+  about?: Maybe<Scalars['String']['output']>;
+  coverPic?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['String']['output'];
+  createdBy: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  interests?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  lastName: Scalars['String']['output'];
+  location?: Maybe<Scalars['String']['output']>;
+  newUser?: Maybe<Scalars['Boolean']['output']>;
+  products?: Maybe<Array<Maybe<Product>>>;
+  profilePic?: Maybe<Scalars['String']['output']>;
+  pwd: Scalars['String']['output'];
+  refreshToken?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
+  updatedBy: Scalars['String']['output'];
+  userName?: Maybe<Scalars['String']['output']>;
+};
+
 export type UpdateShotMutationVariables = Exact<{
   shotId: Scalars['ID']['input'];
   shotInput: ShotInput;
@@ -219,6 +244,20 @@ export type GetShotsQuery = {
     votes?: number | null;
     content?: string | null;
     title?: string | null;
+    product?: {
+      __typename?: 'Product';
+      user?: {
+        __typename?: 'User';
+        firstName: string;
+        lastName: string;
+        about?: string | null;
+        coverPic?: string | null;
+        userName?: string | null;
+        profilePic?: string | null;
+        location?: string | null;
+        id: string;
+      } | null;
+    } | null;
   }>;
 };
 
@@ -346,6 +385,56 @@ export const GetShotsDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'votes' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'product' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'user' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'firstName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'lastName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'about' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'coverPic' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'profilePic' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'location' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },

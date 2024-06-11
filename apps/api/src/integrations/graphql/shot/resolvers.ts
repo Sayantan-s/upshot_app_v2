@@ -3,6 +3,7 @@ import {
   QueryGetShotsByProductIdArgs,
 } from '@api/__generated__/graphql';
 import { CacheKey } from '@api/enums/cache';
+import prisma from '@api/integrations/prisma';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ShotService } from '@api/services/shot';
@@ -20,15 +21,20 @@ const queries = {
   },
 
   getShots: async () => {
-    const data = await ShotService.fetchMany({
+    const data = await prisma.shot.findMany({
       where: {
         status: ShotStatus.SHOOT,
         isArchived: false,
       },
       include: {
-        product: true,
+        product: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
+
     return data;
   },
 };

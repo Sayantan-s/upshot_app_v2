@@ -12,6 +12,7 @@ import { Server } from '@api/app/server';
 import { WebSocketServer } from 'ws';
 import { Product } from './product';
 import { Shot } from './shot';
+import { User } from './user';
 export class GQLService {
   public static pubSub = new PubSub();
 
@@ -20,6 +21,7 @@ export class GQLService {
         type Query{
             ${Product.queries}
             ${Shot.queries}
+            ${User.queries}
         }
         type Mutation{
           ${Shot.mutations}
@@ -29,11 +31,13 @@ export class GQLService {
         }
         ${Product.typeDefs}
         ${Shot.typeDefs}
+        ${User.typeDefs}
       `,
     resolvers: {
       Query: {
         ...Product.resolvers.queries,
         ...Shot.resolvers.queries,
+        ...User.resolvers.queries,
       },
       Mutation: {
         ...Shot.resolvers.mutations,
