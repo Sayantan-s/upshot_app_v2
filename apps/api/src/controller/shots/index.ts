@@ -37,7 +37,7 @@ export class ShotController {
     req,
     res
   ) => {
-    const { productId, isArchived = 'false', search = '' } = req.query;
+    const { productId, search = '' } = req.query;
 
     const product = await prisma.product.findFirst({
       where: { id: productId },
@@ -47,7 +47,6 @@ export class ShotController {
             status: {
               not: ShotStatus.DELETED,
             },
-            isArchived: JSON.parse(isArchived),
             ...(search.trim() !== ''
               ? {
                   OR: [

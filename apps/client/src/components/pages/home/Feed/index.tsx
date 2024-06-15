@@ -1,5 +1,6 @@
 import { feedRef } from '@client/components/shared/Layouts/Rootlayout';
 import { useWindowScroll } from '@client/hooks';
+import { useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
@@ -8,6 +9,7 @@ import { Shot } from './Shot';
 
 export const Feed = () => {
   const [showAdditionalStyles, setShowAdditionalStyles] = useState(false);
+  shotsApi.useFetchFeedShotsQuery();
 
   useWindowScroll(feedRef, (target) => {
     setShowAdditionalStyles(target.scrollTop > 100);
@@ -17,13 +19,11 @@ export const Feed = () => {
     ? 'after:translate-x-0 shadow-sm shadow-slate-100'
     : 'after:-translate-x-full shadow-none';
 
-  // handlers
-
   const {
-    data: shots,
-    isLoading,
-    isSuccess,
-  } = shotsApi.useFetchFeedShotsQuery();
+    data: { shots },
+    loading: isLoading,
+    success: isSuccess,
+  } = useSelector((state) => state.shots.feed);
 
   return (
     <div className="h-full">
@@ -38,7 +38,9 @@ export const Feed = () => {
         {isLoading ? (
           <PostFallbackLoading value={3} />
         ) : isSuccess ? (
-          shots.map((shot) => <Shot {...shot} key={shot.id} />)
+          shots.ids.map((shotId) => (
+            <Shot {...shots.entities[shotId]} key={shotId} />
+          ))
         ) : null}
         {/* <FloatingActionButton
           onSelect={handleSelectWhatAction}

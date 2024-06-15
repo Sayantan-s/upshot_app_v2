@@ -19,21 +19,25 @@ export const ShotSearch = () => {
         search: value,
       });
     else
-      await searchShots({
+      await searchShotDebounced({
         productId: location.productId!,
+        search: value,
       });
   };
 
   return (
-    <div className="bg-white p-2.5 h-full flex space-x-2 items-center border rounded-full w-72">
-      <SearchNormal1 size={14} color="#9ca3af" />
+    <div className="bg-white p-2.5 h-full flex space-x-2 items-center border-b w-72">
       <input
         type="text"
         placeholder="e.g. search for..."
-        className="bg-transparent w-full placeholder:text-gray-400 stroke-gray-400 text-gray-800 focus:outline-none"
+        className="bg-transparent w-full placeholder:text-gray-400 text-gray-800 focus:outline-none"
         onChange={handleChange}
       />
-      {isLoading ? <Loader size={'sm'} variant={'primary.flat'} /> : null}
+      {isLoading ? (
+        <Loader size={'sm'} variant={'primary.flat'} />
+      ) : (
+        <SearchNormal1 size={14} color="#9ca3af" />
+      )}
     </div>
   );
 };

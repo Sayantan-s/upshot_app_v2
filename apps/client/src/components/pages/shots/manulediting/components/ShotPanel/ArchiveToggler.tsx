@@ -2,18 +2,13 @@ import { useDispatch, useSelector } from '@client/store';
 import { shotActions } from '@client/store/slices/shots';
 import { ArchiveStatus } from '@client/store/types/shot';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { useSearchParams } from 'react-router-dom';
 
 export const ArchiveToggler = () => {
-  const [, setSearchParams] = useSearchParams();
-
   const dispatch = useDispatch();
   const { archived, shots } = useSelector((state) => state.shots.manualEdits);
 
-  const handleOnValueChange = (value: ArchiveStatus) => {
+  const handleOnValueChange = (value: ArchiveStatus) =>
     dispatch(shotActions.setArchivedStatus(value));
-    setSearchParams({ archived: String(value === ArchiveStatus.ARCHIVED) });
-  };
 
   return (
     <ToggleGroup.Root
@@ -23,7 +18,7 @@ export const ArchiveToggler = () => {
       onValueChange={handleOnValueChange}
     >
       <ToggleGroup.Item
-        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:shadow-gray-900/15 data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.UNARCHIVED}
       >
         <span className="text-xs">All</span>{' '}
@@ -32,7 +27,7 @@ export const ArchiveToggler = () => {
         </span>
       </ToggleGroup.Item>
       <ToggleGroup.Item
-        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
+        className="p-[0.42rem] w-28 rounded-full space-x-2 flex items-center justify-center data-[state=on]:shadow-sm data-[state=on]:shadow-gray-900/15 data-[state=on]:bg-white data-[state=off]:bg-transparent data-[state=off]:opacity-60"
         value={ArchiveStatus.ARCHIVED}
       >
         <span className="text-xs">Archived</span>{' '}

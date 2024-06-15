@@ -14,7 +14,14 @@ import {
   setMinutes,
 } from 'date-fns';
 import { Calendar as Datepicker, Timer1 } from 'iconsax-react';
-import { ChangeEventHandler, FC, Fragment, useEffect, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 import { useDispatch } from 'react-redux';
 
@@ -30,6 +37,9 @@ export const DateTimePicker: FC = () => {
   );
   const currentShot = shots.entities[currentlyEditing];
   const [updateShot, { isLoading }] = shotsApi.useUpdateShotMutation();
+
+  const hourRef = useRef<HTMLInputElement>(null);
+  const minuteRef = useRef<HTMLInputElement>(null);
 
   const [dateTime, setDate] = useState<IState>({
     selectedDate: undefined,
@@ -73,12 +83,20 @@ export const DateTimePicker: FC = () => {
     const { name, value } = eve.target;
     const integerValue = Number(value);
     if (name === 'hours' && integerValue >= 0 && integerValue <= 23) {
-      setDate((prevState) => ({ ...prevState, hours: value }));
+      setDate((prevState) => ({
+        ...prevState,
+        hours: value,
+      }));
       handleChangeFinalTime('hours', integerValue);
+      if (value.length >= 2) minuteRef.current?.focus();
     }
     if (name === 'mins' && integerValue >= 0 && integerValue <= 59) {
-      setDate((prevState) => ({ ...prevState, mins: value }));
+      setDate((prevState) => ({
+        ...prevState,
+        mins: value,
+      }));
       handleChangeFinalTime('mins', integerValue);
+      if (value.length >= 2) minuteRef.current?.blur();
     }
   };
 
@@ -193,6 +211,7 @@ export const DateTimePicker: FC = () => {
                   onChange={handleChangeTime}
                   min={'00'}
                   max="23"
+                  ref={hourRef}
                 />
                 <input
                   disabled={!selectedDate || isLoading}
@@ -204,6 +223,7 @@ export const DateTimePicker: FC = () => {
                   onChange={handleChangeTime}
                   min={'00'}
                   max="59"
+                  ref={minuteRef}
                 />
               </div>
             </div>

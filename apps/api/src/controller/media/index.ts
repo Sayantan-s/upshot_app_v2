@@ -13,6 +13,10 @@ export class MediaController {
     if (!file) throw new ErrorHandler(400, 'File not found!');
     const { type, config, cropMetaData, intent, name } = req.body;
 
+    // 683 KB = 683000 bytes
+
+    console.log(file.size);
+
     const cropConfig: ICropState = JSON.parse(config);
     const cropMetaDataValues: ICropArea = JSON.parse(cropMetaData);
     const image = await MediaService.image.crop({
@@ -20,6 +24,9 @@ export class MediaController {
       config: cropConfig,
       metaData: cropMetaDataValues,
     });
+
+    console.log(image);
+
     const uploadCloudinaryImages = Promise.all([
       Cloudinary.client.uploader.upload(file.path, {
         folder: `${type}/raw`,
@@ -28,7 +35,10 @@ export class MediaController {
         folder: `${type}/cropped`,
       }),
     ]);
+
     const [rawImage, croppedImage] = await uploadCloudinaryImages;
+
+    console.log([rawImage, croppedImage]);
 
     await image.destroy();
 

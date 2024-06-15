@@ -1,7 +1,8 @@
 import { Button } from '@client/components/ui';
 import { useModal } from '@client/context/ModalSystem';
 import { useToggle } from '@client/hooks';
-import { useSelector } from '@client/store';
+import { useDispatch, useSelector } from '@client/store';
+import { Tags } from '@client/store/services';
 import { shotsApi } from '@client/store/services/shot';
 import { ShotStatus } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
@@ -20,11 +21,22 @@ export const ShotController: FC<IShotControllerProps> = ({
   characterCount,
 }) => {
   const [deleteShot, { isLoading }] = shotsApi.useDeleteShotMutation();
+  const [archiveShot, { isLoading: isArchiving }] =
+    shotsApi.useUpdateShotMutation();
+
   const [scheduleOne, { isLoading: isScheduling }] =
     shotsApi.useScheduleOneMutation();
   const [isOpenLaunch, { off: closeLaunch, setState }] = useToggle();
+  const dispatch = useDispatch();
+  const [
+    isOpenLaunchArchive,
+    { off: closeArchive, setState: setStateArchive },
+  ] = useToggle();
+
   const deletShotModal = useModal({ isLoading });
   const { shots } = useSelector((state) => state.shots.manualEdits);
+
+  const isArchived = !shots.entities[shotId]?.isArchived;
 
   const handleDeleteShot = async () => await deleteShot({ shotId });
 
@@ -46,6 +58,40 @@ export const ShotController: FC<IShotControllerProps> = ({
       });
     } else await scheduleOne({ id: shotId }).unwrap();
     closeLaunch();
+  };
+
+  const handleArchive = async () => {
+    await archiveShot({
+      shotId,
+      shotInput: {
+        isArchived: true,
+      },
+    }).unwrap();
+    dispatch(
+      shotsApi.util.invalidateTags([
+        {
+          id: 'LIST',
+          type: Tags.SHOT,
+        },
+      ])
+    );
+  };
+
+  const handleUnArchive = async () => {
+    await archiveShot({
+      shotId,
+      shotInput: {
+        isArchived: false,
+      },
+    }).unwrap();
+    dispatch(
+      shotsApi.util.invalidateTags([
+        {
+          id: 'LIST',
+          type: Tags.SHOT,
+        },
+      ])
+    );
   };
 
   return (
@@ -83,7 +129,7 @@ export const ShotController: FC<IShotControllerProps> = ({
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content
-                className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-md"
+                className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-xl"
                 side="top"
                 sticky="always"
                 sideOffset={5}
@@ -100,11 +146,12 @@ export const ShotController: FC<IShotControllerProps> = ({
                     proceed with caution. You will have the option to update the
                     shot before it is finalized.
                   </p>
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end mt-4 space-x-2">
                     <Button
                       size={'sm'}
                       onClick={handleLaunch}
                       isLoading={isScheduling}
+                      className="shadow"
                     >
                       Launch
                     </Button>
@@ -113,6 +160,7 @@ export const ShotController: FC<IShotControllerProps> = ({
                       size={'sm'}
                       variant={'neutral.ghost'}
                       onClick={closeLaunch}
+                      className="shadow border border-slate-400/10"
                     >
                       Cancel
                     </Button>
@@ -122,12 +170,97 @@ export const ShotController: FC<IShotControllerProps> = ({
             </Popover.Portal>
           </Popover.Root>
         ) : null}
-        <motion.button
-          disabled={!isActive}
-          className="disabled:grayscale border border-sky-500/20 bg-sky-50 w-8 h-8 rounded-full flex items-center justify-center"
-        >
-          <Archive size={16} color="#0ea5e9" variant="Bulk" />
-        </motion.button>
+        <Popover.Root open={isOpenLaunchArchive} onOpenChange={setStateArchive}>
+          <Popover.Trigger>
+            <motion.button
+              disabled={!isActive}
+              className="disabled:grayscale border border-sky-500/20 bg-sky-50 w-8 h-8 rounded-full flex items-center justify-center"
+            >
+              <Archive size={16} color="#0ea5e9" variant="Bulk" />
+            </motion.button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            {isArchived ? (
+              <Popover.Content
+                className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-xl"
+                sticky="always"
+                sideOffset={5}
+              >
+                <div className="p-4">
+                  <h1 className="text-gray-900 text-base font-semibold">
+                    Are you sure you want to archive this shot?
+                  </h1>
+                  <p className="text-sm mt-2">
+                    <b className="text-rose-500 font-semibold">
+                      Action Warning:
+                    </b>{' '}
+                    This shot will be archived and subsequently removed from the
+                    global feed. Please review the content and take any
+                    necessary actions before it is no longer accessible.
+                  </p>
+                  <div className="flex justify-end mt-4 space-x-2">
+                    <Button
+                      size={'sm'}
+                      onClick={handleArchive}
+                      isLoading={isArchiving}
+                      className="shadow"
+                      variant={'neutral.solid'}
+                    >
+                      Archive
+                    </Button>
+                    <Button
+                      disabled={isArchiving}
+                      size={'sm'}
+                      variant={'neutral.ghost'}
+                      onClick={closeArchive}
+                      className="shadow border border-slate-400/10"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </Popover.Content>
+            ) : (
+              <Popover.Content
+                className="bg-white border border-gray-200 max-w-[350px] z-40 focus:outline-none shadow shadow-gray-800/10 rounded-xl"
+                sticky="always"
+                sideOffset={5}
+              >
+                <div className="p-4">
+                  <h1 className="text-gray-900 text-base font-semibold">
+                    Are you sure you want to archive this shot?
+                  </h1>
+                  <p className="text-sm mt-2">
+                    This shot will be un-archived and subsequently added to the
+                    global feed. Please review the content and take any
+                    necessary actions before it is added to the feed again.
+                  </p>
+                  <div className="flex justify-end mt-4 space-x-2">
+                    <Button
+                      size={'sm'}
+                      onClick={handleUnArchive}
+                      isLoading={isArchiving}
+                      className="shadow"
+                      variant={'neutral.solid'}
+                    >
+                      Unarchive
+                    </Button>
+                    <Button
+                      disabled={isArchiving}
+                      size={'sm'}
+                      variant={'neutral.ghost'}
+                      onClick={closeArchive}
+                      className="shadow border border-slate-400/10"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </Popover.Content>
+            )}
+          </Popover.Portal>
+        </Popover.Root>
+
         <motion.button
           disabled={!isActive}
           className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center"

@@ -78,6 +78,8 @@ export class GQLProductTypeDefs {
         createdBy:String
         updatedBy:String
         userId:String
+        shots: [Shot]
+        user: User
       }
     `;
   public static root = 'Product';

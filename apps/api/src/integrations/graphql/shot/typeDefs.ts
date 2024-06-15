@@ -49,7 +49,9 @@ export class GQLShotTypeDefs {
         updatedAt:String
         createdBy:String
         updatedBy:String
-        productId:String
+        productId:String,
+        tweet:Boolean,
+        isArchived:Boolean,
       }
 
     `;

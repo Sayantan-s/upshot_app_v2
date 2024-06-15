@@ -15,7 +15,7 @@ import {
   IShot,
   ShotStatus,
 } from '@client/store/types/shot';
-import { Tags, api } from '.';
+import { api, Tags } from '.';
 
 export const shotsApi = api.injectEndpoints({
   endpoints: (builder) => ({
