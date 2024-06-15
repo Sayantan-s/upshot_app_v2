@@ -20,7 +20,8 @@
     "serve:client": "nx run client:serve:production --verbose",
     "serve:web": "nx dev web",
     "compile": "graphql-codegen",
-    "compile:watch": "graphql-codegen --watch"
+    "compile:watch": "graphql-codegen --watch",
+    "studio": "cd apps/api && npx prisma studio"
   },
   "private": true,
   "dependencies": {
