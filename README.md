@@ -4,7 +4,7 @@
 
 ### 🛠️ Languages and Tools
 
-<img src="https://cdn.svgporn.com/logos/typescript-icon.svg" width="48">&nbsp;<img src="https://cdn.svgporn.com/logos/react.svg" width="48">
+<img src="https://cdn.svgporn.com/logos/typescript-icon.svg" width="48">&nbsp;<img src="./assets/react.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/vitejs.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/redux.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/tailwindcss-icon.svg" width="64">
@@ -17,6 +17,7 @@
 &nbsp;<img src="https://www.gitbook.com/cdn-cgi/image/width=36,dpr=2,height=36,fit=contain,format=auto/https%3A%2F%2F876297641-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-LUuDmt_xXMfG66Rn1GA%252Ficon%252FHOq80FSJicAlE4bVptC9%252Fbull.png%3Falt%3Dmedia%26token%3D10a2ba71-db1f-4d5c-8787-3dbedc8dd3ce" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/nx.svg" width="48">
+&nbsp;<img src="./assets/ngrok.svg" width="56">
 
 **☁️ Cloud Functions:** https://github.com/Sayantan-s/serverless-fns-upshot_v2
 
