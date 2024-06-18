@@ -6,8 +6,6 @@
 
 <img src="https://cdn.svgporn.com/logos/typescript-icon.svg" width="48">&nbsp;<img src="https://cdn.svgporn.com/logos/react.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/vitejs.svg" width="48">
-&nbsp;<img src="https://assets.rspack.dev/rspack/rspack-logo.svg
-" width="54">
 &nbsp;<img src="https://cdn.svgporn.com/logos/redux.svg" width="48">
 &nbsp;<img src="https://cdn.svgporn.com/logos/tailwindcss-icon.svg" width="64">
 &nbsp;&nbsp;<img src="https://cdn.svgporn.com/logos/nodejs-icon.svg" width="45">
