@@ -25,13 +25,29 @@ export const FeedCaseReducers = {
         state.feed.error = '';
         state.feed.success = true;
         const responseClone = structuredClone(action.payload);
-        responseClone.forEach((shotEntry) => {
-          usersAdapter.addOne(state.feed.data.users, shotEntry.product?.user);
-          delete shotEntry.product?.user;
-          productsAdapter.addOne(state.feed.data.products, shotEntry!.product!);
-          delete shotEntry.product;
-          shotsAdapter.addOne(state.feed.data.shots, shotEntry);
-        });
+
+        usersAdapter.addMany(
+          state.feed.data.users,
+          responseClone.map((item) => item.product?.user)
+        );
+        productsAdapter.addMany(
+          state.feed.data.products,
+          responseClone.map((item) => item.product!)
+        );
+        shotsAdapter.addMany(state.feed.data.shots, responseClone);
+
+        // responseClone.forEach((shotEntry, index) => {
+        //   console.log('START', index);
+        //   usersAdapter.setOne(state.feed.data.users, shotEntry.product?.user);
+        //   console.log('USER', index, shotEntry.product?.user);
+        //   delete shotEntry.product?.user;
+        //   productsAdapter.setOne(state.feed.data.products, shotEntry!.product!);
+        //   console.log('PRODUCT', index);
+        //   delete shotEntry.product;
+        //   shotsAdapter.setOne(state.feed.data.shots, shotEntry);
+        //   console.log('SHOT', index);
+        //   console.log('END', index);
+        // });
       }
     );
   },

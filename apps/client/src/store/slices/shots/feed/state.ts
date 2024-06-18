@@ -16,19 +16,13 @@ export interface IfetchFeedShotsState {
   };
 }
 
-export const usersAdapter = createEntityAdapter<IFeedUser>({
-  selectId: (user) => user!.id,
-});
+export const usersAdapter = createEntityAdapter<IFeedUser>();
 const usersInitialState = usersAdapter.getInitialState();
 
-export const productsAdapter = createEntityAdapter<IFeedProduct>({
-  selectId: (product) => product!.id!,
-});
+export const productsAdapter = createEntityAdapter<IFeedProduct>();
 const productsInitialState = productsAdapter.getInitialState();
 
-export const shotsAdapter = createEntityAdapter<IFeedShot>({
-  selectId: (shot) => shot!.id!,
-});
+export const shotsAdapter = createEntityAdapter<IFeedShot>();
 const shotsInitialState = shotsAdapter.getInitialState();
 
 export const fetchfeedShotState: IfetchFeedShotsState = {

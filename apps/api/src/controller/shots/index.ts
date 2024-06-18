@@ -30,7 +30,6 @@ import {
   IShotsScheduleRegistrationHandler,
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
-const _SERVER_URL = Server.webhookInterceptorOrigin;
 export class ShotController {
   // CRUD
   public static fetchTargetProductShots: IShotsFetchHandler = async (
@@ -161,6 +160,7 @@ export class ShotController {
       const dayOfMonth = format(dateAccordingToOffsetTime, 'd');
       const month = format(dateAccordingToOffsetTime, 'M');
       const cronTime = `${minute} ${hour} ${dayOfMonth} ${month} *`;
+      const _SERVER_URL = Server.webhookInterceptorOrigin;
 
       // Task 5:: Create a schedule
       const { scheduleId } = await Scheduler.client.schedules.create({
@@ -189,6 +189,7 @@ export class ShotController {
 
   public static shotScheduleAllRegistrationHandler: IShotsScheduleAllRegistrationHandler =
     async (req, res) => {
+      const _SERVER_URL = Server.webhookInterceptorOrigin;
       const { productId } = req.params;
 
       // Task 1:: Get Shot's data
@@ -302,12 +303,19 @@ export class ShotController {
     const { scheduleReference, shotId } = req.body;
     const scheduleId = await Redis.client.cache.get(scheduleReference);
     await Scheduler.client.schedules.delete(scheduleId);
-    const targetShot = await ShotService.update(
-      { id: shotId },
-      {
-        status: ShotStatus.SHOOT,
-      }
-    );
+    const targetShot = await prisma.shot.update({
+      where: {
+        id: shotId,
+      },
+      data: { status: ShotStatus.SHOOT },
+      include: {
+        product: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
     await ShotQueue.client.produce(MESSAGE_SHOOT_SCHEDULED_SHOT, targetShot);
     await Redis.client.cache.del(scheduleReference);
     return H.success(res, {

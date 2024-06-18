@@ -11,7 +11,7 @@ export const Shot: FC<IFeedShot> = ({ title, content, productId }) => {
     (state) => state.shots.feed.data.users.entities[product!.userId!]
   );
   return (
-    <motion.div className="border p-2">
+    <motion.div className="border border-slate-200 bg-white shadow-sm p-3 rounded-lg">
       <div className="relative flex">
         <div className="bg-gray-100 rounded-full relative z-20">
           <img

@@ -1,9 +1,9 @@
-import { NGROK_AUTHTOKEN, NODE_ENV, ORIGIN, PORT } from '@api/config';
+import { ORIGIN, PORT } from '@api/config';
 import { Redis } from '@api/integrations/redis';
+import { Tunnel } from '@api/integrations/tunnel';
 import chalk from 'chalk';
 import express from 'express';
 import http from 'http';
-import ngrok from 'ngrok';
 import path from 'path';
 
 export class Server {
@@ -16,20 +16,16 @@ export class Server {
     this.app = express();
     this.server = http.createServer(this.app);
     this.server.listen(PORT, async () => {
-      Server.tunnel = await ngrok.connect({
-        proto: 'http',
-        addr: 8080, // replace with your server port
-        authtoken: NGROK_AUTHTOKEN,
-      });
-      Server.webhookInterceptorOrigin =
-        NODE_ENV === 'local' ? Server.tunnel : ORIGIN;
+      const tunnel = await Tunnel.create();
+      Server.tunnel = tunnel.uri;
+      Server.webhookInterceptorOrigin = tunnel.webhookInterceptorOrigin;
       console.log(`Ngrok initialized at:: ${chalk.blue(Server.tunnel)}`);
       console.log(`Server running on:: ${chalk.red(ORIGIN)}`);
     });
     process.on('SIGINT', () => {
       Redis.client.cache.flushall();
       Redis.client.cache.disconnect();
-      ngrok.disconnect(Server.tunnel);
+      Tunnel.destroy();
       this.server.close();
     });
   }
