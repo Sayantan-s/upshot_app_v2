@@ -42,5 +42,8 @@ Thumbs.db
 
 apps/client/.env*
 apps/api/.env*
+assets/ngrok-url.txt
 
 .astro
+
+

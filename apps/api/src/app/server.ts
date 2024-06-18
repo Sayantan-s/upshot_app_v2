@@ -1,5 +1,6 @@
-import { ORIGIN, PORT } from '@api/config';
+import { NODE_ENV, ORIGIN, PORT } from '@api/config';
 import { Redis } from '@api/integrations/redis';
+import { ITunnelClientInstance, Tunnel } from '@api/integrations/tunnel';
 import chalk from 'chalk';
 import express from 'express';
 import http from 'http';
@@ -7,18 +8,24 @@ import path from 'path';
 
 export class Server {
   public static instance: Server | null;
+  public static webhookInterceptorOrigin: string;
+  public static tunnel: ITunnelClientInstance;
   app: ReturnType<typeof express>;
   server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
   constructor() {
     this.app = express();
     this.server = http.createServer(this.app);
-    this.server.listen(PORT, () => {
-      console.log(chalk.bgGray.bold.redBright(`SERVER RUNNING ON ${ORIGIN}`));
+    this.server.listen(PORT, async () => {
+      Server.tunnel = await Tunnel.create();
+      Server.webhookInterceptorOrigin =
+        NODE_ENV === 'local' ? Server.tunnel.uri : ORIGIN;
+      console.log(`Server running on:: ${chalk.red(ORIGIN)}`);
     });
-    process.on('SIGINT', async () => {
-      await Redis.client.cache.flushall();
-      await Redis.client.cache.disconnect();
-      await this.server.close();
+    process.on('SIGINT', () => {
+      Redis.client.cache.flushall();
+      Redis.client.cache.disconnect();
+      Tunnel.destroy();
+      this.server.close();
     });
   }
   public static init() {
