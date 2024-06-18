@@ -37,6 +37,7 @@ export const shotsApi = api.injectEndpoints({
             .subscribe({
               next: (data) => {
                 updateCachedData((draft) => {
+                  console.log(data.data?.lauchShot);
                   draft.unshift(data.data!.lauchShot!);
                 });
               },

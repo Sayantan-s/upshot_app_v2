@@ -33,6 +33,9 @@ const queries = {
           },
         },
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     return data;

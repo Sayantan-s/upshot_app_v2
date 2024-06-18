@@ -137,9 +137,13 @@ export const ShotPanel = () => {
 };
 
 const SwiperPagination = () => {
-  const { ids: shotIds } = useSelector(
-    (state) => state.shots.manualEdits.shots
+  const { archived: archiveStatus, shots } = useSelector(
+    (state) => state.shots.manualEdits
   );
+  const shotIds =
+    archiveStatus === ArchiveStatus.ARCHIVED
+      ? shots.archived
+      : shots.unArchived;
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiper = useSwiper();
   const location = useParams();
