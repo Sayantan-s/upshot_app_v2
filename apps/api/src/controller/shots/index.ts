@@ -1,3 +1,4 @@
+import { Server } from '@api/app/server';
 import { API_KEY } from '@api/config';
 import { CacheKey } from '@api/enums/cache';
 import { MESSAGE_SHOOT_SCHEDULED_SHOT } from '@api/enums/pubsub';
@@ -29,8 +30,7 @@ import {
   IShotsScheduleRegistrationHandler,
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
-const _SERVER_URL = 'https://1209-119-82-104-98.ngrok-free.app';
-
+const _SERVER_URL = Server.webhookInterceptorOrigin;
 export class ShotController {
   // CRUD
   public static fetchTargetProductShots: IShotsFetchHandler = async (

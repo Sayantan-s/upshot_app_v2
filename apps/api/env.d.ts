@@ -22,6 +22,7 @@ declare global {
       GEN_POSTS_DEV_TEST_API_KEY: string;
       SERVERLESS_API_KEY: string;
       QSTASH_API_KEY: string;
+      NGROK_AUTHTOKEN: string;
     }
 
     interface Global {}
