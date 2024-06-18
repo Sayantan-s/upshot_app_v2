@@ -20,6 +20,8 @@
 
 **☁️ Cloud Functions:** https://github.com/Sayantan-s/serverless-fns-upshot_v2
 
+**☁️ Webhook Intercepting**: `ngrok config add-authtoken $YOUR_AUTHTOKEN`
+
 ### 🛣️ Major flows
 
 <img src="./assets/System Design_ShotScheduling.png">
