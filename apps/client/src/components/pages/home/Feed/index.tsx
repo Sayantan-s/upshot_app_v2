@@ -28,7 +28,7 @@ export const Feed = () => {
   return (
     <div className="h-full">
       <header
-        className={`overflow-hidden after:content-[''] after:h-[1px] after:bg-slate-100 after:absolute after:bottom-0 sticky top-0 z-10 after:transition-transform after:w-full after:transform ${additionalStyles}`}
+        className={`overflow-hidden after:content-[''] after:h-[1px] after:bg-slate-100 after:absolute after:bottom-0 sticky top-0 z-50 after:transition-transform after:w-full after:transform ${additionalStyles}`}
       >
         <h1 className="p-4 text-slate-800 text-xl font-semibold bg-white/70 backdrop-blur-xl">
           Hey, <span className="text-xl text-slate-300">Sayantan</span>{' '}
