@@ -16,6 +16,7 @@ import {
   ShotStatus,
 } from '@client/store/types/shot';
 import { api, Tags } from '.';
+import { shotActions } from '../slices/shots';
 
 export const shotsApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -28,7 +29,7 @@ export const shotsApi = api.injectEndpoints({
       },
       async onCacheEntryAdded(
         _,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
       ) {
         try {
           await cacheDataLoaded;
@@ -37,7 +38,7 @@ export const shotsApi = api.injectEndpoints({
             .subscribe({
               next: (data) => {
                 updateCachedData((draft) => {
-                  console.log(data.data?.lauchShot);
+                  dispatch(shotActions.addOneShotToFeed(data.data!.lauchShot!));
                   draft.unshift(data.data!.lauchShot!);
                 });
               },
