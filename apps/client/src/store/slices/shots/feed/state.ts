@@ -22,7 +22,10 @@ const usersInitialState = usersAdapter.getInitialState();
 export const productsAdapter = createEntityAdapter<IFeedProduct>();
 const productsInitialState = productsAdapter.getInitialState();
 
-export const shotsAdapter = createEntityAdapter<IFeedShot>();
+export const shotsAdapter = createEntityAdapter<IFeedShot>({
+  sortComparer: (shotA, shotB) =>
+    shotA.launchedAt! > shotB.launchedAt! ? -1 : 1,
+});
 const shotsInitialState = shotsAdapter.getInitialState();
 
 export const fetchfeedShotState: IfetchFeedShotsState = {
