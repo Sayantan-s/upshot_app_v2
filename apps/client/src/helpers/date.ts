@@ -1,5 +1,13 @@
 import { ILaunchedAtClientState } from '@client/store/types/shot';
-import { format, getUnixTime, parseISO } from 'date-fns';
+import {
+  differenceInHours,
+  differenceInMinutes,
+  format,
+  getUnixTime,
+  isToday,
+  isYesterday,
+  parseISO,
+} from 'date-fns';
 
 export const convertDateToEpoch = (selectedDate: Date) => {
   const date = parseISO(selectedDate!.toISOString());
@@ -24,4 +32,30 @@ export const convertUTCEpochToDate = (
   const mins = format(date, 'mm');
 
   return { selectedDate: date, hours, mins };
+};
+
+export const formatTimeDifference = (date: Date) => {
+  const now = new Date();
+
+  if (differenceInMinutes(now, date) < 1) {
+    return 'just now';
+  }
+
+  if (differenceInMinutes(now, date) < 60) {
+    return `${differenceInMinutes(now, date)} m ago`;
+  }
+
+  if (differenceInHours(now, date) < 24) {
+    return `${differenceInHours(now, date)} h ago`;
+  }
+
+  if (isToday(date)) {
+    return 'today';
+  }
+
+  if (isYesterday(date)) {
+    return 'yesterday';
+  }
+
+  return format(date, 'MMM dd, yyyy');
 };
