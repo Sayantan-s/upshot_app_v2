@@ -21,7 +21,9 @@
     "serve:web": "nx dev web",
     "compile": "graphql-codegen",
     "compile:watch": "graphql-codegen --watch",
-    "studio": "cd apps/api && npx prisma studio"
+    "studio": "cd apps/api && npx prisma studio",
+    "lint:api": "nx run api:lint",
+    "lint:client": "nx run client:lint"
   },
   "private": true,
   "dependencies": {
