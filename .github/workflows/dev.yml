@@ -8,7 +8,7 @@ env:
   HUSKY: 0
 
 jobs:
-  lint:
+  install:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -21,6 +21,26 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install
+        working-directory: ${{ github.workspace }}
+        env:
+          cache: cache-node-modules
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Restore Dependencies Cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ env.cache }}
 
       - name: Lint Api
         run: yarn run lint:api
