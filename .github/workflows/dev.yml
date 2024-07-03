@@ -19,11 +19,22 @@ jobs:
         with:
           node-version: '18.16.0'
 
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Dependencies
         run: yarn install
-        working-directory: ${{ github.workspace }}
-        env:
-          cache: cache-node-modules
+
+      - name: Install Nx CLI
+        run: yarn global add nx
 
   lint:
     runs-on: ubuntu-latest
@@ -36,11 +47,13 @@ jobs:
         with:
           node-version: '18.16.0'
 
-      - name: Restore Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ env.cache }}
+      - name: Restore Node Modules Cache
+          uses: actions/cache@v2
+          with:
+            path: |
+              node_modules
+              ~/.cache/yarn
+            key: ${{ needs.install.outputs['yarn-cache'] }}
 
       - name: Lint Api
         run: yarn run lint:api
