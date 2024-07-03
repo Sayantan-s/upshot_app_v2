@@ -6,7 +6,7 @@ export const isObject = (className: unknown) =>
 export const classNames = (...args: unknown[]) => {
   const result: string[] = [];
   args.forEach((className) => {
-    if (!!!className) return;
+    if (!className) return;
     else if (isObject(className)) {
       for (const [key, value] of Object.entries(className)) {
         if (value) result.push(key);
