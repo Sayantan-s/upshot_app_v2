@@ -47,3 +47,4 @@ assets/ngrok-url.txt
 .astro
 
 
+.env*

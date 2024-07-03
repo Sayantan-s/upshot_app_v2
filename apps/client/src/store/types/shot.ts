@@ -1,6 +1,6 @@
-import { EntityState } from '@reduxjs/toolkit';
-import { User } from './auth';
-import { EProductStatus } from './product';
+import type { EntityState } from '@reduxjs/toolkit';
+import type { User } from './auth';
+import type { EProductStatus } from './product';
 
 export type Activity = 'promote' | 'sell';
 
