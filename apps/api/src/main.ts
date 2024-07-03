@@ -1,6 +1,6 @@
 import { Server } from '@api/app/server';
-import { SessionData } from 'express-session';
-import { Session } from 'inspector';
+import type { SessionData } from 'express-session';
+import type { Session } from 'node:inspector';
 import Controllers from './controller';
 import Middlewares from './middlewares';
 
