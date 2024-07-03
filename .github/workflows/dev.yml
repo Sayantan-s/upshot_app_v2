@@ -8,34 +8,6 @@ env:
   HUSKY: 0
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.16.0'
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: |
-            node_modules
-            ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Install Nx CLI
-        run: yarn global add nx
-
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -47,16 +19,39 @@ jobs:
         with:
           node-version: '18.16.0'
 
-      - name: Restore Node Modules Cache
-          uses: actions/cache@v2
-          with:
-            path: |
-              node_modules
-              ~/.cache/yarn
-            key: ${{ needs.install.outputs['yarn-cache'] }}
+      - name: Install Dependencies
+        run: yarn install
 
       - name: Lint Api
         run: yarn run lint:api
 
       - name: Lint Client
         run: yarn run lint:client
+
+  deploy-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Install Dependencies
+        run: yarn install
+
+  deploy-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.16.0'
+
+      - name: Install Dependencies
+        run: yarn install
