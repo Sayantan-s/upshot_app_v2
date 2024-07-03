@@ -29,6 +29,7 @@ jobs:
         run: yarn run lint:client
 
   deploy-client:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
