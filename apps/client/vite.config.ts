@@ -14,13 +14,6 @@ export default defineConfig({
     strictPort: true,
     port: 3000,
     host: 'localhost',
-    proxy: {
-      '/api': {
-        target: process.env.VITE_SERVER_ORIGIN,
-        changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
   },
 
   preview: {

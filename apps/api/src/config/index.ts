@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import dotenv from 'dotenv';
 import path from 'node:path';
 
@@ -9,8 +8,6 @@ dotenv.config(
       }
     : null
 );
-
-console.log(`Envs running on:: ${chalk.red(JSON.stringify(process.env))}`);
 
 const {
   ORIGIN,
