@@ -12,7 +12,7 @@ export const RequireAuth = () => {
   const [refresh, { isFetching }] = authApi.useLazyRefreshQuery();
 
   const { isLoading } = authApi.useUserQuery(undefined, {
-    skip: !isAuthenticated || !!!tokenMetaData?.id,
+    skip: !isAuthenticated || !tokenMetaData?.id,
   });
 
   useEffect(() => {

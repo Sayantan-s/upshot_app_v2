@@ -100,7 +100,7 @@ export const ProductDescription = () => {
               input={
                 <TextField
                   placeholder="Choose your product tags!"
-                  error={formState.errors.tags as any}
+                  error={formState.errors.tags as never}
                 />
               }
             >

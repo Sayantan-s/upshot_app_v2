@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
 export const useClickOutside = (
   ref: React.RefObject<HTMLElement>,
-  callback: Function
+  callback: () => void
 ) => {
   const handleClick = (e: Event) => {
     if (ref.current && !ref.current.contains(e.target as HTMLElement))
       callback();
   };
   React.useEffect(() => {
-    document.addEventListener("click", handleClick);
+    document.addEventListener('click', handleClick);
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener('click', handleClick);
     };
   });
 };

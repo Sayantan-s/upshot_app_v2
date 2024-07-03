@@ -1,21 +1,20 @@
-import { store } from '@client/store';
 import {
-  createContext,
-  createRef,
   MutableRefObject,
   PropsWithChildren,
+  createContext,
+  createRef,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 
 interface IContextProps {
   socket: Socket;
   isConnected: boolean;
 }
 
-const auth = store.getState().auth;
+// const auth = store.getState().auth;
 
 const socket = io(import.meta.env.VITE_SERVER_ORIGIN, {
   withCredentials: true,
@@ -38,7 +37,8 @@ export const WsProvider = ({ children }: PropsWithChildren) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (false) {
+    const constant = false;
+    if (constant) {
       socket.connect();
       socket.on('connect', () => {
         console.log(`${socket.id} connected to socket server...`);
