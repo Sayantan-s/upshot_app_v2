@@ -128,6 +128,7 @@ export class ShotController {
 
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
+      console.log(calculateDifferenceInSecs, 'SERVER TIME');
       const UTCDate = new Date(shotData.launchedAt * 1000);
       const offsetMinutes = UTCDate.getTimezoneOffset();
       const dateAccordingToOffsetTime = addMinutes(UTCDate, offsetMinutes);
@@ -135,6 +136,9 @@ export class ShotController {
         currentDate,
         dateAccordingToOffsetTime
       );
+
+      console.log(calculateDifferenceInSecs, 'DIFFERENCE IN SECONDS...');
+
       if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
       const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
