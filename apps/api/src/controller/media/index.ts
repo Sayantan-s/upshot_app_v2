@@ -14,9 +14,6 @@ export class MediaController {
     const { type, config, cropMetaData, intent, name } = req.body;
 
     // 683 KB = 683000 bytes
-
-    console.log(file.size);
-
     const cropConfig: ICropState = JSON.parse(config);
     const cropMetaDataValues: ICropArea = JSON.parse(cropMetaData);
     const image = await MediaService.image.crop({
@@ -24,8 +21,6 @@ export class MediaController {
       config: cropConfig,
       metaData: cropMetaDataValues,
     });
-
-    console.log(image);
 
     const uploadCloudinaryImages = Promise.all([
       Cloudinary.client.uploader.upload(file.path, {
@@ -37,8 +32,6 @@ export class MediaController {
     ]);
 
     const [rawImage, croppedImage] = await uploadCloudinaryImages;
-
-    console.log([rawImage, croppedImage]);
 
     await image.destroy();
 

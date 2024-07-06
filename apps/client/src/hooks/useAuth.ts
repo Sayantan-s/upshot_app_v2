@@ -1,5 +1,5 @@
 import { useSelector } from '@client/store';
-import { User } from '@client/store/types/auth';
+import type { User } from '@client/store/types/auth';
 
 export interface JwtPayload {
   exp?: number | undefined;
