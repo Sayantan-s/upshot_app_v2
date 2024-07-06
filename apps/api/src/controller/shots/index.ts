@@ -128,8 +128,9 @@ export class ShotController {
 
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
-      console.log(currentDate, 'SERVER TIME');
+      console.log(currentDate, 'CURRENT DATE');
       const UTCDate = new Date(shotData.launchedAt * 1000);
+      console.log(UTCDate, 'LAUNCH DATE');
       const offsetMinutes = UTCDate.getTimezoneOffset();
       const dateAccordingToOffsetTime = addMinutes(UTCDate, offsetMinutes);
       const calculateDifferenceInSecs = differenceInSeconds(
