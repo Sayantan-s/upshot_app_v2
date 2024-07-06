@@ -134,7 +134,8 @@ export class ShotController {
       console.log(UTCDate, 'LAUNCH DATE');
       console.log(
         'ACTIVE MILISECOND DIFF',
-        currentDateUtcEpoch - shotData.launchedAt
+        currentDateUtcEpoch,
+        shotData.launchedAt
       );
       const offsetMinutes = UTCDate.getTimezoneOffset();
       const dateAccordingToOffsetTime = addMinutes(UTCDate, offsetMinutes);
