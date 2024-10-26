@@ -426,16 +426,16 @@ export type GetAllProductsQuery = {
   getProducts: Array<{
     __typename?: 'Product';
     productName?: string | null;
-    launchedAt?: string | null;
-    createdAt?: string | null;
-    createdBy?: string | null;
-    tags?: Array<InterestsType | null> | null;
+    productMoto?: string | null;
     id?: string | null;
+    launchedAt?: string | null;
+    status?: ProductStatus | null;
+    createdAt?: string | null;
     price?: {
       __typename?: 'ProductPrice';
-      amount?: number | null;
-      currency?: ProductPriceCurrency | null;
       soldAt?: number | null;
+      currency?: ProductPriceCurrency | null;
+      amount?: number | null;
     } | null;
   }>;
 };
@@ -1246,11 +1246,7 @@ export const GetAllProductsDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'productName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdBy' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'productMoto' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'price' },
@@ -1259,7 +1255,7 @@ export const GetAllProductsDocument = {
                     selections: [
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'amount' },
+                        name: { kind: 'Name', value: 'soldAt' },
                       },
                       {
                         kind: 'Field',
@@ -1267,11 +1263,15 @@ export const GetAllProductsDocument = {
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'soldAt' },
+                        name: { kind: 'Name', value: 'amount' },
                       },
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'launchedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
               ],
             },
           },

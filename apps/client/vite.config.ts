@@ -4,8 +4,6 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
-console.log(process.env, 'VALUE...');
-
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/client',
   server: {
@@ -28,12 +26,6 @@ export default defineConfig({
     }),
     nxViteTsPaths(),
   ],
-
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-
   // test: {
   //   globals: true,
   //   cache: {

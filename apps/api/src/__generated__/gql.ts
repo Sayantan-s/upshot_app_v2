@@ -19,7 +19,7 @@ const documents = {
     types.GetShotsDocument,
   '\n  subscription Subscription {\n    lauchShot {\n      id\n      launchedAt\n      media\n      productType\n      votes\n      content\n      title\n      product {\n        user {\n          firstName\n          lastName\n          about\n          coverPic\n          userName\n          profilePic\n          location\n          id\n        }\n        tags\n        status\n        launchedAt\n        id\n        productDescription\n        productMoto\n        productName\n        media {\n          productCover {\n            config {\n              area {\n                height\n                width\n                x\n                y\n              }\n              fileName\n              metadata {\n                crop {\n                  y\n                  x\n                }\n                zoom\n                rotate\n              }\n            }\n            current\n            raw\n          }\n          productLogo {\n            raw\n            current\n            config {\n              metadata {\n                zoom\n                crop {\n                  y\n                  x\n                }\n                rotate\n              }\n              fileName\n              area {\n                y\n                x\n                width\n                height\n              }\n            }\n          }\n        }\n        userId\n      }\n      productId\n    }\n  }\n':
     types.SubscriptionDocument,
-  '\n  query GetAllProducts {\n    getProducts {\n      productName\n      launchedAt\n      createdAt\n      createdBy\n      tags\n      id\n      price {\n        amount\n        currency\n        soldAt\n      }\n    }\n  }\n':
+  '\n  query GetAllProducts {\n    getProducts {\n      productName\n      productMoto\n      price {\n        soldAt\n        currency\n        amount\n      }\n      id\n      launchedAt\n      status\n      createdAt\n    }\n  }\n':
     types.GetAllProductsDocument,
 };
 
@@ -59,8 +59,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllProducts {\n    getProducts {\n      productName\n      launchedAt\n      createdAt\n      createdBy\n      tags\n      id\n      price {\n        amount\n        currency\n        soldAt\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GetAllProducts {\n    getProducts {\n      productName\n      launchedAt\n      createdAt\n      createdBy\n      tags\n      id\n      price {\n        amount\n        currency\n        soldAt\n      }\n    }\n  }\n'];
+  source: '\n  query GetAllProducts {\n    getProducts {\n      productName\n      productMoto\n      price {\n        soldAt\n        currency\n        amount\n      }\n      id\n      launchedAt\n      status\n      createdAt\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllProducts {\n    getProducts {\n      productName\n      productMoto\n      price {\n        soldAt\n        currency\n        amount\n      }\n      id\n      launchedAt\n      status\n      createdAt\n    }\n  }\n'];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

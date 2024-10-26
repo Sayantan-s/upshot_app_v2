@@ -8,11 +8,13 @@ const config = [
     heading: 'Products',
     counts: 3,
     active: true,
+    link: 'profile/products',
   },
   {
     heading: 'Posts',
     counts: 21,
     active: false,
+    link: 'profile/products',
   },
 ];
 
@@ -51,8 +53,9 @@ export const ProfileCard = () => {
           <p className="mt-1">{user?.location}</p>
         </div>
         <div className="pt-[10%] flex justify-between">
-          {config.map(({ heading, counts, active }) => (
-            <div
+          {config.map(({ heading, counts, active, link }) => (
+            <NavLink
+              to={link || '#'}
               role={active ? 'button' : 'document'}
               key={heading}
               className={`p-2 rounded-md ${
@@ -80,7 +83,7 @@ export const ProfileCard = () => {
               >
                 {counts}
               </p>
-            </div>
+            </NavLink>
           ))}
           <div className={`p-2 rounded-md`}>
             <h3 className="flex items-center">

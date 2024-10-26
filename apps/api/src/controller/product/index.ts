@@ -1,4 +1,5 @@
 import H from '@api/helpers/ResponseHelper';
+import prisma from '@api/integrations/prisma';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { ProductStatus } from '@prisma/client';
@@ -44,7 +45,11 @@ export class ProductController {
     const keyName = `${productId}_updateProduct`;
     const cacheCurrentData = await Redis.client.cache.get(keyName);
     if (cacheCurrentData !== currentStringifiedData) {
-      await ProductService.update({ id: productId }, data);
+      // await ProductService.update({ id: productId }, data);
+      await prisma.product.update({
+        where: { id: productId },
+        data,
+      });
       await Redis.client.cache.setex(keyName, 10, JSON.stringify(data));
     }
     H.success(res, {
@@ -58,12 +63,10 @@ export class ProductController {
     const key = `PRODUCT_FINALISE_${productId}`;
     const isProductFinalized = await Redis.client.cache.get(key);
     if (!isProductFinalized) {
-      await ProductService.update(
-        { id: productId },
-        {
-          status: ProductStatus.COMING_SOON,
-        }
-      );
+      await prisma.product.update({
+        where: { id: productId },
+        data: { status: ProductStatus.COMING_SOON },
+      });
       await Redis.client.cache.setex(key, 20, 1);
     }
     res.clearCookie('onboarding-session');
