@@ -1,27 +1,29 @@
-import { NGROK_AUTHTOKEN, NODE_ENV, ORIGIN } from '@api/config';
+import { NGROK_AUTHTOKEN, NGROK_SWITCH, NODE_ENV, ORIGIN } from '@api/config';
 import ngrok from 'ngrok';
 
 export class Tunnel {
   private static uri: string;
   private static webhookInterceptorOrigin: string;
+  private static isNgrokActive = NODE_ENV === 'local' && NGROK_SWITCH === 'on';
   static async create() {
-    if (NODE_ENV === 'local') {
+    if (Tunnel.isNgrokActive) {
       Tunnel.uri = await ngrok.connect({
         proto: 'http',
         addr: 8080,
         authtoken: NGROK_AUTHTOKEN,
       });
     }
-    Tunnel.webhookInterceptorOrigin =
-      NODE_ENV === 'local' ? Tunnel.uri : ORIGIN;
+    Tunnel.webhookInterceptorOrigin = Tunnel.isNgrokActive
+      ? Tunnel.uri
+      : ORIGIN;
 
     return {
-      uri: Tunnel.uri,
+      uri: Tunnel.uri || 'NO URI. TURN `on` NGROK SWITCH',
       webhookInterceptorOrigin: Tunnel.webhookInterceptorOrigin,
     };
   }
 
   static async destroy() {
-    NODE_ENV === 'local' && (await ngrok.disconnect(Tunnel.uri));
+    Tunnel.isNgrokActive && (await ngrok.disconnect(Tunnel.uri));
   }
 }

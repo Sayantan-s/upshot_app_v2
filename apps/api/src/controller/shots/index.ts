@@ -18,7 +18,7 @@ import {
   Shot,
   ShotStatus,
 } from '@prisma/client';
-import { addMinutes, differenceInSeconds, format } from 'date-fns';
+import { addMinutes, differenceInSeconds, format, getTime } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { ScheduleAllRegistrationHandlerEnumShotScheduleStatus } from './enum';
 import {
@@ -128,13 +128,24 @@ export class ShotController {
 
       // Task 2:: Setup JWT expiry
       const currentDate = new Date();
+      const currentDateUtcEpoch = getTime(currentDate);
+      console.log(currentDate, 'CURRENT DATE');
       const UTCDate = new Date(shotData.launchedAt * 1000);
+      console.log(UTCDate, 'LAUNCH DATE');
+      console.log(
+        'ACTIVE MILISECOND DIFF',
+        currentDateUtcEpoch,
+        shotData.launchedAt
+      );
       const offsetMinutes = UTCDate.getTimezoneOffset();
       const dateAccordingToOffsetTime = addMinutes(UTCDate, offsetMinutes);
       const calculateDifferenceInSecs = differenceInSeconds(
         currentDate,
         dateAccordingToOffsetTime
       );
+
+      console.log(calculateDifferenceInSecs, 'DIFFERENCE IN SECONDS...');
+
       if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
       const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
