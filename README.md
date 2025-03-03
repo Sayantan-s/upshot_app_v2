@@ -25,8 +25,7 @@
 
 ### 📝 Notes
 
-In production, neither **Vercel** nor **Render** supports WS/SSE's so I have add a demo of it's working below in the
-loom video. :)
+In production, neither **Vercel** nor **Render** supports WS/SSE's so I have added a demo of it's working below in the loom video. :)
 
 ### 🛣️ Major flows
 
