@@ -1,57 +1,26 @@
 import { Button } from '@client/components/ui';
-import { useModal } from '@client/context/ModalSystem';
 import { useSelector } from '@client/store';
 import { shotsApi } from '@client/store/services/shot';
-import { ShotStatus } from '@client/store/types/shot';
 import * as Toggle from '@radix-ui/react-toggle';
-import { addHours, addMinutes, getUnixTime } from 'date-fns';
 import { Share } from 'iconsax-react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 import { DateTimePicker } from './DateTimePicker';
 
 export const Toolbar = () => {
-  const [scheduleAll, { isLoading: isSchedulingAll }] =
-    shotsApi.useScheduleAllMutation();
-  const { shots } = useSelector((state) => state.shots.manualEdits);
-  const params = useParams();
-  const modal = useModal({ isLoading: isSchedulingAll });
+  const [scheduleOne, { isLoading: isScheduling }] =
+    shotsApi.useScheduleOneMutation();
+  const { currentlyEditing: currentlyEditingShot } = useSelector(
+    (state) => state.shots.manualEdits
+  );
+
   const [pressed, setPressed] = useState(false);
 
-  const handleOpenSaveAll = () => {
-    const isAvailableForLaunchAll = shots.ids.every((id) => {
-      const shot = shots.entities[id];
-      if (shot?.status === ShotStatus.IDLE && shot.launchedAt?.selectedDate) {
-        const launchDate = addMinutes(
-          addHours(shot.launchedAt.selectedDate, +shot.launchedAt.hours),
-          +shot.launchedAt.mins
-        );
-        return getUnixTime(launchDate) > Math.floor(Date.now() / 1000);
-      }
-      return false;
-    });
-    if (!isAvailableForLaunchAll) {
-      toast.info('Shot Status Mismatch', {
-        description:
-          'All your shots might not have the same idle status with a scheduled date!',
-      });
-      return;
-    }
-    modal.create({
-      variant: 'info',
-      heading: `Are you sure want to schedule all the shots according to their
-              schedule time?`,
-      body: `Once the shots have been scheduled, any changes or reversals will
-              necessitate additional credits. Please proceed only after
-              confirming your final selections!`,
-      confirmationBtnText: `Let's do this!`,
-      onConfirm: handleScheduleAll,
-    });
+  const handleScheduleTargetShot = async () => {
+    await scheduleOne({ id: currentlyEditingShot });
   };
 
-  const handleScheduleAll = async () =>
-    await scheduleAll({ productId: params.productId as string });
+  // const handleScheduleAll = async () =>
+  //   await scheduleAll({ productId: params.productId as string });
 
   return (
     <nav
@@ -84,10 +53,11 @@ export const Toolbar = () => {
           size={'md'}
           className="shadow-md shadow-emerald-700/20 space-x-1.5"
           variant={'neutral.solid'}
-          onClick={handleOpenSaveAll}
+          onClick={handleScheduleTargetShot}
+          disabled={isScheduling}
         >
           <Share size={16} color="#ffffff" variant="Bulk" />
-          <span className="text-white">Launch All</span>
+          <span className="text-white">Launch</span>
         </Button>
       </div>
     </nav>

@@ -44,6 +44,7 @@ export const ShotPanel = () => {
       skip: !location.productId,
     }
   );
+
   const {
     entities: data,
     isLoading,
@@ -83,13 +84,12 @@ export const ShotPanel = () => {
   const configBlocker = shotIds.length > 2;
 
   return (
-    <div className="flex justify-center h-screen flex-col">
+    <div className="flex justify-center h-[120vh] flex-col">
       <Swiper
         loop={configBlocker}
         mousewheel
         centeredSlides
         modules={[Mousewheel]}
-        allowTouchMove={isNotEditing}
         spaceBetween={12}
         slidesPerView={2.65}
         onRealIndexChange={handleSlideChange}
@@ -123,7 +123,7 @@ export const ShotPanel = () => {
         />
         <div
           slot="container-start"
-          className="mb-10 flex items-center z-50 w-full"
+          className="mb-20 flex items-center z-50 w-full"
         >
           <div className="flex items-stretch space-x-3">
             <ArchiveToggler />

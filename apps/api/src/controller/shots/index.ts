@@ -144,8 +144,6 @@ export class ShotController {
         dateAccordingToOffsetTime
       );
 
-      console.log(calculateDifferenceInSecs, 'DIFFERENCE IN SECONDS...');
-
       if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
       const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
