@@ -4,11 +4,11 @@ import { shotsApi } from '@client/store/services/shot';
 import { shotActions } from '@client/store/slices/shots';
 import { ArchiveStatus } from '@client/store/types/shot';
 import { Add } from 'iconsax-react';
-import { useEffect, useState } from 'react';
+import { KeyboardEventHandler, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 import 'swiper/css';
-import { Mousewheel } from 'swiper/modules';
+import { FreeMode } from 'swiper/modules';
 import {
   Swiper,
   SwiperClass,
@@ -20,6 +20,7 @@ import { EditableShotCard } from '../EditableShotCard';
 import { Skeleton } from '../EditableShotCard/Skeleton';
 import { ArchiveToggler } from './ArchiveToggler';
 import { ShotSearch } from './ShotSearch';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * Once one post is edit clicked
@@ -29,7 +30,7 @@ import { ShotSearch } from './ShotSearch';
  */
 
 export const ShotPanel = () => {
-  const [activeSlideIndex, setActiveSlideIndex] = useState(1);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const location = useParams();
   const [searchParams] = useSearchParams();
@@ -75,6 +76,7 @@ export const ShotPanel = () => {
   };
 
   const handleSlideChange: SwiperProps['onSlideChange'] = (swiper) => {
+    console.log('swiper.realIndex', swiper.realIndex);
     !Number.isNaN(swiper.realIndex) && setActiveSlideIndex(swiper.realIndex);
   };
 
@@ -87,14 +89,13 @@ export const ShotPanel = () => {
     <div className="flex justify-center h-[120vh] flex-col">
       <Swiper
         loop={configBlocker}
-        mousewheel
         centeredSlides
-        modules={[Mousewheel]}
+        modules={[FreeMode]}
         spaceBetween={12}
         slidesPerView={2.65}
         onRealIndexChange={handleSlideChange}
         direction="horizontal"
-        className="overflow-x-hidden py-2 cursor-grab w-[1200px] h-[700px] mx-auto flex justify-center items-start flex-col relative"
+        className="overflow-x-hidden  py-2 cursor-grab w-[1200px] h-[700px] mx-auto flex justify-center items-start flex-col relative"
       >
         <div
           className={`w-1/4 h-full absolute left-0 z-40 bg-gradient-to-r from-white via-white/50 to-white/0`}
@@ -123,7 +124,7 @@ export const ShotPanel = () => {
         />
         <div
           slot="container-start"
-          className="mb-20 flex items-center z-50 w-full"
+          className="mb-20 flex items-center z-50 w-full bg-white"
         >
           <div className="flex items-stretch space-x-3">
             <ArchiveToggler />
@@ -179,20 +180,16 @@ const SwiperPagination = () => {
   return (
     <div className="flex items-center w-full">
       <div className="w-full max-w-[1200px] mx-auto flex items-center justify-end flex-1 space-x-2.5">
-        <div className="flex space-x-2 items-center bg-gray-100 rounded-full w-max px-2.5 py-1.5 border border-gray-200">
-          {shotIds.map((shotId, index) => (
-            <button
-              onClick={() => handleSwipeTo(index)}
-              key={shotId}
-              className={`w-6 h-6 shadow flex items-center justify-center text-xs rounded-full ${
-                currentIndex === index
-                  ? 'bg-gray-700 text-white shadow'
-                  : 'bg-white text-gray-400 shadow'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
+        <div className="border px-2 py-1 rounded-full">
+          <Pagination
+            currentPage={currentIndex}
+            onPageChange={handleSwipeTo}
+            totalPages={shotIds.length}
+            previousButtonClassName="bg-gray-200 text-gray-700 h-7 px-3 flex items-center justify-center text-xs rounded-full"
+            nextButtonClassName="bg-gray-200 text-gray-700 h-7 px-3 flex items-center justify-center text-xs rounded-full"
+            paginationButtonClassName="w-7 h-7 shadow flex items-center justify-center text-xs rounded-full shadow-gray-500/20 text-xs text-gray-700 border-gray-100 border transition-all duration-200 aria-[current]:bg-gray-900 aria-[current]:pointer-events-none aria-[current]:font-medium aria-[current]:text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            maxVisiblePages={3}
+          />
         </div>
         <Button
           isLoading={isCreating}
@@ -203,6 +200,153 @@ const SwiperPagination = () => {
           Add New Shot
         </Button>
       </div>
+    </div>
+  );
+};
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  showPageNumbers?: boolean;
+  maxVisiblePages?: number;
+  className?: string;
+  maxMovementAllowed?: number;
+  ref?: React.Ref<HTMLDivElement>;
+  previousButtonClassName: string;
+  nextButtonClassName: string;
+  paginationButtonClassName: string;
+}
+
+export const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+  showPageNumbers = true,
+  maxVisiblePages = 5,
+  className,
+  maxMovementAllowed,
+  previousButtonClassName,
+  nextButtonClassName,
+  paginationButtonClassName,
+  ref,
+}: PaginationProps) => {
+  const maxMovement = maxMovementAllowed || totalPages;
+  // Don't render pagination if there's only one page
+  if (totalPages <= 1) return null;
+
+  const handlePrevious = () => {
+    console.log('currentPage, maxMovement', currentPage, maxMovement);
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < maxMovement) {
+      onPageChange(currentPage + 1);
+    }
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (e.key === 'ArrowLeft') handlePrevious();
+    else if (e.key === 'ArrowRight') handleNext();
+    else if (e.key === 'Home') onPageChange(1);
+    else if (e.key === 'End') onPageChange(totalPages);
+  };
+
+  // Calculate which page numbers to show
+  const getVisiblePageNumbers = () => {
+    const pageNumbers = [];
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+
+    let startPage = Math.max(1, currentPage - halfVisible);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    if (startPage > 1) {
+      pageNumbers.push(1);
+      if (startPage > 2) {
+        pageNumbers.push('ellipsis-start');
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageNumbers.push('ellipsis-end');
+      }
+      pageNumbers.push(totalPages);
+    }
+
+    return pageNumbers;
+  };
+
+  return (
+    <div
+      className={twMerge('flex items-center justify-center gap-2', className)}
+      ref={ref}
+      onKeyDown={handleKeyDown}
+    >
+      <button
+        onClick={handlePrevious}
+        disabled={currentPage <= 1}
+        className={previousButtonClassName}
+        aria-label="Previous page"
+      >
+        Previous
+      </button>
+
+      {showPageNumbers && (
+        <div className="flex items-center gap-1">
+          {getVisiblePageNumbers().map((pageNumber, index) => {
+            if (
+              pageNumber === 'ellipsis-start' ||
+              pageNumber === 'ellipsis-end'
+            ) {
+              return (
+                <div
+                  key={`${pageNumber}-${index}`}
+                  className="flex items-center justify-center w-9 h-9"
+                >
+                  ...{' '}
+                </div>
+              );
+            }
+
+            console.log('pageNumber, currentPage', pageNumber, currentPage);
+
+            return (
+              <button
+                disabled={+pageNumber > maxMovement}
+                key={pageNumber}
+                className={twMerge(paginationButtonClassName)}
+                onClick={() => onPageChange(pageNumber as number)}
+                aria-label={`Page ${pageNumber}`}
+                aria-current={pageNumber === currentPage ? 'page' : undefined}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <button
+        onClick={handleNext}
+        disabled={currentPage >= maxMovement}
+        className={nextButtonClassName}
+        aria-label="Next page"
+      >
+        Next
+      </button>
     </div>
   );
 };

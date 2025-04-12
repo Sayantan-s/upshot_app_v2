@@ -261,7 +261,7 @@ export const ShotController: FC<IShotControllerProps> = ({
 
         <motion.button
           disabled={!isActive}
-          className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center"
+          className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center border border-rose-200"
           onClick={handleCreateDeleteModal}
         >
           <Bag size={16} color="#f43f5d" variant="Bulk" />

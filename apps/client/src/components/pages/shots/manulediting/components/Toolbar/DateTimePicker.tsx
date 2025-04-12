@@ -57,7 +57,7 @@ export const DateTimePicker: FC = () => {
 
   const dispatch = useDispatch();
 
-  const [isOpen, { off, setState }] = useToggle();
+  const [isOpen, { off, setState, on }] = useToggle();
 
   const handleSelectDate: SelectSingleEventHandler = (dateData) => {
     setDate((prevState) => ({ ...prevState, selectedDate: dateData }));
@@ -135,6 +135,7 @@ export const DateTimePicker: FC = () => {
           ? new Date(currentShot.launchedAt.selectedDate)
           : null
       );
+      if (!currentShot.launchedAt?.selectedDate) on();
     }
   }, [currentShot]);
 
