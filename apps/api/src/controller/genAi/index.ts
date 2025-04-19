@@ -7,6 +7,9 @@ import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { v4 as uuid } from 'uuid';
 import { IProductInputGenerationHandler, IResponsePayload } from './types';
+import { RequestHandler } from 'express';
+import { LLM } from '@api/integrations/llm';
+import { Type } from '@google/genai';
 
 export class GenAiController {
   public static generateProductOnboarding: IProductInputGenerationHandler =
@@ -80,4 +83,39 @@ export class GenAiController {
         data: responsePayload,
       });
     };
+
+  public static generateStruturedOps: RequestHandler = async (_, res) => {
+    const schema = {
+      type: Type.OBJECT,
+      required: ['shots'],
+      properties: {
+        shots: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            required: ['title', 'content'],
+            properties: {
+              title: {
+                type: Type.STRING,
+              },
+              content: {
+                type: Type.STRING,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const shots = await LLM.generateStructuredOPs({
+      model: LLM.models.pro_preview,
+      schema,
+      prompt: `You are developer adovate promoting your product. Write 5 tweet like posts promoting your product.`,
+    });
+
+    return H.success(res, {
+      data: shots,
+      statusCode: 201,
+    });
+  };
 }

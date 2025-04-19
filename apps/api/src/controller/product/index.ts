@@ -9,6 +9,7 @@ import {
   IProductFetchHandler,
   IProductUpdateHandler,
 } from './type';
+import { RequestHandler } from 'express';
 export class ProductController {
   public static createProduct: IProductCreateHandler = async (req, res) => {
     const { productMoto, productName } = req.body;
@@ -57,6 +58,8 @@ export class ProductController {
       data: null,
     });
   };
+
+  public static onboardProduct: RequestHandler = async () => {};
 
   public static finaliseProduct: IProductUpdateHandler = async (req, res) => {
     const { productId } = req.params;
