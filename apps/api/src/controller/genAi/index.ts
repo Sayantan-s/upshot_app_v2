@@ -1,8 +1,7 @@
-import { MESSAGE_CALL_GENPOST_FN } from '@api/enums/pubsub';
+import { MESSAGE_POST_GEN } from '@api/enums/pubsub';
 import { OnboardingShotCreationStatus } from '@api/enums/shot';
 import H from '@api/helpers/ResponseHelper';
-import { OpenApi } from '@api/integrations/openai';
-import GenaiQueue from '@api/integrations/queues/genai/queue';
+import { PostGen } from '@api/integrations/queues/genai/queue';
 import { Redis } from '@api/integrations/redis';
 import { ProductService } from '@api/services/product';
 import { v4 as uuid } from 'uuid';
@@ -10,16 +9,13 @@ import { IProductInputGenerationHandler, IResponsePayload } from './types';
 import { RequestHandler } from 'express';
 import { LLM } from '@api/integrations/llm';
 import { Type } from '@google/genai';
+import { MessageQueue } from '@api/integrations/queues';
 
 export class GenAiController {
   public static generateProductOnboarding: IProductInputGenerationHandler =
     async (req, res) => {
-      const {
-        productMoto,
-        productName,
-        setupInitialFiveAutomatedPosts,
-        generateProductDescription,
-      } = req.body;
+      const { productMoto, productName, setupInitialFiveAutomatedPosts } =
+        req.body;
       const userId = req.session.user_id;
       const responsePayload: Partial<IResponsePayload> = {
         startedSettingUpAutomatedPosts: false,
@@ -39,41 +35,30 @@ export class GenAiController {
 
       responsePayload.productId = product.id;
 
-      if (generateProductDescription) {
-        // Task 2:: Generate a product description using ai if checked from UI
-        const description = await OpenApi.client.completions.create({
-          model: 'gpt-3.5-turbo-instruct',
-          prompt: `
-        Generate a 50 words product decription according to the below inputs:
-        productName: ${productName}
-        productMoto: ${productMoto}
-      `,
-          stream: false,
-          temperature: 0.3,
-          max_tokens: 50,
-        });
-        responsePayload.description = description.choices[0].text;
-      }
-
       if (setupInitialFiveAutomatedPosts) {
-        // Task 3:: Call the firebase cloud function to generate 5 posts behind the scenes using bullMQ
-        responsePayload.startedSettingUpAutomatedPosts = true;
-        responsePayload.messageId = await GenaiQueue.client.produce(
-          MESSAGE_CALL_GENPOST_FN,
-          {
-            productMoto,
-            productName,
-            productId: responsePayload.productId,
-            ...(responsePayload.description
-              ? { productDescription: responsePayload.description }
-              : {}),
-          }
-        );
+        // Task 2:: Call the LLM to generate 5 posts behind the scenes through a queue.
+        const queue = new MessageQueue(PostGen.message_name, PostGen.workerFn);
+
+        queue.produce(MESSAGE_POST_GEN, {
+          productMoto,
+          productName,
+          productId: responsePayload.productId,
+        });
+
         const keyName = `${responsePayload.productId}_generateProductOnboarding`;
-        await Redis.client.cache.set(
-          keyName,
-          OnboardingShotCreationStatus.CREATING
-        );
+
+        queue.on(MessageQueue.action.POST_PRODUCE, async () => {
+          await Redis.client.cache.set(
+            keyName,
+            OnboardingShotCreationStatus.CREATING
+          );
+        });
+
+        queue.on(MessageQueue.action.POST_CONSUME, async () => {
+          await Redis.client.cache.del(keyName);
+        });
+
+        responsePayload.startedSettingUpAutomatedPosts = true;
       }
 
       res.cookie('onboarding-session', uuid());

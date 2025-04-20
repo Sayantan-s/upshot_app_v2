@@ -1,5 +1,10 @@
 import { GEMINI_API_KEY } from '@api/config';
-import { GoogleGenAI, SchemaUnion } from '@google/genai';
+import {
+  ContentListUnion,
+  GenerateContentConfig,
+  GoogleGenAI,
+  SchemaUnion,
+} from '@google/genai';
 
 class MODEL {
   static pro_preview = Symbol('gemini-2.5-flash-preview-04-17');
@@ -9,35 +14,41 @@ interface IGenerateStructuredOPs {
   schema: SchemaUnion;
   model: symbol;
   prompt: string;
+  systemPrompt?: string;
 }
 
 export class LLM {
-  private instance: GoogleGenAI;
-  private static clientInstance: GoogleGenAI | null;
+  private _instance: GoogleGenAI;
+  private static _clientInstance: GoogleGenAI | null;
   static models = MODEL;
   constructor() {
-    this.instance = new GoogleGenAI({
+    this._instance = new GoogleGenAI({
       apiKey: GEMINI_API_KEY,
     });
   }
 
-  private static get client() {
-    if (!LLM.clientInstance) LLM.clientInstance = new LLM().instance;
-    return LLM.clientInstance;
+  private static get _client() {
+    if (!LLM._clientInstance) LLM._clientInstance = new LLM()._instance;
+    return LLM._clientInstance;
   }
 
-  static async generateStructuredOPs({
+  static async generateStructuredOPs<TData>({
     model: llmModel,
     schema,
     prompt,
+    systemPrompt,
   }: IGenerateStructuredOPs) {
-    const config = {
+    const config: GenerateContentConfig = {
       responseMimeType: 'application/json',
       responseSchema: schema,
     };
+
+    if (systemPrompt.trim() !== '' && systemPrompt.length > 20)
+      config.systemInstruction = systemPrompt;
+
     const model = llmModel.description;
 
-    const contents = [
+    const contents: ContentListUnion = [
       {
         role: 'user',
         parts: [
@@ -47,13 +58,14 @@ export class LLM {
         ],
       },
     ];
-    const response = await LLM.client.models.generateContent({
+
+    const response = await LLM._client.models.generateContent({
       model,
       config,
       contents,
     });
 
-    const result = JSON.parse(response.text);
+    const result: TData = JSON.parse(response.text);
 
     return result;
   }

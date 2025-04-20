@@ -7,9 +7,14 @@ import { v4 as uuid } from 'uuid';
 import {
   IProductCreateHandler,
   IProductFetchHandler,
+  IProductOnboardingHandler,
+  IProductOnboardingResponsePayload,
   IProductUpdateHandler,
 } from './type';
-import { RequestHandler } from 'express';
+import { MessageQueue } from '@api/integrations/queues';
+import { PostGen } from '@api/integrations/queues/genai/queue';
+import { MESSAGE_POST_GEN } from '@api/enums/pubsub';
+import { OnboardingShotCreationStatus } from '@api/enums/shot';
 export class ProductController {
   public static createProduct: IProductCreateHandler = async (req, res) => {
     const { productMoto, productName } = req.body;
@@ -59,8 +64,6 @@ export class ProductController {
     });
   };
 
-  public static onboardProduct: RequestHandler = async () => {};
-
   public static finaliseProduct: IProductUpdateHandler = async (req, res) => {
     const { productId } = req.params;
     const key = `PRODUCT_FINALISE_${productId}`;
@@ -76,6 +79,61 @@ export class ProductController {
     H.success(res, {
       statusCode: 204,
       data: null,
+    });
+  };
+
+  public static onboardProduct: IProductOnboardingHandler = async (
+    req,
+    res
+  ) => {
+    const { productMoto, productName, config } = req.body;
+    const userId = req.session.user_id;
+    const responsePayload: IProductOnboardingResponsePayload = {
+      productId: null,
+    };
+
+    // Task 1:: Create a product in database
+    const product = await ProductService.create({
+      productMoto,
+      productName,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
+
+    responsePayload.productId = product.id;
+
+    if (config.shots.generate) {
+      // Task 2:: Call the LLM to generate 5 posts behind the scenes through a queue.
+      const queue = new MessageQueue(PostGen.message_name, PostGen.workerFn);
+
+      queue.produce(MESSAGE_POST_GEN, {
+        productMoto,
+        productName,
+        productId: responsePayload.productId,
+      });
+
+      const keyName = `${responsePayload.productId}_generateProductOnboarding`;
+
+      queue.on(MessageQueue.action.POST_PRODUCE, async () => {
+        await Redis.client.cache.set(
+          keyName,
+          OnboardingShotCreationStatus.CREATING
+        );
+      });
+
+      queue.on(MessageQueue.action.POST_CONSUME, async () => {
+        await Redis.client.cache.del(keyName);
+      });
+    }
+
+    res.cookie('onboarding-session', uuid());
+
+    H.success(res, {
+      statusCode: 200,
+      data: responsePayload,
     });
   };
 }

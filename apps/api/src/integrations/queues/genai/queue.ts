@@ -1,59 +1,71 @@
-import { generatePosts } from '@api/apis/serverless/generatePosts';
-import { OnboardingShotCreationStatus } from '@api/enums/shot';
 import { RichText } from '@api/helpers/RichTextEditor';
-import { Redis } from '@api/integrations/redis';
-import { ProductService } from '@api/services/product';
-import { ShotService } from '@api/services/shot';
 import { CreationMethod, ProductStatus, ShotStatus } from '@prisma/client';
-import { MessageQueue } from '..';
 import { JobFn } from '../type';
-import { MessageQueueInput } from './type';
+import { LLM } from '@api/integrations/llm';
+import { Type } from '@google/genai';
+import prisma from '@api/integrations/prisma';
+import { PostGenInput, PostGenOutput } from './type';
 
-export default class GenaiQueue {
-  private static instance: MessageQueue<MessageQueueInput> = null;
-  static messageName = 'call-gen-posts';
-  private static workerFunction: JobFn = async (job) => {
-    let productId: string | null = null;
-    const keyName = `${productId}_generateProductOnboarding`;
-    try {
-      const genPostMetaData = job.data;
-      const data = await generatePosts(genPostMetaData);
-      productId = genPostMetaData.productId;
-      genPostMetaData.productDescription &&
-        (await ProductService.update(
-          { id: productId },
-          {
-            productDescription: genPostMetaData.productDescription,
-          }
-        ));
-
-      const shotsPayload = data.map((payload) => ({
-        ...payload,
-        content: RichText.generate(payload.content),
-        status: ShotStatus.IDLE,
-        productType: ProductStatus.IDLE,
-        creationMethod: CreationMethod.GEN_AI,
-        productId,
-      }));
-
-      await ShotService.createMany(shotsPayload);
-      await Redis.client.cache.del(keyName);
-    } catch (error) {
-      productId &&
-        (await Redis.client.cache.set(
-          keyName,
-          OnboardingShotCreationStatus.FAILED
-        ));
-    }
+export class PostGen {
+  static message_name = PostGen.name.toLowerCase();
+  private static systemPrompt = `
+  You are developer adovcate of big opensource startup/organization similar to cal.com etc.
+  Your work is to write technical posts and promotional tweets about the products your company builds.
+  `;
+  private static schema = {
+    type: Type.OBJECT,
+    required: ['shots'],
+    properties: {
+      shots: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          required: ['title', 'content'],
+          properties: {
+            title: {
+              type: Type.STRING,
+            },
+            content: {
+              type: Type.STRING,
+            },
+          },
+        },
+      },
+    },
   };
-  static get client() {
-    if (!GenaiQueue.instance) {
-      const instance = new MessageQueue(
-        GenaiQueue.messageName,
-        GenaiQueue.workerFunction
-      );
-      GenaiQueue.instance = instance;
-    }
-    return GenaiQueue.instance;
+  static workerFn: JobFn<PostGenInput> = async (job) => {
+    const genPostMetaData = job.data;
+    const res = await LLM.generateStructuredOPs<PostGenOutput>({
+      prompt: PostGen.createPrompt(genPostMetaData),
+      model: LLM.models.pro_preview,
+      schema: PostGen.schema,
+      systemPrompt: PostGen.systemPrompt,
+    });
+
+    const payload = res.shots.map((payload) => ({
+      ...payload,
+      content: RichText.generate(payload.content),
+      status: ShotStatus.IDLE,
+      productType: ProductStatus.IDLE,
+      creationMethod: CreationMethod.GEN_AI,
+      productId: job.data.productId,
+    }));
+
+    await prisma.shot.createMany({ data: payload });
+  };
+
+  private static createPrompt(input: PostGenInput) {
+    let basePrompt = `
+      You are tasked to write 5 pre-release kind of tweets for your current product named: ${input.productName}.
+
+      A little brief or motto what the product's gonna be: \n${input.productName}
+    `;
+
+    if (input.productDescription)
+      basePrompt += `\n
+      A more detailed description of the product gonna be: \n${input.productDescription}
+    `;
+
+    return basePrompt;
   }
 }
