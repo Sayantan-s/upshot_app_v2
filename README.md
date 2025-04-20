@@ -19,9 +19,11 @@
 &nbsp;<img src="./assets/ngrok.svg" width="64">
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 
-**☁️ Cloud Functions:** https://github.com/Sayantan-s/serverless-fns-upshot_v2
+**☁️ Webhook Interception**: `ngrok config add-authtoken $YOUR_AUTHTOKEN`
 
-**☁️ Webhook Intercepting**: `ngrok config add-authtoken $YOUR_AUTHTOKEN`
+### 📝 Notes
+
+In production, neither **Vercel** nor **Render** supports WS/SSE's so I have added a demo of it's working below in the loom video. :)
 
 ### 📝 Notes
 
@@ -30,3 +32,7 @@ In production, neither **Vercel** nor **Render** supports WS/SSE's so I have add
 ### 🛣️ Major flows
 
 <img src="./assets/System Design_ShotScheduling.png">
+
+<br/>
+
+<img src="./assets/System Design_ShotGeneration.png">
