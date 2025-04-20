@@ -12,4 +12,9 @@ genAiRouter.post(
   ErrorHandler.tryCatch(GenAiController.generateProductOnboarding)
 );
 
+genAiRouter.post(
+  '/',
+  ErrorHandler.tryCatch(GenAiController.generateStruturedOps)
+);
+
 export default genAiRouter;

@@ -4,12 +4,10 @@ import { useToggle } from '@client/hooks';
 import { useDispatch, useSelector } from '@client/store';
 import { Tags } from '@client/store/services';
 import { shotsApi } from '@client/store/services/shot';
-import { ShotStatus } from '@client/store/types/shot';
 import * as Popover from '@radix-ui/react-popover';
 import { motion } from 'framer-motion';
-import { Archive, Bag, Edit2, Share } from 'iconsax-react';
+import { Archive, Bag, Edit2 } from 'iconsax-react';
 import { FC } from 'react';
-import { toast } from 'sonner';
 import { IShotControllerProps } from './type';
 
 export const ShotController: FC<IShotControllerProps> = ({
@@ -24,9 +22,9 @@ export const ShotController: FC<IShotControllerProps> = ({
   const [archiveShot, { isLoading: isArchiving }] =
     shotsApi.useUpdateShotMutation();
 
-  const [scheduleOne, { isLoading: isScheduling }] =
-    shotsApi.useScheduleOneMutation();
-  const [isOpenLaunch, { off: closeLaunch, setState }] = useToggle();
+  // const [scheduleOne, { isLoading: isScheduling }] =
+  //   shotsApi.useScheduleOneMutation();
+  // const [isOpenLaunch, { off: closeLaunch, setState }] = useToggle();
   const dispatch = useDispatch();
   const [
     isOpenLaunchArchive,
@@ -51,14 +49,14 @@ export const ShotController: FC<IShotControllerProps> = ({
       onConfirm: handleDeleteShot,
     });
 
-  const handleLaunch = async () => {
-    if (!shots.entities[shotId]?.launchedAt?.selectedDate) {
-      toast.info('Shot Upload', {
-        description: `Shot cannot be launched without a launch date!`,
-      });
-    } else await scheduleOne({ id: shotId }).unwrap();
-    closeLaunch();
-  };
+  // const handleLaunch = async () => {
+  //   if (!shots.entities[shotId]?.launchedAt?.selectedDate) {
+  //     toast.info('Shot Upload', {
+  //       description: `Shot cannot be launched without a launch date!`,
+  //     });
+  //   } else await scheduleOne({ id: shotId }).unwrap();
+  //   closeLaunch();
+  // };
 
   const handleArchive = async () => {
     await archiveShot({
@@ -116,7 +114,7 @@ export const ShotController: FC<IShotControllerProps> = ({
             className={allowEdit ? 'animate-pulse' : ''}
           />
         </button>
-        {shots.entities[shotId]?.status !== ShotStatus.SHOOT ||
+        {/* {shots.entities[shotId]?.status !== ShotStatus.SHOOT ||
         shots.entities[shotId]?.status !== ShotStatus.SHOOT ? (
           <Popover.Root open={isOpenLaunch} onOpenChange={setState}>
             <Popover.Trigger>
@@ -169,7 +167,7 @@ export const ShotController: FC<IShotControllerProps> = ({
               </Popover.Content>
             </Popover.Portal>
           </Popover.Root>
-        ) : null}
+        ) : null} */}
         <Popover.Root open={isOpenLaunchArchive} onOpenChange={setStateArchive}>
           <Popover.Trigger>
             <motion.button
@@ -263,7 +261,7 @@ export const ShotController: FC<IShotControllerProps> = ({
 
         <motion.button
           disabled={!isActive}
-          className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center"
+          className="disabled:grayscale bg-rose-50 w-8 h-8 rounded-full flex items-center justify-center border border-rose-200"
           onClick={handleCreateDeleteModal}
         >
           <Bag size={16} color="#f43f5d" variant="Bulk" />

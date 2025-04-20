@@ -33,6 +33,7 @@ const {
   QSTASH_API_KEY,
   NGROK_AUTHTOKEN,
   NGROK_SWITCH,
+  GEMINI_API_KEY,
 } = process.env;
 
 export {
@@ -59,4 +60,5 @@ export {
   SERVERLESS_API_KEY,
   SERVERLESS_FN,
   SESSION_SECRET,
+  GEMINI_API_KEY,
 };
