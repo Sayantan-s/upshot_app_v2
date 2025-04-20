@@ -26,3 +26,29 @@ export type IProductFetchHandler = RequestHandler<
   { productId: string },
   unknown
 >;
+
+// Onboard Product
+
+interface IProductOnboardingConfig {
+  shots: {
+    generate: boolean;
+    count: 5;
+  };
+}
+
+export type IProductOnboardingBody = Pick<
+  Product,
+  'productName' | 'productMoto'
+> & {
+  config: IProductOnboardingConfig;
+};
+
+export type IProductOnboardingHandler = RequestHandler<
+  unknown,
+  unknown,
+  Partial<IProductOnboardingBody>
+>;
+
+export interface IProductOnboardingResponsePayload {
+  productId: string;
+}

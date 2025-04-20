@@ -30,6 +30,7 @@ import {
   IShotsScheduleRegistrationHandler,
 } from './type';
 import { ScheduleAllRegistrationHandlerSchema } from './validations';
+import { RequestHandler } from 'express';
 export class ShotController {
   // CRUD
   public static fetchTargetProductShots: IShotsFetchHandler = async (
@@ -144,8 +145,6 @@ export class ShotController {
         dateAccordingToOffsetTime
       );
 
-      console.log(calculateDifferenceInSecs, 'DIFFERENCE IN SECONDS...');
-
       if (calculateDifferenceInSecs < 1)
         throw new ErrorHandler(409, 'Cannot schedule shot for past date!');
       const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
@@ -234,7 +233,8 @@ export class ShotController {
               scheduleStatus:
                 ScheduleAllRegistrationHandlerEnumShotScheduleStatus.FAILED,
             };
-          const JWT_EXPIRY = `${calculateDifferenceInSecs}s`;
+          const offset = 3600;
+          const JWT_EXPIRY = `${calculateDifferenceInSecs + offset}s`;
           // SubTask 2:: Setup credentials for scheduling
           const scheduleReference = uuid();
           const access_token = AuthService.jwt.signAccessToken({
@@ -334,7 +334,8 @@ export class ShotController {
       data: 'Success',
     });
   };
-  public static updateAll = async (_, res) => {
+
+  public static updateAll: RequestHandler = async (_, res) => {
     await ShotService.updateMany(
       {},
       {
@@ -345,6 +346,25 @@ export class ShotController {
     return H.success(res, {
       statusCode: 200,
       data: 'Updated All Collections',
+    });
+  };
+
+  public static revertInvalidatedShots: RequestHandler = async (_, res) => {
+    await prisma.shot.updateMany({
+      where: {
+        status: ShotStatus.IDLE,
+        launchedAt: {
+          lt: Date.now(),
+        },
+      },
+      data: {
+        launchedAt: null,
+      },
+    });
+
+    return H.success(res, {
+      statusCode: 201,
+      data: 'success',
     });
   };
 }

@@ -1,10 +1,15 @@
 import { ShotController } from '@api/controller/shots';
+import { AuthMiddleware } from '@api/middlewares/auth';
 import ErrorHandler from '@api/middlewares/error';
 import { validate } from '@api/middlewares/zod';
 import { shotSchdlExecSchema } from '@api/validation/shots/shots';
 import express from 'express';
 
 const shotRouter = express.Router();
+
+shotRouter.route('/webhook/revert').post(ShotController.revertInvalidatedShots);
+
+shotRouter.use(AuthMiddleware.withAuthorization);
 
 shotRouter
   .route('/')
@@ -26,9 +31,5 @@ shotRouter.post(
 shotRouter
   .route('/schedule/:productId/all')
   .post(ShotController.shotScheduleAllRegistrationHandler);
-
-// shotRouter
-//   .route('/update-all')
-//   .patch(ShotController.updateAll)
 
 export default shotRouter;

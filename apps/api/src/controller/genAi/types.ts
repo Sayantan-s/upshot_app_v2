@@ -6,7 +6,6 @@ export type IProductInputGenerationBody = Pick<
   'productName' | 'productMoto'
 > & {
   setupInitialFiveAutomatedPosts: boolean;
-  generateProductDescription: boolean;
 };
 
 export type IProductInputGenerationHandler = RequestHandler<
