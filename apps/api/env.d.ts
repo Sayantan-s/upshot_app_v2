@@ -24,6 +24,7 @@ declare global {
       QSTASH_API_KEY: string;
       NGROK_AUTHTOKEN: string;
       NGROK_SWITCH: string;
+      GEMINI_API_KEY: string;
     }
 
     interface Global {}

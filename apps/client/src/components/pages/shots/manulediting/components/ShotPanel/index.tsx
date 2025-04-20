@@ -186,12 +186,12 @@ const SwiperPagination = () => {
       <div className="w-full max-w-[1200px] mx-auto flex items-center justify-end flex-1 space-x-2.5">
         <div className="border px-2 py-1 rounded-full">
           <Pagination
-            currentPage={currentIndex+1}
+            currentPage={currentIndex + 1}
             onPageChange={handleSwipeTo}
             totalPages={shotIds.length}
             previousButtonClassName="bg-gray-200 text-gray-700 h-7 px-3 flex items-center justify-center text-xs rounded-full"
             nextButtonClassName="bg-gray-200 text-gray-700 h-7 px-3 flex items-center justify-center text-xs rounded-full"
-            paginationButtonClassName="w-7 h-7 shadow hover:shadow-gray-500/60 flex items-center justify-center text-xs rounded-full shadow-gray-500/60 text-xs text-gray-700 border-gray-100 border transition-all duration-200 aria-[current]:bg-gray-900 aria-[current]:pointer-events-none aria-[current]:font-medium aria-[current]:text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            paginationButtonClassName="w-7 h-7 shadow-sm shadow-gray-900/20 flex items-center justify-center text-xs rounded-full text-xs text-gray-700 border-gray-100 border transition-all duration-200 aria-[current]:bg-gray-900 aria-[current]:pointer-events-none aria-[current]:font-medium aria-[current]:text-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
             maxVisiblePages={3}
           />
         </div>
