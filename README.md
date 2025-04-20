@@ -19,9 +19,7 @@
 &nbsp;<img src="./assets/ngrok.svg" width="64">
 &nbsp;<img src="https://cdn.svgporn.com/logos/yarn.svg" width="48">
 
-**☁️ Cloud Functions:** https://github.com/Sayantan-s/serverless-fns-upshot_v2
-
-**☁️ Webhook Intercepting**: `ngrok config add-authtoken $YOUR_AUTHTOKEN`
+**☁️ Webhook Interception**: `ngrok config add-authtoken $YOUR_AUTHTOKEN`
 
 ### 📝 Notes
 
