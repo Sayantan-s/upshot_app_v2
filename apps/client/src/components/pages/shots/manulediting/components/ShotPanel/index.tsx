@@ -18,16 +18,10 @@ import {
 } from 'swiper/react';
 import { EditableShotCard } from '../EditableShotCard';
 import { Skeleton } from '../EditableShotCard/Skeleton';
-import { ArchiveToggler } from './ArchiveToggler';
+// import { ArchiveToggler } from './ArchiveToggler';
 import { ShotSearch } from './ShotSearch';
 import { twMerge } from 'tailwind-merge';
-
-/**
- * Once one post is edit clicked
- * - Disable the draggable feature -> IDLE | EDITING | IDLE
- * - Make all other posts disabled and blur them
- * - Once done save that target post.
- */
+import { Filters } from './Filters';
 
 export const ShotPanel = () => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -55,11 +49,13 @@ export const ShotPanel = () => {
   const { archived: archiveStatus } = useSelector(
     (state) => state.shots.manualEdits
   );
+
   const dispatch = useDispatch();
 
   const currentlyEditing = useSelector(
     (state) => state.shots.manualEdits.currentlyEditing
   );
+
   const [isNotEditing, setIsNotEditing] = useState(true);
   const handleEdit = (id: string) => {
     dispatch(
@@ -124,11 +120,12 @@ export const ShotPanel = () => {
         />
         <div
           slot="container-start"
-          className="mb-20 flex items-center z-50 w-full bg-white"
+          className="mb-20 flex items-center z-50 bg-white justify-between w-full"
         >
           <div className="flex items-stretch space-x-3">
-            <ArchiveToggler />
+            {/* <ArchiveToggler /> */}
             <ShotSearch />
+            <Filters />
           </div>
           <SwiperPagination />
         </div>
@@ -182,7 +179,7 @@ const SwiperPagination = () => {
   };
 
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-max">
       <div className="w-full max-w-[1200px] mx-auto flex items-center justify-end flex-1 space-x-2.5">
         <div className="border px-2 py-1 rounded-full">
           <Pagination
